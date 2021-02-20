@@ -20,6 +20,13 @@ npm run develop
 
 By default, the local development server is running at `localhost:8000`.
 
+## TypeScript
+
+Gatsby currently uses babel to transform TS into JS, which totally ignores typechecking. This is a bit unfortunate, but hopefully it will change someday. In order to check types properly:
+
+- Setup your editor to highlight type errors. VSCode will do this out of the box.
+- Consider running `npm run type-check` periodically, or even use it in watch mode: `npm run type-check:watch`.
+
 ## Adding pages
 
 Pages can be added by adding a new file to `src/pages`. See:
