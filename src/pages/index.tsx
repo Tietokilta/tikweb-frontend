@@ -3,7 +3,7 @@ const IndexPage: React.FC = () => {
     <main>
       <h1>Hello, world!</h1>
     </main>
-  );
-};
+  )
+}
 
-export default IndexPage;
+export default IndexPage
