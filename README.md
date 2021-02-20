@@ -27,6 +27,12 @@ Gatsby currently uses babel to transform TS into JS, which totally ignores typec
 - Setup your editor to highlight type errors. VSCode will do this out of the box.
 - Consider running `npm run type-check` periodically, or even use it in watch mode: `npm run type-check:watch`.
 
+## Linting & Code style
+
+Code style is defined by Prettier, which is ran through ESLint. In order to check for linting errors and code style, run `npm run lint`. In order to fix auto-fixable issues, use `npm run lint:fix`.
+
+Consider using ESLint and Prettier plugins in your editor, with autoformatting on save enabled.
+
 ## Adding pages
 
 Pages can be added by adding a new file to `src/pages`. See:

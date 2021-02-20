@@ -1,11 +1,9 @@
-import * as React from "react"
-
-const IndexPage = () => {
+const IndexPage: React.FC = () => {
   return (
     <main>
       <h1>Hello, world!</h1>
     </main>
-  )
-}
+  );
+};
 
-export default IndexPage
+export default IndexPage;

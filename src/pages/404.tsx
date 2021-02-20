@@ -1,15 +1,12 @@
-import * as React from "react"
-import { PageProps } from "gatsby"
+import { PageProps } from "gatsby";
 
-
-// markup
-const NotFoundPage = (props: PageProps) => {
+const NotFoundPage: React.FC<PageProps> = (props: PageProps) => {
   return (
     <main>
       <h1>Not found</h1>
       <p>{props.path}</p>
     </main>
-  )
-}
+  );
+};
 
-export default NotFoundPage
+export default NotFoundPage;
