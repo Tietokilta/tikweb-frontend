@@ -1,17 +1,19 @@
 module.exports = {
-  parser: "@typescript-eslint/parser",
+  // parser: "@typescript-eslint/parser",
   parserOptions: {
-    ecmaVersion: 2020,
-    sourceType: "module",
+    // ecmaVersion: 2020,
+    // sourceType: "module",
+    project: "./tsconfig.json",
   },
   extends: [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:jsx-a11y/recommended",
-    "plugin:@typescript-eslint/recommended",
+    "airbnb-typescript",
+    // "eslint:recommended",
+    // "plugin:react/recommended",
+    // "plugin:react-hooks/recommended",
+    // "plugin:import/errors",
+    // "plugin:import/warnings",
+    // "plugin:jsx-a11y/recommended",
+    // "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
     "prettier/react",
     "prettier/@typescript-eslint",
@@ -21,13 +23,13 @@ module.exports = {
     browser: true,
     jest: true,
   },
-  settings: {
-    react: {
-      version: "detect",
-    },
-  },
+  // settings: {
+  //   react: {
+  //     version: "detect",
+  //   },
+  // },
   rules: {
     // React 17's new JSX transform doesn't require importing React
     "react/react-in-jsx-scope": "off",
   },
-};
+}
