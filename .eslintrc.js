@@ -17,5 +17,7 @@ module.exports = {
   rules: {
     // React 17's new JSX transform doesn't require importing React
     "react/react-in-jsx-scope": "off",
+    // We don't need these with TS
+    "react/prop-types": "off",
   },
 }
