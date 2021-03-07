@@ -1,5 +1,6 @@
 import styled from "styled-components"
 
+import NavBar from "./NavBar"
 import logo from "../assets/logo.svg"
 
 const HeaderContainer = styled.header`
@@ -44,7 +45,7 @@ const Header: React.FC = () => {
           <img src={logo} alt="logo" />
           Tietokilta Ry
         </TitleContainer>
-        <div>Navigation here</div>
+        <NavBar />
       </HeaderContent>
     </HeaderContainer>
   )

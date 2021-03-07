@@ -58,4 +58,9 @@ export default createGlobalStyle<{ theme: DefaultTheme }>`
     font-size: ${({ theme }) => theme.size[16]};
   }
 
+  a {
+    text-decoration: none;
+    color: ${({ theme }) => theme.color.black}
+  }
+
 `
