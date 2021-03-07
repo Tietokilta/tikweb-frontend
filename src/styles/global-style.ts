@@ -21,6 +21,14 @@ export default createGlobalStyle<{ theme: DefaultTheme }>`
     font-size: 62.5%;
   }
 
+  * {
+    // SEE: https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing
+    // Affects how padding and border behave with width/height. With border-box,
+    // padding and border are included in width/height so that width: 200px is
+    // still 200px even if the element has padding or border.
+    box-sizing: border-box;
+  }
+
   body {
     font-family: "Roboto";
     font-size: ${({ theme }) => theme.size[16]};
