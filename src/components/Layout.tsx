@@ -1,8 +1,9 @@
 import styled, { ThemeProvider } from "styled-components"
 
+import Footer from "./Footer"
+import Header from "./Header"
 import GlobalStyle from "../styles/global-style"
 import theme from "../styles/theme"
-import Header from "./Header"
 
 const LayoutContainer = styled.div`
   min-height: 100%;
@@ -22,6 +23,7 @@ const Layout: React.FC = (props) => {
       <LayoutContainer>
         <Header />
         <PageContent>{children}</PageContent>
+        <Footer />
       </LayoutContainer>
     </ThemeProvider>
   )
