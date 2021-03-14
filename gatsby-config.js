@@ -2,5 +2,5 @@ module.exports = {
   siteMetadata: {
     title: "Tietokilta",
   },
-  plugins: [],
+  plugins: ["gatsby-plugin-styled-components"],
 }
