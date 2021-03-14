@@ -2,6 +2,7 @@ import styled from "styled-components"
 
 import NavBar from "./NavBar"
 import logo from "../assets/logo.svg"
+import { FullWidthContainer } from "./Containers"
 
 const HeaderContainer = styled.header`
   width: 100%;
@@ -16,13 +17,9 @@ const HeaderContainer = styled.header`
   color: ${({ theme }) => theme.color.white};
 `
 
-const HeaderContent = styled.div`
+const HeaderContent = styled(FullWidthContainer)`
   display: flex;
   justify-content: space-between;
-
-  // Max width is 1440 minus 64px padding on each side.
-  max-width: calc(144rem - 2 * ${({ theme }) => theme.size[64]});
-  width: 100%;
 `
 
 const TitleContainer = styled.div`

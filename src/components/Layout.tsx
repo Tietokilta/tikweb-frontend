@@ -4,6 +4,7 @@ import Footer from "./Footer"
 import Header from "./Header"
 import GlobalStyle from "../styles/global-style"
 import theme from "../styles/theme"
+import { FullWidthContainer } from "./Containers"
 
 const LayoutContainer = styled.div`
   min-height: 100%;
@@ -13,6 +14,7 @@ const LayoutContainer = styled.div`
 
 const PageContent = styled.main`
   flex-grow: 1;
+  align-self: center;
 `
 
 const Layout: React.FC = (props) => {
@@ -22,7 +24,9 @@ const Layout: React.FC = (props) => {
       <GlobalStyle />
       <LayoutContainer>
         <Header />
-        <PageContent>{children}</PageContent>
+        <PageContent>
+          <FullWidthContainer>{children}</FullWidthContainer>
+        </PageContent>
         <Footer />
       </LayoutContainer>
     </ThemeProvider>
