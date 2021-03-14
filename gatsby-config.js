@@ -8,7 +8,7 @@ module.exports = {
       resolve: "gatsby-source-strapi",
       options: {
         apiURL: "http://localhost:1337",
-        contentTypes: ["restaurant", "category"],
+        contentTypes: ["page"],
         queryLimit: 1000,
       },
     },
