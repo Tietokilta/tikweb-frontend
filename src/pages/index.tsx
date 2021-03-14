@@ -1,20 +1,4 @@
-import { StaticQuery, graphql } from "gatsby"
 import Layout from "../components/Layout"
-
-// https://strapi.io/documentation/developer-docs/latest/getting-started/gatsby.html
-const query = graphql`
-  query {
-    allStrapiRestaurant {
-      edges {
-        node {
-          strapiId
-          name
-          description
-        }
-      }
-    }
-  }
-`
 
 const IndexPage: React.FC = () => {
   return (
