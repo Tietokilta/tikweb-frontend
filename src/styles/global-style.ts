@@ -40,6 +40,7 @@ export default createGlobalStyle<{ theme: DefaultTheme }>`
     font-family: "Roboto";
     font-size: ${({ theme }) => theme.size[16]};
     color: ${({ theme }) => theme.color.black};
+    background: ${({ theme }) => theme.color.black}
   }
 
   h1, h2, h3, h4, h5 {
