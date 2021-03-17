@@ -9,3 +9,39 @@ exports.onCreateBabelConfig = ({ actions }) => {
     },
   })
 }
+
+exports.createPages = async ({ actions, graphql }) => {
+  const { data } = await graphql(`
+    query {
+      allStrapiPage {
+        nodes {
+          content {
+            id
+            strapi_component
+            text
+          }
+          id: strapiId
+          slug
+          title
+          unlisted
+          strapiChildren {
+            id
+            slug
+            title
+          }
+          strapiParent {
+            id
+          }
+        }
+      }
+    }
+  `)
+
+  data.allStrapiPage.nodes.forEach((page) => {
+    actions.createPage({
+      path: page.slug,
+      component: require.resolve("./src/templates/page.tsx"),
+      context: { page },
+    })
+  })
+}
