@@ -1,5 +1,7 @@
 # tietokilta.fi-frontend
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Tietokilta_tietokilta.fi-frontend&metric=alert_status)](https://sonarcloud.io/dashboard?id=Tietokilta_tietokilta.fi-frontend)
+
 ## Requirements
 
 - Node (see .nvmrc for version used)
