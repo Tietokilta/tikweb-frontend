@@ -2,11 +2,13 @@
   "extends": "./tsconfig.json",
   "include": [
     "./src/**/*",
+    "./test/**/*",
+    "./__mocks__/**/*",
     "gatsby-config.js",
     "gatsby-node.js",
     ".eslintrc.js",
     "jest.config.js",
     "jest-preprocess.js",
-    "jest-setup.js"
+    "jest.setup.js"
   ]
 }
