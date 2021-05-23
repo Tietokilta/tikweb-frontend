@@ -8,6 +8,7 @@ on:
 
 env:
   STRAPI_URL: https://tikweb-prod-app-cms.azurewebsites.net
+  DEPLOYMENT_SA: tikwebprodsa
 
 jobs:
   ci:
@@ -33,3 +34,34 @@ jobs:
       - run: npm run type-check
       - run: npm test
       - run: npm run build
+
+  deploy:
+    needs: ci
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Read node version from `.nvmrc` file
+      - id: nvmrc
+        uses: browniebroke/read-nvmrc-action@v1
+
+      # Install node
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ steps.nvmrc.outputs.node_version }}
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Delete old files
+        run: az storage blob delete-batch --source '$web' --account-name $DEPLOYMENT_SA --pattern '*'
+
+      - name: Upload new files
+        run: az storage blob upload-batch -s public -d '$web' --account-name $DEPLOYMENT_SA

@@ -41,3 +41,18 @@ Pages can be added by adding a new file to `src/pages`. See:
 
 - Docs about [routing](https://www.gatsbyjs.com/docs/reference/routing/creating-routes/), especially [file system routing API](https://www.gatsbyjs.com/docs/reference/routing/file-system-route-api/).
 - Gatsby used to have createPage API before, nowadays it's not that needed if using the FS routing API. See [this](https://www.gatsbyjs.com/blog/fs-route-api/) for context.
+
+# Deployment
+
+CI will deploy main branch automatically. In Github repository settings, set correct `AZURE_CREDENTIALS` values in format:
+
+```
+{
+  "clientId": "<GUID>",
+  "clientSecret": "<GUID>",
+  "subscriptionId": "<GUID>",
+  "tenantId": "<GUID>"
+}
+```
+
+**NOTE!** Client secret will expire after 2 years.
