@@ -28,5 +28,5 @@ jobs:
       # Run checks
       - run: npm run lint
       - run: npm run type-check
+      - run: npm test
       #- run: npm run build # Build disabled while we don't have proper Strapi setup for CI use
-      #- run: npm test # No tests specified, commenting out.
