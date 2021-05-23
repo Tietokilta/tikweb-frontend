@@ -6,8 +6,12 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  STRAPI_URL: https://tikweb-prod-app-cms.azurewebsites.net
+  DEPLOYMENT_SA: tikwebprodsa
+
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,5 +32,37 @@ jobs:
       # Run checks
       - run: npm run lint
       - run: npm run type-check
-      #- run: npm run build # Build disabled while we don't have proper Strapi setup for CI use
-      #- run: npm test # No tests specified, commenting out.
+      - run: npm test
+      - run: npm run build
+
+  deploy:
+    needs: ci
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Read node version from `.nvmrc` file
+      - id: nvmrc
+        uses: browniebroke/read-nvmrc-action@v1
+
+      # Install node
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ steps.nvmrc.outputs.node_version }}
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Delete old files
+        run: az storage blob delete-batch --source '$web' --account-name $DEPLOYMENT_SA --pattern '*'
+
+      - name: Upload new files
+        run: az storage blob upload-batch -s public -d '$web' --account-name $DEPLOYMENT_SA
