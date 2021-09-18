@@ -2,59 +2,65 @@
 
 exports[`pages/index.tsx Renders correctly 1`] = `
 <div
-  class="sc-gKseQn bKWhsC"
+  class="flex flex-col items-center min-h-full bg-white"
 >
-  <header
-    class="sc-hKgJUU hLUShl"
+  <div
+    class="flex justify-center w-full h-12 px-16 bg-black text-white"
   >
     <div
-      class="sc-bdfBQB sc-eCstlR gUhhVY jOPhHk"
+      class="w-full max-w-[90rem] flex justify-between"
     >
       <div
-        class="sc-jSgvzq fGWPrk"
+        class="flex items-center text-2xl"
       >
         <img
           alt="logo"
+          class="w-8 h-8 mr-2"
           src="test-file-stub"
         />
         Tietokilta Ry
       </div>
-      <nav
-        class="sc-dlfnuX jHKFHC"
+      <div
+        class="flex items-center font-mono text-lg"
       >
         <a
+          class="font-normal ml-12"
           href="/#"
         >
           Tapahtumat
         </a>
         <a
+          class="font-normal ml-12"
           href="/#"
         >
           Kilta
         </a>
         <a
+          class="font-normal ml-12"
           href="/#"
         >
           Fuksit
         </a>
         <a
+          class="font-normal ml-12"
           href="/#"
         >
           Abeille
         </a>
         <a
+          class="font-normal ml-12"
           href="/#"
         >
           Yritykset
         </a>
-      </nav>
+      </div>
     </div>
-  </header>
-  <main
-    class="sc-iBPTik cXmhPf"
+  </div>
+  <div
+    class="flex-grow"
   >
     <div
-      class="sc-bdfBQB gUhhVY"
+      class="w-full max-w-[90rem] "
     >
       <h1>
         Hello, world! h1
@@ -129,15 +135,15 @@ exports[`pages/index.tsx Renders correctly 1`] = `
         Vestibulum vel augue efficitur, volutpat massa ut, tempus nulla. Suspendisse id libero tempus, dictum lorem euismod, sagittis dolor. Praesent sagittis pellentesque urna vel aliquet. Cras sodales, purus quis vehicula pretium, tellus risus cursus mauris, at congue mi ante id orci. Pellentesque ut nunc ultrices, iaculis est sed, efficitur magna. Maecenas in commodo lacus. Aliquam maximus, purus id fermentum finibus, eros mi tristique sapien, ac convallis quam purus at erat.
       </p>
     </div>
-  </main>
-  <footer
-    class="sc-gsTEea heNezP"
+  </div>
+  <div
+    class="flex w-full text-white justify-center bg-gray-darkest px-12 py-6"
   >
     <div
-      class="sc-bdfBQB gUhhVY"
+      class="w-full max-w-[90rem] "
     >
       Footer
     </div>
-  </footer>
+  </div>
 </div>
 `;
