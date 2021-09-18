@@ -2,16 +2,16 @@
 
 exports[`pages/index.tsx Renders correctly 1`] = `
 <div
-  class="sc-gKsewC gmWVLQ"
+  class="sc-gKseQn bKWhsC"
 >
   <header
-    class="sc-hKgILt iSlApH"
+    class="sc-hKgJUU hLUShl"
   >
     <div
-      class="sc-bdfBwQ sc-eCssSg cpngaA litkEQ"
+      class="sc-bdfBQB sc-eCstlR gUhhVY jOPhHk"
     >
       <div
-        class="sc-jSgupP dTPNIp"
+        class="sc-jSgvzq fGWPrk"
       >
         <img
           alt="logo"
@@ -20,7 +20,7 @@ exports[`pages/index.tsx Renders correctly 1`] = `
         Tietokilta Ry
       </div>
       <nav
-        class="sc-dlfnbm eUcpKd"
+        class="sc-dlfnuX jHKFHC"
       >
         <a
           href="/#"
@@ -51,10 +51,10 @@ exports[`pages/index.tsx Renders correctly 1`] = `
     </div>
   </header>
   <main
-    class="sc-iBPRYJ fxCJFd"
+    class="sc-iBPTik cXmhPf"
   >
     <div
-      class="sc-bdfBwQ cpngaA"
+      class="sc-bdfBQB gUhhVY"
     >
       <h1>
         Hello, world! h1
@@ -131,10 +131,10 @@ exports[`pages/index.tsx Renders correctly 1`] = `
     </div>
   </main>
   <footer
-    class="sc-gsTCUz gEYGIj"
+    class="sc-gsTEea heNezP"
   >
     <div
-      class="sc-bdfBwQ cpngaA"
+      class="sc-bdfBQB gUhhVY"
     >
       Footer
     </div>
