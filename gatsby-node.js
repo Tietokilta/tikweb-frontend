@@ -15,11 +15,6 @@ exports.createPages = async ({ actions, graphql }) => {
     query {
       allStrapiPage {
         nodes {
-          content {
-            id
-            strapi_component
-            text
-          }
           id: strapiId
           slug
           title
@@ -32,6 +27,8 @@ exports.createPages = async ({ actions, graphql }) => {
           strapiParent {
             id
           }
+          locale
+          content
         }
       }
     }

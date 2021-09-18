@@ -13,7 +13,12 @@ module.exports = {
       resolve: "gatsby-source-strapi",
       options: {
         apiURL: process.env.STRAPI_URL,
-        contentTypes: ["page"],
+        collectionTypes: [
+          {
+            name: `page`,
+            api: { qs: { _locale: `all` } },
+          },
+        ],
         queryLimit: 1000,
       },
     },
