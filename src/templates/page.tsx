@@ -1,3 +1,4 @@
+import ContentRenderer from "../components/ContentRenderer"
 import Layout from "../components/Layout"
 import { StrapiPage } from "../types/strapi"
 
@@ -11,7 +12,7 @@ const Page: React.FC<Props> = ({ pageContext: { page } }) => {
   return (
     <Layout>
       <h1>{page.title}</h1>
-      {page.content.map((contentBlock) => JSON.stringify(contentBlock))}
+      <ContentRenderer contentBlocks={page.content} />
     </Layout>
   )
 }
