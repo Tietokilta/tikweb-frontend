@@ -4,11 +4,14 @@
     "./src/**/*",
     "./test/**/*",
     "./__mocks__/**/*",
+    "gatsby-browser.js",
     "gatsby-config.js",
     "gatsby-node.js",
     ".eslintrc.js",
     "jest.config.js",
     "jest-preprocess.js",
-    "jest.setup.js"
+    "jest.setup.js",
+    "tailwind.config.js",
+    "postcss.config.js"
   ]
 }

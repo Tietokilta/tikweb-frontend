@@ -1,21 +1,10 @@
-import styled from "styled-components"
-
 import { FullWidthContainer } from "./Containers"
-
-const FooterContainer = styled.footer`
-  display: flex;
-  justify-content: center;
-
-  background: ${({ theme }) => theme.color.darkestGray};
-  color: white;
-  padding: ${({ theme }) => `${theme.size[32]} ${theme.size[64]}`};
-`
 
 const Footer: React.FC = () => {
   return (
-    <FooterContainer>
+    <div className="flex w-full text-white justify-center bg-gray-darkest px-12 py-6">
       <FullWidthContainer>Footer</FullWidthContainer>
-    </FooterContainer>
+    </div>
   )
 }
 
