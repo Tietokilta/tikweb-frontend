@@ -3,6 +3,7 @@ module.exports = {
     project: "./tsconfig.eslint.json",
   },
   extends: [
+    "airbnb",
     "airbnb-typescript",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
