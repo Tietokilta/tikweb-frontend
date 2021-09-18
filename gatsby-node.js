@@ -36,7 +36,8 @@ exports.createPages = async ({ actions, graphql }) => {
 
   data.allStrapiPage.nodes.forEach((page) => {
     actions.createPage({
-      path: page.slug,
+      // Finnish is the default locale => let's not require prefixing for it.
+      path: page.locale === "fi" ? page.slug : `${page.locale}/${page.slug}`,
       component: require.resolve("./src/templates/page.tsx"),
       context: { page },
     })
