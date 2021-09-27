@@ -7,16 +7,13 @@ import "@fontsource/source-code-pro/700.css"
 
 import Footer from "./Footer"
 import Header from "./Header"
-import { FullWidthContainer } from "./Containers"
 
 const Layout: React.FC = (props) => {
   const { children } = props
   return (
     <div className="flex flex-col items-center min-h-full bg-white">
       <Header />
-      <div className="flex-grow">
-        <FullWidthContainer>{children}</FullWidthContainer>
-      </div>
+      <div className="w-full flex-grow">{children}</div>
       <Footer />
     </div>
   )
