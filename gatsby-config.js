@@ -8,7 +8,7 @@ module.exports = {
     title: "Tietokilta",
   },
   plugins: [
-    "gatsby-plugin-styled-components",
+    "gatsby-plugin-postcss",
     {
       resolve: "gatsby-source-strapi",
       options: {

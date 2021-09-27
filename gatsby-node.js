@@ -14,7 +14,7 @@ exports.onCreateWebpackConfig = ({ actions }) => {
   actions.setWebpackConfig({
     resolve: {
       fallback: {
-        assert: false,
+        assert: require.resolve("assert"),
       },
     },
   })

@@ -1,36 +1,24 @@
-import styled, { ThemeProvider } from "styled-components"
+import "@fontsource/roboto/300.css"
+import "@fontsource/roboto/400.css"
+import "@fontsource/roboto/700.css"
+import "@fontsource/source-code-pro/300.css"
+import "@fontsource/source-code-pro/400.css"
+import "@fontsource/source-code-pro/700.css"
 
 import Footer from "./Footer"
 import Header from "./Header"
-import GlobalStyle from "../styles/global-style"
-import theme from "../styles/theme"
 import { FullWidthContainer } from "./Containers"
-
-const LayoutContainer = styled.div`
-  min-height: 100%;
-  display: flex;
-  flex-flow: column nowrap;
-  background: ${(props) => props.theme.color.white};
-`
-
-const PageContent = styled.main`
-  flex-grow: 1;
-  align-self: center;
-`
 
 const Layout: React.FC = (props) => {
   const { children } = props
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <LayoutContainer>
-        <Header />
-        <PageContent>
-          <FullWidthContainer>{children}</FullWidthContainer>
-        </PageContent>
-        <Footer />
-      </LayoutContainer>
-    </ThemeProvider>
+    <div className="flex flex-col items-center min-h-full bg-white">
+      <Header />
+      <div className="flex-grow">
+        <FullWidthContainer>{children}</FullWidthContainer>
+      </div>
+      <Footer />
+    </div>
   )
 }
 
