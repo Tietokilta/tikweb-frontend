@@ -5,7 +5,7 @@ import { FullWidthContainer } from "./Containers"
 const Header: React.FC = () => {
   return (
     <>
-      <div className="flex justify-center w-full h-12 px-16 bg-black text-white">
+      <div className="flex justify-center w-full h-12 px-4 md:px-8 lg:px-16 bg-black text-white">
         <FullWidthContainer className="flex justify-between">
           <div className="flex items-center text-2xl">
             <img className="w-8 h-8 mr-2" src={logo} alt="logo" />

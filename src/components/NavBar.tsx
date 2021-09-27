@@ -1,28 +1,40 @@
-// FIXME: delete this when using real links
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import { Link } from "gatsby"
+import { useState } from "react"
+import BurgerButton from "./BurgerButton"
+
+type MenuItem = {
+  title: string
+  url: string
+  items?: MenuItem[]
+}
+
+const menuItems: MenuItem[] = [
+  { title: "Tapahtumat", url: "#" },
+  { title: "Kilta", url: "#" },
+  { title: "Fuksit", url: "#" },
+  { title: "Abeille", url: "#" },
+  { title: "Yritykset", url: "#" },
+]
 
 const NavBar: React.FC = () => {
-  // TODO: Generate links from actual data and make them functional
+  const [open, setOpen] = useState(false)
 
   return (
-    <div className="flex items-center font-mono text-lg">
-      <Link className="font-normal ml-12" to="#">
-        Tapahtumat
-      </Link>
-      <Link className="font-normal ml-12" to="#">
-        Kilta
-      </Link>
-      <Link className="font-normal ml-12" to="#">
-        Fuksit
-      </Link>
-      <Link className="font-normal ml-12" to="#">
-        Abeille
-      </Link>
-      <Link className="font-normal ml-12" to="#">
-        Yritykset
-      </Link>
-    </div>
+    <>
+      <div className="hidden md:flex items-center font-mono text-lg">
+        {menuItems.map((menuItem) => (
+          <Link className="font-normal ml-6 lg:ml-12" to={menuItem.url}>
+            {menuItem.title}
+          </Link>
+        ))}
+      </div>
+      <div className="flex md:hidden items-center">
+        <BurgerButton
+          open={open}
+          onClick={() => setOpen((isOpen) => !isOpen)}
+        />
+      </div>
+    </>
   )
 }
 
