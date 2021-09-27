@@ -7,10 +7,10 @@ const Header: React.FC = () => {
     <>
       <div className="flex justify-center w-full h-12 px-16 bg-black text-white">
         <FullWidthContainer className="flex justify-between">
-          <div className="flex items-center text-2xl">
+          <a href="/" className="flex items-center text-2xl font-normal">
             <img className="w-8 h-8 mr-2" src={logo} alt="logo" />
             Tietokilta Ry
-          </div>
+          </a>
           <NavBar />
         </FullWidthContainer>
       </div>
