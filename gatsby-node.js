@@ -22,34 +22,35 @@ exports.onCreateWebpackConfig = ({ actions }) => {
 
 exports.createPages = async ({ actions, graphql }) => {
   const { data } = await graphql(`
-  query {
-    allStrapiPage {
-      edges {
-        node {
-          id
-          children {
-            id
-          }
+    query {
+      allStrapiPage {
+        nodes {
           content
-          locale
-          parent {
-            id
+          strapiParent {
+            slug
           }
           slug
-          strapiId
           title
-          unlisted
+          locale
         }
       }
     }
-  }
   `)
-  data.allStrapiPage.edges.forEach((edge) => {
+  const buildPathTree = (key, loc) => {
+    const node = data.allStrapiPage.nodes.find((obj) => obj.slug === key)
+    if (!node.strapiParent) {
+      return loc !== "fi" ? `${loc}/${node.slug}` : node.slug
+    }
+    return `${buildPathTree(node.strapiParent.slug, loc)}/${node.slug}`
+  }
+  data.allStrapiPage.nodes.forEach((node) => {
+    const p = buildPathTree(node.slug, node.locale)
+    console.log(node.slug, node.locale, " -> ", p)
     actions.createPage({
       // Finnish is the default locale => let's not require prefixing for it.
-      path: edge.node.locale === "fi" ? edge.node.slug : `${edge.node.locale}/${edge.node.slug}`,
+      path: p,
       component: require.resolve("./src/templates/page.tsx"),
-      context: { page: edge.node },
+      context: { page: node },
     })
   })
 }
