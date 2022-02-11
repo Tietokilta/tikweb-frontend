@@ -55,9 +55,9 @@ CI will deploy main branch automatically. In Github repository settings, set cor
 }
 ```
 
+**NOTE!** Client secret will expire after 2 years.
+
 # Common issues
 
 `package-lock.json` changes lockfile version when running `npm i`
 - install the NPM version specified in `.nvmrc` in repository root
-
-**NOTE!** Client secret will expire after 2 years.
