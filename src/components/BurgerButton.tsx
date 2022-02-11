@@ -19,13 +19,13 @@ const BurgerButton: React.FC<Props> = ({ open, onClick }) => (
       />
       <span
         aria-hidden="true"
-        className={`block absolute  h-0.5 w-5 bg-current   transform transition duration-500 ease-in-out ${
+        className={`block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out ${
           open ? "opacity-0" : ""
         }`}
       />
       <span
         aria-hidden="true"
-        className={`block absolute  h-0.5 w-5 bg-current transform  transition duration-500 ease-in-out ${
+        className={`block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out ${
           open ? "-rotate-45" : "translate-y-1.5"
         }`}
       />
