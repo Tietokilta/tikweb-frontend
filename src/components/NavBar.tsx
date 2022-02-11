@@ -42,7 +42,7 @@ const NavBar: React.FC = () => {
           className={classNames(
             "fixed top-0 left-0 h-full bg-gray-darkest transition-[max-width] ease-in-out duration-500",
             {
-              "max-w-[80%] w-full overflow-scroll": open,
+              "max-w-[80%] w-full overflow-y-auto": open,
               "max-w-0 w-0 overflow-hidden": !open,
             }
           )}
