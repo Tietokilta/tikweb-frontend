@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { FullWidthContainer } from "./Containers"
-
+import tempLandingPagePicture from "../assets/Landing_page_picture.png"
 const Hero: React.FC = () => {
   return (
     <div className="w-full bg-black flex justify-center">
       <FullWidthContainer className="relative">
         <img
-          src="https://tikweb-prod-app-cms.azurewebsites.net/uploads/Landing_page_picture_6b76cf11b2.png"
+          src={tempLandingPagePicture}
           alt=""
         />
         <div className="absolute top-0 left-0 h-full w-1/2 from-black bg-gradient-to-r font-mono flex flex-col justify-end">
