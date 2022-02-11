@@ -1,14 +1,14 @@
 ---
 name: Feature
-about: Pohja featurekuvaukselle
+about: Template for a new feature
 title: ''
 labels: feature
 assignees: ''
 
 ---
 
-## Kuvaus
+## Description
 
-## Taskit
+## Tasks
 
-- [ ]
+- [ ] 
