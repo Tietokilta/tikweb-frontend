@@ -23,7 +23,11 @@ const NavBar: React.FC = () => {
     <>
       <div className="hidden md:flex items-center font-mono text-lg">
         {menuItems.map((menuItem) => (
-          <Link className="font-normal ml-6 lg:ml-12" to={menuItem.url}>
+          <Link
+            className="font-normal ml-6 lg:ml-12"
+            to={menuItem.url}
+            key={`menu-item-${menuItem.title}-${menuItem.url}`}
+          >
             {menuItem.title}
           </Link>
         ))}
