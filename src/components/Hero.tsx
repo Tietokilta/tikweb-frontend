@@ -4,12 +4,13 @@ import tempLandingPagePicture from "../assets/Landing_page_picture.png"
 const Hero: React.FC = () => {
   return (
     <div className="w-full bg-black flex justify-center">
-      <FullWidthContainer className="relative">
-        <img
-          src={tempLandingPagePicture}
-          alt=""
+      <FullWidthContainer className="relative h-[calc(100vh-48px-48px)]">
+        <div
+          style={{ backgroundImage: `url(${tempLandingPagePicture})` }}
+          className="w-full h-full bg-cover bg-no-repeat bg-center"
         />
-        <div className="absolute top-0 left-0 h-full w-1/2 from-black bg-gradient-to-r font-mono flex flex-col justify-end">
+        <div
+          className="absolute top-0 left-0 h-full w-1/2 from-black bg-gradient-to-r font-mono flex flex-col justify-end">
           <div className="lg:text-5xl md:text-4xl sm:text-3xl p-16 text-white leading-tight">
             <p className="mb-8">Kiinnostaako tietotekniikan opiskelu?</p>
             <a
