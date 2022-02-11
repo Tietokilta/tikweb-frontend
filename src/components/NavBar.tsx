@@ -1,3 +1,4 @@
+import classNames from "classnames"
 import { Link } from "gatsby"
 import { useState } from "react"
 import BurgerButton from "./BurgerButton"
@@ -21,22 +22,43 @@ const NavBar: React.FC = () => {
 
   return (
     <>
-      <div className="hidden md:flex items-center font-mono text-lg">
+      <nav className="hidden md:flex items-center font-mono text-lg">
         {menuItems.map((menuItem) => (
           <Link
-            className="font-normal ml-6 lg:ml-12"
+            className="font-mono ml-6 lg:ml-12"
             to={menuItem.url}
             key={`menu-item-${menuItem.title}-${menuItem.url}`}
           >
             {menuItem.title}
           </Link>
         ))}
-      </div>
+      </nav>
       <div className="flex md:hidden items-center">
         <BurgerButton
           open={open}
           onClick={() => setOpen((isOpen) => !isOpen)}
         />
+        <div
+          className={classNames(
+            "fixed top-0 left-0 h-full bg-gray-darkest transition-[max-width] ease-in-out duration-500",
+            {
+              "max-w-[80%] w-full overflow-scroll": open,
+              "max-w-0 w-0 overflow-hidden": !open,
+            }
+          )}
+        >
+          <div className="p-4">
+            {menuItems.map((menuItem) => (
+              <Link
+                className="block font-mono text-2xl p-4"
+                to={menuItem.url}
+                key={`menu-item-${menuItem.title}-${menuItem.url}`}
+              >
+                {menuItem.title}
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
     </>
   )
