@@ -7,7 +7,7 @@ import { FullWidthContainer } from "./Containers"
 const Header: React.FC = () => {
   return (
     <>
-      <div className="sticky top-0 left-0 flex justify-center w-full h-12 px-4 md:px-8 lg:px-16 bg-black text-white">
+      <div className="z-50 sticky top-0 left-0 flex justify-center w-full h-12 px-4 md:px-8 lg:px-16 bg-black text-white">
         <FullWidthContainer className="flex justify-between">
           <Link
             to="/"

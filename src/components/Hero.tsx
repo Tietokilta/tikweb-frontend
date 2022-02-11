@@ -10,10 +10,10 @@ const Hero: React.FC = () => {
           alt=""
         />
         <div className="absolute top-0 left-0 h-full w-1/2 from-black bg-gradient-to-r font-mono flex flex-col justify-end">
-          <div className="p-16 text-5xl text-white leading-tight">
+          <div className="lg:text-5xl md:text-4xl sm:text-3xl p-16 text-white leading-tight">
             <p className="mb-8">Kiinnostaako tietotekniikan opiskelu?</p>
             <a
-              className="inline-block bg-orange px-8 py-4 text-2xl font-sans uppercase tracking-wider"
+              className="lg:text-4xl md:text-3xl sm:text-2xl whitespace-nowrap inline-block bg-orange px-8 py-4 font-sans uppercase tracking-wider"
               href="#"
             >
               Lue lisää
