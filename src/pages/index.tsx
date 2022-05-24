@@ -1,7 +1,15 @@
 import { FullWidthContainer } from "../components/Containers"
+import EventCard from "../components/EventCard"
 import Hero from "../components/Hero"
 import Layout from "../components/Layout"
 import { TextContainer } from "../components/TextContainer"
+import Title from "../components/Title"
+
+const testEvents = [
+  { title: "Nappusitsit", location: "Smökki", date: new Date(), signUpLink: "https://tietokilta.fi" },
+  { title: "Fappusitsit", location: "Smökki", date: new Date(), signUpLink: "https://tietokilta.fi" },
+  { title: "Sappusitsit", location: "Smökki", date: new Date(), signUpLink: "https://tietokilta.fi" },
+]
 
 const IndexPage: React.FC = () => {
   return (
@@ -9,11 +17,27 @@ const IndexPage: React.FC = () => {
       <Hero />
       <div className="justify-center flex">
         <TextContainer />
-        <FullWidthContainer>
-            Tietokilta ry (TiK) on Aalto-yliopiston Perustieteiden korkeakoulun tietotekniikan koulutusohjelman opiskelijoiden ainejärjestö eli kilta, joka on avoin muillekin killan toiminnasta kiinnostuneille.
-            Tietokilta järjestää opiskelijoilleen erilaista vapaa-ajan toimintaa niin Otaniemessä kuin sen ulkopuolellakin, valvoo heidän etujaan korkeakoulun toimielimissä, huolehtii yhteyksistä muihin opiskelijajärjestöihin ja pyrkii muuten huolehtimaan heidän hyvinvoinnistaan. Kaikki killan toiminta perustuu hyvien teekkariperinteiden mukaiseen vapaaehtoistyöhön ja yhteiseen talkoohenkeen.
-            Kampuksella tietokiltalaiset löytää parhaiten kiltahuoneelta eli kiltikseltä, joka sijaitsee Tietotekniikan Talolla osoitteessa Konemiehentie 2 rakennuksen koilliskulmassa.
-            TiK toimii kaikkien Aalto-yliopiston opiskelijoiden etuja ajavan Aalto-yliopiston ylioppilaskunnan (AYY) piirissä.
+        <FullWidthContainer className="p-3">
+          <Title>Juuri Nyt</Title>
+          <EventCard
+            title={"Wappusitsit"}
+            location={"Smökki"}
+            date={new Date()}
+            numberOfAttendees={76}
+            maxCapacity={250}
+            description={"Teekkareiden vuoden tärkein tapahtuma lähenee ja mikä olisi parempi tapa juhlistaa sitä jo ennakkoon kuin Wappusitsit! Tänäkin vuonna paikan päällä raikaa"}
+            signUpLink={"https://tietokilta.fi"}
+          />
+          <Title className="pt-3">Tulevat tapahtumat</Title>
+          {testEvents.map(x => 
+            <EventCard
+              className={"mb-3"}
+              title={x.title}
+              location={x.location}
+              date={x.date}
+              signUpLink={x.signUpLink}
+            />
+          )}
         </FullWidthContainer>
       </div>
     </Layout>
