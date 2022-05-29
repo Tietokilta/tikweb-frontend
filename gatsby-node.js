@@ -31,6 +31,13 @@ exports.createPages = async ({ actions, graphql }) => {
           parentPage {
             slug
           }
+          content {
+            text {
+              data {
+                text
+              }
+            }
+          }
         }
       }
     }
