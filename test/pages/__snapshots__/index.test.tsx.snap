@@ -5,13 +5,15 @@ exports[`pages/index.tsx Renders correctly 1`] = `
   class="flex flex-col items-center min-h-full bg-white"
 >
   <div
-    class="flex justify-center w-full h-12 px-16 bg-black text-white"
+    class="sticky top-0 left-0 flex justify-center w-full h-12 px-4 md:px-8 lg:px-16 bg-black text-white"
   >
     <div
       class="w-full max-w-[90rem] flex justify-between"
     >
-      <div
-        class="flex items-center text-2xl"
+      <a
+        aria-current="page"
+        class="sticky flex items-center font-normal text-2xl"
+        href="/"
       >
         <img
           alt="logo"
@@ -19,40 +21,108 @@ exports[`pages/index.tsx Renders correctly 1`] = `
           src="test-file-stub"
         />
         Tietokilta Ry
-      </div>
-      <div
-        class="flex items-center font-mono text-lg"
+      </a>
+      <nav
+        class="hidden md:flex items-center font-mono text-lg"
       >
         <a
-          class="font-normal ml-12"
+          class="font-mono ml-6 lg:ml-12"
           href="/#"
         >
           Tapahtumat
         </a>
         <a
-          class="font-normal ml-12"
+          class="font-mono ml-6 lg:ml-12"
           href="/#"
         >
           Kilta
         </a>
         <a
-          class="font-normal ml-12"
+          class="font-mono ml-6 lg:ml-12"
           href="/#"
         >
           Fuksit
         </a>
         <a
-          class="font-normal ml-12"
+          class="font-mono ml-6 lg:ml-12"
           href="/#"
         >
           Abeille
         </a>
         <a
-          class="font-normal ml-12"
+          class="font-mono ml-6 lg:ml-12"
           href="/#"
         >
           Yritykset
         </a>
+      </nav>
+      <div
+        class="flex md:hidden items-center"
+      >
+        <button
+          class="text-white w-8 h-8 relative"
+          type="button"
+        >
+          <span
+            class="sr-only"
+          >
+            Open main menu
+          </span>
+          <div
+            class="block w-5 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
+          >
+            <span
+              aria-hidden="true"
+              class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out -translate-y-1.5"
+            />
+            <span
+              aria-hidden="true"
+              class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out "
+            />
+            <span
+              aria-hidden="true"
+              class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out translate-y-1.5"
+            />
+          </div>
+        </button>
+        <div
+          class="fixed top-0 left-0 h-full bg-gray-darkest transition-[max-width] ease-in-out duration-500 max-w-0 w-0 overflow-hidden"
+        >
+          <div
+            class="p-4"
+          >
+            <a
+              class="block font-mono text-2xl p-4"
+              href="/#"
+            >
+              Tapahtumat
+            </a>
+            <a
+              class="block font-mono text-2xl p-4"
+              href="/#"
+            >
+              Kilta
+            </a>
+            <a
+              class="block font-mono text-2xl p-4"
+              href="/#"
+            >
+              Fuksit
+            </a>
+            <a
+              class="block font-mono text-2xl p-4"
+              href="/#"
+            >
+              Abeille
+            </a>
+            <a
+              class="block font-mono text-2xl p-4"
+              href="/#"
+            >
+              Yritykset
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -137,7 +207,7 @@ exports[`pages/index.tsx Renders correctly 1`] = `
     </div>
   </div>
   <div
-    class="flex w-full text-white justify-center bg-gray-darkest px-12 py-6"
+    class="flex w-full text-white justify-center bg-gray-darkest px-4 md:px-8 lg:px-16 py-6"
   >
     <div
       class="w-full max-w-[90rem] "
