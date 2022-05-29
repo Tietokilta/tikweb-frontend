@@ -31,6 +31,7 @@ const IndexPage: React.FC = () => {
           <Title className="pt-3">Tulevat tapahtumat</Title>
           {testEvents.map(x => 
             <EventCard
+              key={x.title} // todo replace
               className={"mb-3"}
               title={x.title}
               location={x.location}

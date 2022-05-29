@@ -17,8 +17,9 @@ module.exports = {
           {
             name: `page`,
             api: { qs: { _locale: `all` } },
-          },
+          }
         ],
+        singleTypes: ["navigation"],
         queryLimit: 1000,
       },
     },

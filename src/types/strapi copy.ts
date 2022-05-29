@@ -15,19 +15,3 @@ export type StrapiPage = {
   strapiChildren: Pick<StrapiPage, "id" | "slug" | "title">[]
   strapiParent: Pick<StrapiPage, "id">
 }
-
-export type NavigatesTo = {
-  title: string
-  slug: string
-}
-
-export type NavigationItem = {
-  title: string
-  navigatesTo: NavigatesTo
-  parentSlug?: string
-  subItems?: NavigationItem[]
-}
-
-export type StrapiNavigation = {
-  items: NavigationItem[]
-}

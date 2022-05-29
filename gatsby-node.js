@@ -36,6 +36,26 @@ exports.createPages = async ({ actions, graphql }) => {
       }
     }
   `)
+  const strapiNavigation = await graphql(`
+    query {
+      strapiNavigation {
+        items {
+          title
+          subItems {
+            title
+            navigatesTo {
+              slug
+              title
+            }
+          }
+          navigatesTo {
+            slug
+            title
+          }
+        }
+      }
+    }
+  `)
   // Use recursion to build path for each node
   const buildPathTree = (slug, locale) => {
     const node = data.allStrapiPage.nodes.find((obj) => obj.slug === slug)
@@ -51,7 +71,7 @@ exports.createPages = async ({ actions, graphql }) => {
       // Finnish is the default locale => let's not require prefixing for it.
       path: buildPathTree(node.slug, node.locale),
       component: require.resolve("./src/templates/page.tsx"),
-      context: { page: node },
+      context: { page: node, navigation: strapiNavigation.data.strapiNavigation },
     })
   })
 }

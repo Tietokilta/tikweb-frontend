@@ -11,7 +11,7 @@ import Header from "./Header"
 const Layout: React.FC = (props) => {
   const { children } = props
   return (
-    <div className="flex flex-col items-center min-h-full bg-white">
+    <div className="flex flex-col items-center flex-grow min-h-full bg-white" style={{alignItems: "stretch"}}>
       <Header />
       <div className="w-full flex-grow">{children}</div>
       <Footer />
