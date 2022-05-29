@@ -9,7 +9,11 @@ import Footer from "./Footer"
 import Header from "./Header"
 import { FullWidthContainer } from "./Containers"
 
-const Layout: React.FC = (props) => {
+type Props = {
+  children?: React.ReactNode
+}
+
+const Layout: React.FC<Props> = (props) => {
   const { children } = props
   return (
     <div className="flex flex-col items-center min-h-full bg-white">
