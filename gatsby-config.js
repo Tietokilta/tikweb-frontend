@@ -15,7 +15,7 @@ module.exports = {
         apiURL: process.env.STRAPI_URL,
         collectionTypes: [
           {
-            name: `page`,
+            singularName: `page`,
             api: { qs: { _locale: `all` } },
           },
         ],

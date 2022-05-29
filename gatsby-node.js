@@ -25,13 +25,12 @@ exports.createPages = async ({ actions, graphql }) => {
     query {
       allStrapiPage {
         nodes {
-          content
-          strapiParent {
+          locale
+          title
+          slug
+          parentPage {
             slug
           }
-          slug
-          title
-          locale
         }
       }
     }
