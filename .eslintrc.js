@@ -18,5 +18,12 @@ module.exports = {
     "react/react-in-jsx-scope": "off",
     // We don't need these with TS
     "react/prop-types": "off",
+    "react/function-component-definition": [
+      "error",
+      {
+        namedComponents: "arrow-function",
+        unnamedComponents: "arrow-function",
+      },
+    ],
   },
 }
