@@ -8,9 +8,13 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment to deploy to'
+        description: "Environment to deploy to"
         type: environment
         required: true
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   STRAPI_URL: https://tikweb-prod-app-cms.azurewebsites.net
@@ -41,7 +45,7 @@ jobs:
       - run: npm test
       - run: npm run build
 
-  deploy:
+  deploy_branch:
     needs: ci
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -71,4 +75,46 @@ jobs:
         run: az storage blob delete-batch --source '$web' --account-name $DEPLOYMENT_SA --pattern '*'
 
       - name: Upload new files
-        run: az storage blob upload-batch -s public -d '$web' --account-name $DEPLOYMENT_SA
+        run: az storage blob upload-batch -s public -d '$web' --account-name $env.DEPLOYMENT_SA
+
+  deploy_workflow_dispatch:
+    needs: ci
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Sets env vars for production
+        run: |
+          echo "DEPLOYMENT_SA=tikwebprodsa" >> $GITHUB_ENV
+        if: github.event.inputs.environment == 'production'
+
+      - name: Sets env vars for staging
+        run: |
+          echo "DEPLOYMENT_SA=tikwebstagsa" >> $GITHUB_ENV
+        if: github.event.inputs.environment == 'staging'
+
+      # Read node version from `.nvmrc` file
+      - id: nvmrc
+        uses: browniebroke/read-nvmrc-action@v1
+
+      # Install node
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ steps.nvmrc.outputs.node_version }}
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Delete old files
+        run: az storage blob delete-batch --source '$web' --account-name ${{ env.DEPLOYMENT_SA }} --pattern '*'
+
+      - name: Upload new files
+        run: az storage blob upload-batch -s public -d '$web' --account-name ${{ env.DEPLOYMENT_SA }}
