@@ -18,9 +18,7 @@ env:
 jobs:
   ci:
     runs-on: ubuntu-latest
-    concurrency: 
-      group: ${{ github.ref }}
-      cancel-in-progress: true
+    concurrency: ${{ github.ref }}
     steps:
       - uses: actions/checkout@v2
 
@@ -66,67 +64,22 @@ jobs:
   deploy_staging:
     needs: ci
     if: github.ref == 'refs/heads/staging' || github.event.inputs.environment == 'staging'
-    runs-on: ubuntu-latest
     concurrency: staging_environment
-    environment: staging
-    env:
-      DEPLOYMENT_SA: tikwebstagingsa
-      GATSBY_IS_PREVIEW: true
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Cache public
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-public
-        with:
-          # Gatsby builds to `public` dir
-          path: public
-          key: cache-${{ runner.os }}-public-${{ github.sha }}
-          restore-keys: cache-${{ runner.os }}-public-
-
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Delete old files
-        run: az storage blob delete-batch --source '$web' --account-name $DEPLOYMENT_SA --pattern '*'
-
-      - name: Upload new files
-        run: az storage blob upload-batch -s public -d '$web' --account-name $DEPLOYMENT_SA
+    uses: ./.github/workflows/deploy.yml
+    with:
+      deployment_sa: tikwebstagingsa
+      gatsby_is_preview: true
+      environment: staging
+    secrets: inherit
 
   deploy_production:
     needs: ci
     if: github.ref == 'refs/heads/main' || github.event.inputs.environment == 'production'
-    runs-on: ubuntu-latest
     concurrency: production_environment
-    environment: production
-    env:
-      DEPLOYMENT_SA: tikwebprodsa
-      GATSBY_IS_PREVIEW: false
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Cache public
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-public
-        with:
-          # Gatsby builds to `public` dir
-          path: public
-          key: cache-${{ runner.os }}-public-${{ github.sha }}
-          restore-keys: cache-${{ runner.os }}-public-
-
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Delete old files
-        run: az storage blob delete-batch --source '$web' --account-name $DEPLOYMENT_SA --pattern '*'
-
-      - name: Upload new files
-        run: az storage blob upload-batch -s public -d '$web' --account-name $DEPLOYMENT_SA
+    uses: ./.github/workflows/deploy.yml
+    with:
+      deployment_sa: tikwebprodsa
+      gatsby_is_preview: false
+      environment: production
+    secrets: inherit
+    
