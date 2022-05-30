@@ -31,9 +31,10 @@ jobs:
         uses: browniebroke/read-nvmrc-action@v1
 
       # Install node
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ steps.nvmrc.outputs.node_version }}
+          cache: "npm"
 
       # Install dependencies
       - run: npm ci
@@ -42,6 +43,25 @@ jobs:
       - run: npm run lint
       - run: npm run type-check
       - run: npm test
+
+      - name: Cache .cache
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-build-cache
+        with:
+          path: .cache
+          key: cache-${{ runner.os }}-.cache-${{ github.sha }}
+          restore-keys: cache-${{ runner.os }}-.cache-
+
+      - name: Cache public
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-public
+        with:
+          path: public
+          key: cache-${{ runner.os }}-public-${{ github.sha }}
+          restore-keys: cache-${{ runner.os }}-public-
+
       - run: npm run build
 
   deploy_branch:
@@ -56,17 +76,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Read node version from `.nvmrc` file
-      - id: nvmrc
-        uses: browniebroke/read-nvmrc-action@v1
-
-      # Install node
-      - uses: actions/setup-node@v1
+      - name: Cache public
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-public
         with:
-          node-version: ${{ steps.nvmrc.outputs.node_version }}
-
-      - run: npm ci
-      - run: npm run build
+          # Gatsby builds to `public` dir
+          path: public
+          key: cache-${{ runner.os }}-public-${{ github.sha }}
+          restore-keys: cache-${{ runner.os }}-public-
 
       - name: Azure Login
         uses: azure/login@v1
@@ -100,17 +118,15 @@ jobs:
           echo "GATSBY_IS_PREVIEW=true" >> $GITHUB_ENV
         if: github.event.inputs.environment == 'staging'
 
-      # Read node version from `.nvmrc` file
-      - id: nvmrc
-        uses: browniebroke/read-nvmrc-action@v1
-
-      # Install node
-      - uses: actions/setup-node@v1
+      - name: Cache public
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-public
         with:
-          node-version: ${{ steps.nvmrc.outputs.node_version }}
-
-      - run: npm ci
-      - run: npm run build
+          # Gatsby builds to `public` dir
+          path: public
+          key: cache-${{ runner.os }}-public-${{ github.sha }}
+          restore-keys: cache-${{ runner.os }}-public-
 
       - name: Azure Login
         uses: azure/login@v1
