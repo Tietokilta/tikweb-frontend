@@ -12,17 +12,15 @@ on:
         type: environment
         required: true
 
-concurrency:
-  group: ${{ github.ref }}
-  cancel-in-progress: true
-
 env:
   STRAPI_URL: https://tikweb-prod-app-cms.azurewebsites.net
 
 jobs:
   ci:
     runs-on: ubuntu-latest
-
+    concurrency: 
+      group: ${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
 
@@ -49,6 +47,7 @@ jobs:
         env:
           cache-name: cache-build-cache
         with:
+          # Gatsby build cache directory
           path: .cache
           key: cache-${{ runner.os }}-.cache-${{ github.sha }}
           restore-keys: cache-${{ runner.os }}-.cache-
@@ -68,6 +67,7 @@ jobs:
     needs: ci
     if: github.ref == 'refs/heads/staging' || github.event.inputs.environment == 'staging'
     runs-on: ubuntu-latest
+    concurrency: staging_environment
     environment: staging
     env:
       DEPLOYMENT_SA: tikwebstagingsa
@@ -95,12 +95,13 @@ jobs:
         run: az storage blob delete-batch --source '$web' --account-name $DEPLOYMENT_SA --pattern '*'
 
       - name: Upload new files
-        run: az storage blob upload-batch -s public -d '$web' --account-name $env.DEPLOYMENT_SA
+        run: az storage blob upload-batch -s public -d '$web' --account-name $DEPLOYMENT_SA
 
   deploy_production:
     needs: ci
     if: github.ref == 'refs/heads/main' || github.event.inputs.environment == 'production'
     runs-on: ubuntu-latest
+    concurrency: production_environment
     environment: production
     env:
       DEPLOYMENT_SA: tikwebprodsa
@@ -128,4 +129,4 @@ jobs:
         run: az storage blob delete-batch --source '$web' --account-name $DEPLOYMENT_SA --pattern '*'
 
       - name: Upload new files
-        run: az storage blob upload-batch -s public -d '$web' --account-name $env.DEPLOYMENT_SA
+        run: az storage blob upload-batch -s public -d '$web' --account-name $DEPLOYMENT_SA
