@@ -41,8 +41,6 @@ jobs:
 
       - name: Cache .cache
         uses: actions/cache@v3
-        env:
-          cache-name: cache-build-cache
         with:
           # Gatsby build cache directory
           path: .cache
@@ -51,8 +49,6 @@ jobs:
 
       - name: Cache public
         uses: actions/cache@v3
-        env:
-          cache-name: cache-public
         with:
           path: public
           key: cache-${{ runner.os }}-public-${{ github.sha }}

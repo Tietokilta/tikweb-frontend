@@ -28,8 +28,6 @@ jobs:
 
       - name: Cache public
         uses: actions/cache@v3
-        env:
-          cache-name: cache-public
         with:
           # Gatsby builds to `public` dir
           path: public
