@@ -27,12 +27,19 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Cache public
+        id: cache-public
         uses: actions/cache@v3
         with:
           # Gatsby builds to `public` dir
           path: public
           key: cache-${{ runner.os }}-public-${{ github.sha }}
-          restore-keys: cache-${{ runner.os }}-public-
+
+      - name: Check if cache hit
+        if: ${{ steps.cache-public.outputs.cache-hit == 'false' }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+              core.setFailed('Failed to get build from cache')
 
       - name: Azure Login
         uses: azure/login@v1
