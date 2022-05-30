@@ -18,7 +18,6 @@ env:
 jobs:
   ci:
     runs-on: ubuntu-latest
-    concurrency: ${{ github.ref }}
     steps:
       - uses: actions/checkout@v2
 
