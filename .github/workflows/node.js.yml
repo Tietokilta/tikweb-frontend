@@ -18,7 +18,6 @@ concurrency:
 
 env:
   STRAPI_URL: https://tikweb-prod-app-cms.azurewebsites.net
-  DEPLOYMENT_SA: tikwebprodsa
 
 jobs:
   ci:
@@ -51,6 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     env:
+      DEPLOYMENT_SA: tikwebprodsa
       GATSBY_IS_PREVIEW: false
 
     steps:
