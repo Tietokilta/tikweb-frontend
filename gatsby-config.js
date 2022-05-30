@@ -21,7 +21,11 @@ module.exports = {
                 locale: "all",
               },
             },
-          }
+            queryParams: {
+              publicationState:
+                process.env.GATSBY_IS_PREVIEW === "true" ? "preview" : "live",
+            },
+          },
         ],
         singleTypes: [
           {
@@ -34,8 +38,8 @@ module.exports = {
                     navigatesTo: {
                       populate: {
                         slug: "*",
-                        title: "*"
-                      }
+                        title: "*",
+                      },
                     },
                     subItems: {
                       populate: {
@@ -43,16 +47,16 @@ module.exports = {
                         navigatesTo: {
                           populate: {
                             slug: "*",
-                            title: "*"
-                          }
+                            title: "*",
+                          },
                         },
-                      }
-                    }
-                  }
-                }
-              }
+                      },
+                    },
+                  },
+                },
+              },
             },
-          }
+          },
         ],
         queryLimit: 1000,
       },

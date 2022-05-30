@@ -50,6 +50,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: production
+    env:
+      GATSBY_IS_PREVIEW: false
 
     steps:
       - uses: actions/checkout@v2
@@ -89,11 +91,13 @@ jobs:
       - name: Sets env vars for production
         run: |
           echo "DEPLOYMENT_SA=tikwebprodsa" >> $GITHUB_ENV
+          echo "GATSBY_IS_PREVIEW=false" >> $GITHUB_ENV
         if: github.event.inputs.environment == 'production'
 
       - name: Sets env vars for staging
         run: |
           echo "DEPLOYMENT_SA=tikwebstagsa" >> $GITHUB_ENV
+          echo "GATSBY_IS_PREVIEW=true" >> $GITHUB_ENV
         if: github.event.inputs.environment == 'staging'
 
       # Read node version from `.nvmrc` file
