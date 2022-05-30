@@ -2,9 +2,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, staging]
   pull_request:
-    branches: [main]
+    branches: [main, staging]
   workflow_dispatch:
     inputs:
       environment:
@@ -64,9 +64,42 @@ jobs:
 
       - run: npm run build
 
-  deploy_branch:
+  deploy_staging:
     needs: ci
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/staging' || github.event.inputs.environment == 'staging'
+    runs-on: ubuntu-latest
+    environment: staging
+    env:
+      DEPLOYMENT_SA: tikwebstagingsa
+      GATSBY_IS_PREVIEW: true
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache public
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-public
+        with:
+          # Gatsby builds to `public` dir
+          path: public
+          key: cache-${{ runner.os }}-public-${{ github.sha }}
+          restore-keys: cache-${{ runner.os }}-public-
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Delete old files
+        run: az storage blob delete-batch --source '$web' --account-name $DEPLOYMENT_SA --pattern '*'
+
+      - name: Upload new files
+        run: az storage blob upload-batch -s public -d '$web' --account-name $env.DEPLOYMENT_SA
+
+  deploy_production:
+    needs: ci
+    if: github.ref == 'refs/heads/main' || github.event.inputs.environment == 'production'
     runs-on: ubuntu-latest
     environment: production
     env:
@@ -96,45 +129,3 @@ jobs:
 
       - name: Upload new files
         run: az storage blob upload-batch -s public -d '$web' --account-name $env.DEPLOYMENT_SA
-
-  deploy_workflow_dispatch:
-    needs: ci
-    if: github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment }}
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Sets env vars for production
-        run: |
-          echo "DEPLOYMENT_SA=tikwebprodsa" >> $GITHUB_ENV
-          echo "GATSBY_IS_PREVIEW=false" >> $GITHUB_ENV
-        if: github.event.inputs.environment == 'production'
-
-      - name: Sets env vars for staging
-        run: |
-          echo "DEPLOYMENT_SA=tikwebstagsa" >> $GITHUB_ENV
-          echo "GATSBY_IS_PREVIEW=true" >> $GITHUB_ENV
-        if: github.event.inputs.environment == 'staging'
-
-      - name: Cache public
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-public
-        with:
-          # Gatsby builds to `public` dir
-          path: public
-          key: cache-${{ runner.os }}-public-${{ github.sha }}
-          restore-keys: cache-${{ runner.os }}-public-
-
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Delete old files
-        run: az storage blob delete-batch --source '$web' --account-name ${{ env.DEPLOYMENT_SA }} --pattern '*'
-
-      - name: Upload new files
-        run: az storage blob upload-batch -s public -d '$web' --account-name ${{ env.DEPLOYMENT_SA }}
