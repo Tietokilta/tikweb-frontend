@@ -15,11 +15,18 @@ module.exports = {
         apiURL: process.env.STRAPI_URL,
         collectionTypes: [
           {
-            name: `page`,
-            api: { qs: { _locale: `all` } },
+            singularName: "page",
+            // gatsby v4
+            pluginOptions: {
+              i18n: {
+                locale: "all",
+              },
+            },
+            // gatsby v3
+            // api: { qs: { _locale: `all` } },
           }
         ],
-        singleTypes: ["navigation"],
+        singleTypes: ["navigation", "relation"],
         queryLimit: 1000,
       },
     },
