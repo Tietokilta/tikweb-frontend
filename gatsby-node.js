@@ -66,11 +66,11 @@ exports.createPages = async ({ actions, graphql }) => {
   const buildPathTree = (slug, locale) => {
     const node = data.allStrapiPage.nodes.find((obj) => obj.slug === slug)
     // If node we are building path for is a node without a parent just return the slug and locale if not finnish.
-    if (!node.strapiParent) {
+    if (!node.strapi_parent) {
       return locale !== "fi" ? `${locale}/${node.slug}` : node.slug
     }
     // If node has a parent, the path is slug of the node added to the path of the parent.
-    return `${buildPathTree(node.strapiParent.slug, locale)}/${node.slug}`
+    return `${buildPathTree(node.strapi_parent.slug, locale)}/${node.slug}`
   }
   data.allStrapiPage.nodes.forEach((node) => {
     actions.createPage({

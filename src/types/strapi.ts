@@ -13,7 +13,7 @@ export type StrapiPage = {
   title: string
   unlisted: boolean
   strapiChildren: Pick<StrapiPage, "id" | "slug" | "title">[]
-  strapiParent: Pick<StrapiPage, "id">
+  strapi_parent: Pick<StrapiPage, "id">
 }
 
 export type NavigatesTo = {
