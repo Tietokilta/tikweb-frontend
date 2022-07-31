@@ -71,4 +71,4 @@ CI will deploy main branch automatically. In Github repository settings, set cor
 
 `package-lock.json` changes lockfile version when running `npm i`
 
-- install the NPM version specified in `.nvmrc` in repository root
+- run `nvm use` to install the Node/NPM version specified in `.nvmrc`
