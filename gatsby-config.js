@@ -17,16 +17,46 @@ module.exports = {
           {
             singularName: "page",
             // gatsby v4
-            pluginOptions: {
-              i18n: {
-                locale: "all",
-              },
-            },
+            // pluginOptions: {
+            //   i18n: {
+            //     locale: "all",
+            //   },
+            // },
             // gatsby v3
-            // api: { qs: { _locale: `all` } },
+            api: { qs: { _locale: `all` } },
           }
         ],
-        singleTypes: ["navigation", "relation"],
+        singleTypes: [
+          {
+            singularName: "navigation",
+            queryParams: {
+              populate: {
+                items: {
+                  populate: {
+                    title: "*",
+                    navigatesTo: {
+                      populate: {
+                        slug: "*",
+                        title: "*"
+                      }
+                    },
+                    subItems: {
+                      populate: {
+                        title: "*",
+                        navigatesTo: {
+                          populate: {
+                            slug: "*",
+                            title: "*"
+                          }
+                        },
+                      }
+                    }
+                  }
+                }
+              }
+            },
+          }
+        ],
         queryLimit: 1000,
       },
     },
