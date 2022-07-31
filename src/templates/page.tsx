@@ -5,7 +5,7 @@ import { StrapiNavigation, StrapiPage } from "../types/strapi"
 
 type Props = {
   pageContext: {
-    page: StrapiPage,
+    page: StrapiPage
     navigation: StrapiNavigation
   }
 }

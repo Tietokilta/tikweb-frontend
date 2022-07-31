@@ -6,9 +6,24 @@ import { TextContainer } from "../components/TextContainer"
 import Title from "../components/Title"
 
 const testEvents = [
-  { title: "Nappusitsit", location: "Smökki", date: new Date(), signUpLink: "https://tietokilta.fi" },
-  { title: "Fappusitsit", location: "Smökki", date: new Date(), signUpLink: "https://tietokilta.fi" },
-  { title: "Sappusitsit", location: "Smökki", date: new Date(), signUpLink: "https://tietokilta.fi" },
+  {
+    title: "Nappusitsit",
+    location: "Smökki",
+    date: new Date(),
+    signUpLink: "https://tietokilta.fi",
+  },
+  {
+    title: "Fappusitsit",
+    location: "Smökki",
+    date: new Date(),
+    signUpLink: "https://tietokilta.fi",
+  },
+  {
+    title: "Sappusitsit",
+    location: "Smökki",
+    date: new Date(),
+    signUpLink: "https://tietokilta.fi",
+  },
 ]
 
 const IndexPage: React.FC = () => {
@@ -20,25 +35,25 @@ const IndexPage: React.FC = () => {
         <FullWidthContainer className="p-3">
           <Title>Juuri Nyt</Title>
           <EventCard
-            title={"Wappusitsit"}
-            location={"Smökki"}
+            title="Wappusitsit"
+            location="Smökki"
             date={new Date()}
             numberOfAttendees={76}
             maxCapacity={250}
-            description={"Teekkareiden vuoden tärkein tapahtuma lähenee ja mikä olisi parempi tapa juhlistaa sitä jo ennakkoon kuin Wappusitsit! Tänäkin vuonna paikan päällä raikaa"}
-            signUpLink={"https://tietokilta.fi"}
+            description="Teekkareiden vuoden tärkein tapahtuma lähenee ja mikä olisi parempi tapa juhlistaa sitä jo ennakkoon kuin Wappusitsit! Tänäkin vuonna paikan päällä raikaa"
+            signUpLink="https://tietokilta.fi"
           />
           <Title className="pt-3">Tulevat tapahtumat</Title>
-          {testEvents.map(x => 
+          {testEvents.map((x) => (
             <EventCard
               key={x.title} // todo replace
-              className={"mb-3"}
+              className="mb-3"
               title={x.title}
               location={x.location}
               date={x.date}
               signUpLink={x.signUpLink}
             />
-          )}
+          ))}
         </FullWidthContainer>
       </div>
     </Layout>

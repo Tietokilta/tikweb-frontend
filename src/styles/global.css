@@ -33,11 +33,7 @@
   }
 
   a {
-    @apply no-underline cursor-pointer;
-  }
-
-  .link {
-    @apply no-underline font-normal text-orange;
+    @apply no-underline cursor-pointer font-normal text-orange;
   }
 }
 

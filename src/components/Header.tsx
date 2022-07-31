@@ -11,7 +11,7 @@ const Header: React.FC = () => {
         <FullWidthContainer className="flex justify-between max-w-[90rem]">
           <Link
             to="/"
-            className="sticky flex items-center font-normal text-2xl"
+            className="sticky flex items-center font-normal text-2xl text-white"
           >
             <img className="w-8 h-8 mr-2" src={logo} alt="logo" />
             Tietokilta Ry
