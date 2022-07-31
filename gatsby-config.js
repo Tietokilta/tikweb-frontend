@@ -15,9 +15,44 @@ module.exports = {
         apiURL: process.env.STRAPI_URL,
         collectionTypes: [
           {
-            name: `page`,
-            api: { qs: { _locale: `all` } },
-          },
+            singularName: "page",
+            pluginOptions: {
+              i18n: {
+                locale: "all",
+              },
+            },
+          }
+        ],
+        singleTypes: [
+          {
+            singularName: "navigation",
+            queryParams: {
+              populate: {
+                items: {
+                  populate: {
+                    title: "*",
+                    navigatesTo: {
+                      populate: {
+                        slug: "*",
+                        title: "*"
+                      }
+                    },
+                    subItems: {
+                      populate: {
+                        title: "*",
+                        navigatesTo: {
+                          populate: {
+                            slug: "*",
+                            title: "*"
+                          }
+                        },
+                      }
+                    }
+                  }
+                }
+              }
+            },
+          }
         ],
         queryLimit: 1000,
       },

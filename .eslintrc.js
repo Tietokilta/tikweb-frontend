@@ -18,5 +18,8 @@ module.exports = {
     "react/react-in-jsx-scope": "off",
     // We don't need these with TS
     "react/prop-types": "off",
+    // Not very good rule
+    "import/prefer-default-export": "off",
+    "react/require-default-props": "off",
   },
 }

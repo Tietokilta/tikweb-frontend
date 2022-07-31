@@ -1,4 +1,4 @@
-/* eslint-disable import/prefer-default-export */
+import classNames from "classnames"
 
 type Props = {
   className?: string
@@ -7,6 +7,4 @@ type Props = {
 export const FullWidthContainer: React.FC<Props> = ({
   children,
   className,
-}) => (
-  <div className={`w-full max-w-[90rem] ${className || ""}`}>{children}</div>
-)
+}) => <div className={classNames("w-full", className)}>{children}</div>

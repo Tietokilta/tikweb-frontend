@@ -33,7 +33,7 @@
   }
 
   a {
-    @apply no-underline font-black font-semibold;
+    @apply no-underline cursor-pointer font-normal text-orange;
   }
 }
 
