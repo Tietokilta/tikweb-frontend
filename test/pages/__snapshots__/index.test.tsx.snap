@@ -240,7 +240,7 @@ exports[`pages/index.tsx Renders correctly 1`] = `
               <p
                 class="font-mono text-sm"
               >
-                su 31-07-2022, klo 19:57
+                su 31-07-2022, klo 21:00
               </p>
             </div>
             <div
@@ -293,7 +293,7 @@ exports[`pages/index.tsx Renders correctly 1`] = `
               <p
                 class="font-mono text-sm"
               >
-                su 31-07-2022, klo 19:57
+                la 01-01-2022, klo 12:00
               </p>
             </div>
             <div
@@ -326,7 +326,7 @@ exports[`pages/index.tsx Renders correctly 1`] = `
               <p
                 class="font-mono text-sm"
               >
-                su 31-07-2022, klo 19:57
+                la 01-01-2022, klo 12:00
               </p>
             </div>
             <div
@@ -359,7 +359,7 @@ exports[`pages/index.tsx Renders correctly 1`] = `
               <p
                 class="font-mono text-sm"
               >
-                su 31-07-2022, klo 19:57
+                la 01-01-2022, klo 12:00
               </p>
             </div>
             <div

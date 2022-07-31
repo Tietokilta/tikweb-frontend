@@ -9,19 +9,19 @@ const testEvents = [
   {
     title: "Nappusitsit",
     location: "Smökki",
-    date: new Date(),
+    date: new Date("2022-01-01T10:00:00Z"),
     signUpLink: "https://tietokilta.fi",
   },
   {
     title: "Fappusitsit",
     location: "Smökki",
-    date: new Date(),
+    date: new Date("2022-01-01T10:00:00Z"),
     signUpLink: "https://tietokilta.fi",
   },
   {
     title: "Sappusitsit",
     location: "Smökki",
-    date: new Date(),
+    date: new Date("2022-01-01T10:00:00Z"),
     signUpLink: "https://tietokilta.fi",
   },
 ]
