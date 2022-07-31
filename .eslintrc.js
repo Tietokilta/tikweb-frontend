@@ -25,5 +25,8 @@ module.exports = {
         unnamedComponents: "arrow-function",
       },
     ],
+    // Not very good rule
+    "import/prefer-default-export": "off",
+    "react/require-default-props": "off",
   },
 }

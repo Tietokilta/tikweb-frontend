@@ -25,7 +25,7 @@ const NavBar: React.FC = () => {
       <nav className="hidden md:flex items-center font-mono text-lg">
         {menuItems.map((menuItem) => (
           <Link
-            className="font-mono ml-6 lg:ml-12"
+            className="font-mono ml-6 lg:ml-12 text-white"
             to={menuItem.url}
             key={`menu-item-${menuItem.title}-${menuItem.url}`}
           >
@@ -50,7 +50,7 @@ const NavBar: React.FC = () => {
           <div className="p-4">
             {menuItems.map((menuItem) => (
               <Link
-                className="block font-mono text-2xl p-4"
+                className="block font-mono text-2xl p-4 text-white"
                 to={menuItem.url}
                 key={`menu-item-${menuItem.title}-${menuItem.url}`}
               >
