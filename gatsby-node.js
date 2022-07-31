@@ -35,9 +35,6 @@ exports.createPages = async ({ actions, graphql }) => {
               }
             }
           }
-          strapi_parent {
-            slug
-          }
           content {
             text {
               data {
@@ -45,30 +42,38 @@ exports.createPages = async ({ actions, graphql }) => {
               }
             }
           }
+          parentPage {
+            slug
+          }
         }
       }
     }
   `)
+
   const strapiNavigation = await graphql(`
     query {
-      strapiNavigation {
-        items {
-          title
-          subItems {
+      allStrapiNavigation {
+        nodes {
+          items {
             title
+            subItems {
+              title
+              navigatesTo {
+                slug
+                title
+              }
+            }
             navigatesTo {
               slug
               title
             }
           }
-          navigatesTo {
-            slug
-            title
-          }
+          locale
         }
       }
     }
   `)
+
   // Use recursion to build path for each node
   const buildPathTree = (slug, locale) => {
     const node = data.allStrapiPage.nodes.find((obj) => obj.slug === slug)
@@ -79,6 +84,7 @@ exports.createPages = async ({ actions, graphql }) => {
     // If node has a parent, the path is slug of the node added to the path of the parent.
     return `${buildPathTree(node.strapi_parent.slug, locale)}/${node.slug}`
   }
+
   data.allStrapiPage.nodes.forEach((node) => {
     actions.createPage({
       // Finnish is the default locale => let's not require prefixing for it.
@@ -86,7 +92,9 @@ exports.createPages = async ({ actions, graphql }) => {
       component: require.resolve("./src/templates/page.tsx"),
       context: {
         page: node,
-        navigation: strapiNavigation.data.strapiNavigation,
+        navigation: strapiNavigation.data.allStrapiNavigation.nodes.find(
+          (foundNode) => foundNode.locale === node.locale
+        ),
       },
     })
   })

@@ -25,10 +25,11 @@ By default, the local development server is running at `localhost:8000`.
 
 ## Configuring backend
 
-By default, Gatsby will try to connect to localhost:1337, where Strapi is expected to be running. If you want to use local Strapi, see the set up guide in the `tikweb-cms` repository. If you want to instead connect to the production version of Strapi, rename the `.env.example` file to `.env.development`, and put the following line in the file, if it is not there:
+By default, Gatsby will try to connect to localhost:1337, where Strapi is expected to be running. If you want to use local Strapi, see the set up guide in the `tikweb-cms` repository. If you want to instead connect to the production version of Strapi, rename the `.env.example` file to `.env.development`, and put the following content in the file, if it is not there:
 
 ```
 STRAPI_URL=https://tikweb-prod-app-cms.azurewebsites.net
+STRAPI_API_KEY=<api key here>
 ```
 
 ## TypeScript
@@ -69,4 +70,5 @@ CI will deploy main branch automatically. In Github repository settings, set cor
 # Common issues
 
 `package-lock.json` changes lockfile version when running `npm i`
+
 - install the NPM version specified in `.nvmrc` in repository root
