@@ -16,14 +16,11 @@ module.exports = {
         collectionTypes: [
           {
             singularName: "page",
-            // gatsby v4
-            // pluginOptions: {
-            //   i18n: {
-            //     locale: "all",
-            //   },
-            // },
-            // gatsby v3
-            api: { qs: { _locale: `all` } },
+            pluginOptions: {
+              i18n: {
+                locale: "all",
+              },
+            },
           }
         ],
         singleTypes: [
