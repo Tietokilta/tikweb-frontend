@@ -15,8 +15,8 @@
     "clean": "gatsby clean",
     "type-check": "tsc --noEmit",
     "type-check:watch": "tsc --noEmit --watch",
-    "lint": "eslint . --ext .ts --ext .tsx",
-    "lint:fix": "eslint . --ext .ts --ext .tsx --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "test": "TZ=UTC jest"
   },
   "dependencies": {
