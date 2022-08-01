@@ -55,6 +55,8 @@ jobs:
           restore-keys: cache-${{ runner.os }}-public-
 
       - run: npm run build
+        env:
+          STRAPI_API_KEY: ${{ secrets.STRAPI_API_KEY }}
 
   deploy_staging:
     needs: ci

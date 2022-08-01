@@ -2,6 +2,7 @@ import classNames from "classnames"
 
 type Props = {
   className?: string
+  children?: React.ReactNode
 }
 
 export const FullWidthContainer: React.FC<Props> = ({

@@ -13,6 +13,7 @@ module.exports = {
       resolve: "gatsby-source-strapi",
       options: {
         apiURL: process.env.STRAPI_URL,
+        accessToken: process.env.STRAPI_API_KEY,
         collectionTypes: [
           {
             singularName: "page",
@@ -30,6 +31,11 @@ module.exports = {
         singleTypes: [
           {
             singularName: "navigation",
+            pluginOptions: {
+              i18n: {
+                locale: "all",
+              },
+            },
             queryParams: {
               populate: {
                 items: {
