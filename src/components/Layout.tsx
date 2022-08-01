@@ -8,7 +8,11 @@ import "@fontsource/source-code-pro/700.css"
 import Footer from "./Footer"
 import Header from "./Header"
 
-const Layout: React.FC = (props) => {
+type Props = {
+  children?: React.ReactNode
+}
+
+const Layout: React.FC<Props> = (props) => {
   const { children } = props
   return (
     <div

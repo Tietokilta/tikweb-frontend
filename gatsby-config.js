@@ -13,6 +13,7 @@ module.exports = {
       resolve: "gatsby-source-strapi",
       options: {
         apiURL: process.env.STRAPI_URL,
+        accessToken: process.env.STRAPI_API_KEY,
         collectionTypes: [
           {
             singularName: "page",
@@ -21,11 +22,16 @@ module.exports = {
                 locale: "all",
               },
             },
-          }
+          },
         ],
         singleTypes: [
           {
             singularName: "navigation",
+            pluginOptions: {
+              i18n: {
+                locale: "all",
+              },
+            },
             queryParams: {
               populate: {
                 items: {
@@ -34,8 +40,8 @@ module.exports = {
                     navigatesTo: {
                       populate: {
                         slug: "*",
-                        title: "*"
-                      }
+                        title: "*",
+                      },
                     },
                     subItems: {
                       populate: {
@@ -43,16 +49,16 @@ module.exports = {
                         navigatesTo: {
                           populate: {
                             slug: "*",
-                            title: "*"
-                          }
+                            title: "*",
+                          },
                         },
-                      }
-                    }
-                  }
-                }
-              }
+                      },
+                    },
+                  },
+                },
+              },
             },
-          }
+          },
         ],
         queryLimit: 1000,
       },

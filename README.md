@@ -25,15 +25,27 @@ By default, the local development server is running at `localhost:8000`.
 
 ## Configuring backend
 
-By default, Gatsby will try to connect to localhost:1337, where Strapi is expected to be running. If you want to use local Strapi, see the set up guide in the `tikweb-cms` repository. If you want to instead connect to the production version of Strapi, rename the `.env.example` file to `.env.development`, and put the following line in the file, if it is not there:
+By default, Gatsby will try to connect to Strapi at localhost:80. Copy `.env.example` to `.env.development` (for `npm run develop`) or `.env.production` (for `npm run build`) and put configuration options there.
+
+You'll need to generate an API Token from Strapi's settings (**not** a JWT from the Users & Permissions plugin).
+
+For a local Strapi setup, see the set up guide in the `tikweb-cms` repository, and use:
+
+```
+STRAPI_URL=http://localhost:1337
+STRAPI_API_KEY=<api key here>
+```
+
+To connect to our production deployment of Strapi, use:
 
 ```
 STRAPI_URL=https://tikweb-prod-app-cms.azurewebsites.net
+STRAPI_API_KEY=<api key here>
 ```
 
 ## TypeScript
 
-Gatsby currently uses babel to transform TS into JS, which totally ignores typechecking. This is a bit unfortunate, but hopefully it will change someday. In order to check types properly:
+Gatsby currently uses Babel to transform TS into JS, which totally ignores typechecking. This is a bit unfortunate, but hopefully it will change someday. In order to check types properly:
 
 - Setup your editor to highlight type errors. VSCode will do this out of the box.
 - Consider running `npm run type-check` periodically, or even use it in watch mode: `npm run type-check:watch`.
@@ -53,20 +65,12 @@ Pages can be added by adding a new file to `src/pages`. See:
 
 # Deployment
 
-CI will deploy main branch automatically. In Github repository settings, set correct `AZURE_CREDENTIALS` values in format:
+CI will deploy the main branch automatically. We store `AZURE_CREDENTIALS` in the GitHub repository secrets.
 
-```
-{
-  "clientId": "<GUID>",
-  "clientSecret": "<GUID>",
-  "subscriptionId": "<GUID>",
-  "tenantId": "<GUID>"
-}
-```
-
-**NOTE!** Client secret will expire after 2 years.
+**NOTE!** Client secret will expire after 2 years. Refer to [instructions in the infra repo](https://github.com/Tietokilta/infra#credentials) for generating them.
 
 # Common issues
 
 `package-lock.json` changes lockfile version when running `npm i`
-- install the NPM version specified in `.nvmrc` in repository root
+
+- run `nvm use` to install the Node/NPM version specified in `.nvmrc`

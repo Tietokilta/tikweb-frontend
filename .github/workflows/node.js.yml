@@ -13,6 +13,7 @@ env:
 jobs:
   ci:
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
       - uses: actions/checkout@v2
@@ -33,7 +34,9 @@ jobs:
       - run: npm run lint
       - run: npm run type-check
       - run: npm test
-      - run: npm run build
+      - env:
+          STRAPI_API_KEY: ${{ secrets.STRAPI_API_KEY }}
+        run: npm run build
 
   deploy:
     needs: ci
@@ -54,7 +57,9 @@ jobs:
           node-version: ${{ steps.nvmrc.outputs.node_version }}
 
       - run: npm ci
-      - run: npm run build
+      - env:
+          STRAPI_API_KEY: ${{ secrets.STRAPI_API_KEY }}
+        run: npm run build
 
       - name: Azure Login
         uses: azure/login@v1
