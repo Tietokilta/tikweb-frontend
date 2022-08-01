@@ -1,0 +1,54 @@
+name: Static site deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: "Environment to deploy to"
+        type: string
+        required: true
+      gatsby_is_preview:
+        description: "Show only published changes or drafts too?"
+        required: true
+        type: boolean
+      deployment_sa:
+        description: "Service account to deploy with"
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      GATSBY_IS_PREVIEW: ${{ inputs.gatsby_is_preview }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache public
+        id: cache-public
+        uses: actions/cache@v3
+        with:
+          # Gatsby builds to `public` dir
+          path: public
+          key: cache-${{ runner.os }}-public-${{ github.sha }}
+
+      - name: Check if cache hit
+        if: ${{ steps.cache-public.outputs.cache-hit == 'false' }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+              core.setFailed('Failed to get build from cache')
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Delete old files
+        run: az storage blob delete-batch --source '$web' --account-name ${{ inputs.deployment_sa }} --pattern '*'
+
+      - name: Upload new files
+        run: az storage blob upload-batch -s public -d '$web' --account-name ${{ inputs.deployment_sa }}
+      

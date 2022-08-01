@@ -22,6 +22,10 @@ module.exports = {
                 locale: "all",
               },
             },
+            queryParams: {
+              publicationState:
+                process.env.GATSBY_IS_PREVIEW === "true" ? "preview" : "live",
+            },
           },
         ],
         singleTypes: [

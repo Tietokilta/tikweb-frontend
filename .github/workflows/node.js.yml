@@ -2,19 +2,22 @@ name: Node.js CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, staging]
   pull_request:
-    branches: [main]
+    branches: [main, staging]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to deploy to"
+        type: environment
+        required: true
 
 env:
   STRAPI_URL: https://tikweb-prod-app-cms.azurewebsites.net
-  DEPLOYMENT_SA: tikwebprodsa
 
 jobs:
   ci:
     runs-on: ubuntu-latest
-    environment: production
-
     steps:
       - uses: actions/checkout@v2
 
@@ -23,9 +26,10 @@ jobs:
         uses: browniebroke/read-nvmrc-action@v1
 
       # Install node
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ steps.nvmrc.outputs.node_version }}
+          cache: "npm"
 
       # Install dependencies
       - run: npm ci
@@ -34,40 +38,45 @@ jobs:
       - run: npm run lint
       - run: npm run type-check
       - run: npm test
-      - env:
-          STRAPI_API_KEY: ${{ secrets.STRAPI_API_KEY }}
-        run: npm run build
 
-  deploy:
+      - name: Cache .cache
+        uses: actions/cache@v3
+        with:
+          # Gatsby build cache directory
+          path: .cache
+          key: cache-${{ runner.os }}-.cache-${{ github.sha }}
+          restore-keys: cache-${{ runner.os }}-.cache-
+
+      - name: Cache public
+        uses: actions/cache@v3
+        with:
+          path: public
+          key: cache-${{ runner.os }}-public-${{ github.sha }}
+          restore-keys: cache-${{ runner.os }}-public-
+
+      - run: npm run build
+        env:
+          STRAPI_API_KEY: ${{ secrets.STRAPI_API_KEY }}
+
+  deploy_staging:
     needs: ci
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment: production
+    if: github.ref == 'refs/heads/staging' || github.event.inputs.environment == 'staging'
+    concurrency: staging_environment
+    uses: ./.github/workflows/deploy.yml
+    with:
+      deployment_sa: tikwebstagingsa
+      gatsby_is_preview: true
+      environment: staging
+    secrets: inherit
 
-    steps:
-      - uses: actions/checkout@v2
-
-      # Read node version from `.nvmrc` file
-      - id: nvmrc
-        uses: browniebroke/read-nvmrc-action@v1
-
-      # Install node
-      - uses: actions/setup-node@v1
-        with:
-          node-version: ${{ steps.nvmrc.outputs.node_version }}
-
-      - run: npm ci
-      - env:
-          STRAPI_API_KEY: ${{ secrets.STRAPI_API_KEY }}
-        run: npm run build
-
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Delete old files
-        run: az storage blob delete-batch --source '$web' --account-name $DEPLOYMENT_SA --pattern '*'
-
-      - name: Upload new files
-        run: az storage blob upload-batch -s public -d '$web' --account-name $DEPLOYMENT_SA
+  deploy_production:
+    needs: ci
+    if: github.ref == 'refs/heads/main' || github.event.inputs.environment == 'production'
+    concurrency: production_environment
+    uses: ./.github/workflows/deploy.yml
+    with:
+      deployment_sa: tikwebprodsa
+      gatsby_is_preview: false
+      environment: production
+    secrets: inherit
+    
