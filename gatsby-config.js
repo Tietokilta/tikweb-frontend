@@ -63,6 +63,16 @@ module.exports = {
               },
             },
           },
+          {
+            singularName: "partners",
+            queryParams: {
+              populate: {
+                partner: {
+                  populate: "logo",
+                },
+              },
+            },
+          },
         ],
         queryLimit: 1000,
       },

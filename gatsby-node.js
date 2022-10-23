@@ -73,7 +73,6 @@ exports.createPages = async ({ actions, graphql }) => {
       }
     }
   `)
-
   // Use recursion to build path for each node
   const buildPathTree = (slug, locale) => {
     const node = data.allStrapiPage.nodes.find((obj) => obj.slug === slug)

@@ -12,8 +12,7 @@ type Props = {
   children?: React.ReactNode
 }
 
-const Layout: React.FC<Props> = (props) => {
-  const { children } = props
+const Layout: React.FC<Props> = ({ children }) => {
   return (
     <div
       className="flex flex-col items-center flex-grow min-h-[100vh] bg-white"
@@ -25,5 +24,4 @@ const Layout: React.FC<Props> = (props) => {
     </div>
   )
 }
-
 export default Layout
