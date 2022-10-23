@@ -1,15 +1,29 @@
+import * as React from "react"
+import { useStaticQuery, graphql } from "gatsby"
 import { FullWidthContainer } from "./Containers"
 
 import { StrapiPartners } from "../types/strapi"
 import parseImageUrl from "../utils/parseImageUrl"
 
-type Props = {
-  partners: StrapiPartners
-}
+const Footer: React.FC = () => {
+  const data = useStaticQuery(graphql`
+    query {
+      allStrapiPartners {
+        nodes {
+          title
+          partner {
+            logo {
+              url
+            }
+            name
+            url
+          }
+        }
+      }
+    }
+  `)
+  const partners: StrapiPartners = data.allStrapiPartners.nodes[0]
 
-const Footer: React.FC<Props> = ({ partners }) => {
-  // const logos = [Logo1, Logo2, Logo3]
-  // const partnerText = "Tietokilta Main Partners"
   return (
     <div className="flex w-full text-white justify-center bg-gray-darkest px-4 md:px-8 lg:px-16 py-6">
       <FullWidthContainer className="max-w-[90rem] flex flex-col items-center">
