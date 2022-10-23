@@ -1,17 +1,31 @@
 import { FullWidthContainer } from "./Containers"
-import Logo1 from "../assets/futuriceLogoBlack.png"
-import Logo2 from "../assets/vector.png"
-import Logo3 from "../assets/smartly_logo.png"
 
-const Footer: React.FC = () => {
+import { StrapiPartners } from "../types/strapi"
+import parseImageUrl from "../utils/parseImageUrl"
+
+type Props = {
+  partners: StrapiPartners
+}
+
+const Footer: React.FC<Props> = ({ partners }) => {
+  // const logos = [Logo1, Logo2, Logo3]
+  // const partnerText = "Tietokilta Main Partners"
   return (
     <div className="flex w-full text-white justify-center bg-gray-darkest px-4 md:px-8 lg:px-16 py-6">
       <FullWidthContainer className="max-w-[90rem] flex flex-col items-center">
-        <p className="text-3xl pt-4 pb-16">Tietokilta Main Partners</p>
+        <p className="text-3xl pt-4 pb-16">{partners.title}</p>
         <div className="w-[60vw] flex mx-auto justify-center pb-40">
-          <img src={Logo1} alt="Futurice" className="h-[5vw]" />
-          <img src={Logo2} alt="Vector" className="h-[5vw] mx-[4vw]" />
-          <img src={Logo3} alt="Smartly" className="h-[5vw]" />
+          {partners.partner.map(({ logo, name, url }) => {
+            return (
+              <a href={url} key={name}>
+                <img
+                  src={parseImageUrl(logo.url)}
+                  alt={name}
+                  className="h-[5vw] mx-[2vw]"
+                />
+              </a>
+            )
+          })}
         </div>
       </FullWidthContainer>
     </div>

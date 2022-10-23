@@ -4,16 +4,17 @@ import "@fontsource/roboto/700.css"
 import "@fontsource/source-code-pro/300.css"
 import "@fontsource/source-code-pro/400.css"
 import "@fontsource/source-code-pro/700.css"
+import { StrapiPartners } from "../types/strapi"
 
 import Footer from "./Footer"
 import Header from "./Header"
 
 type Props = {
   children?: React.ReactNode
+  partners: StrapiPartners
 }
 
-const Layout: React.FC<Props> = (props) => {
-  const { children } = props
+const Layout: React.FC<Props> = ({ partners, children }) => {
   return (
     <div
       className="flex flex-col items-center flex-grow min-h-[100vh] bg-white"
@@ -21,9 +22,8 @@ const Layout: React.FC<Props> = (props) => {
     >
       <Header />
       <div className="w-full flex-grow">{children}</div>
-      <Footer />
+      <Footer partners={partners} />
     </div>
   )
 }
-
 export default Layout

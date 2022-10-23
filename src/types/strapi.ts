@@ -31,3 +31,18 @@ export type NavigationItem = {
 export type StrapiNavigation = {
   items: NavigationItem[]
 }
+
+type Logo = {
+  url: string
+}
+
+type Partner = {
+  logo: Logo
+  name: string
+  url: string
+}
+
+export type StrapiPartners = {
+  title: string
+  partner: Partner[]
+}

@@ -74,6 +74,23 @@ exports.createPages = async ({ actions, graphql }) => {
     }
   `)
 
+  const strapiPartners = await graphql(`
+    query {
+      allStrapiPartners {
+        nodes {
+          title
+          partner {
+            logo {
+              url
+            }
+            name
+            url
+          }
+        }
+      }
+    }
+  `)
+
   // Use recursion to build path for each node
   const buildPathTree = (slug, locale) => {
     const node = data.allStrapiPage.nodes.find((obj) => obj.slug === slug)
@@ -95,6 +112,7 @@ exports.createPages = async ({ actions, graphql }) => {
         navigation: strapiNavigation.data.allStrapiNavigation.nodes.find(
           (foundNode) => foundNode.locale === node.locale
         ),
+        partners: strapiPartners.data.allStrapiPartners.nodes[0],
       },
     })
   })
