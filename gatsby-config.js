@@ -73,6 +73,9 @@ module.exports = {
               },
             },
           },
+          {
+            singularName: "front-page",
+          },
         ],
         queryLimit: 1000,
       },
