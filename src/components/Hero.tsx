@@ -1,37 +1,25 @@
-import * as React from "react"
-import { useStaticQuery, graphql } from "gatsby"
 import { FullWidthContainer } from "./Containers"
 import parseImageUrl from "../utils/parseImageUrl"
 
-const Hero: React.FC = () => {
-  const data = useStaticQuery(graphql`
-    query {
-      strapiFrontPage {
-        heroText
-        heroImage {
-          url
-        }
-        heroButtonText
-      }
-    }
-  `)
+interface Props {
+  heroImageUrl: string
+  heroText: string
+  heroButtonText: string
+  heroButtonLink: string
+}
 
-  interface StrapiHeroData {
-    heroText: string
-    heroImage: {
-      url: string
-    }
-    heroButtonText: string
-  }
-
-  const { heroText, heroButtonText, heroImage }: StrapiHeroData =
-    data.strapiFrontPage
+const Hero = ({
+  heroImageUrl,
+  heroText,
+  heroButtonLink,
+  heroButtonText,
+}: Props) => {
   return (
     <div className="w-full bg-black flex justify-center">
       <FullWidthContainer className="relative h-[calc(100vh-48px-48px)]">
         <div
           style={{
-            backgroundImage: `url(${parseImageUrl(heroImage.url)})`,
+            backgroundImage: `url(${parseImageUrl(heroImageUrl)})`,
           }}
           className="w-full h-full bg-cover bg-no-repeat bg-center"
         />
@@ -40,7 +28,7 @@ const Hero: React.FC = () => {
             <p className="mb-8">{heroText}</p>
             <a
               className="lg:text-4xl md:text-3xl sm:text-2xl whitespace-nowrap inline-block bg-orange px-8 py-4 font-sans text-white uppercase tracking-wider"
-              href="/"
+              href={heroButtonLink}
             >
               {heroButtonText}
             </a>
