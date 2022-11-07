@@ -1,7 +1,11 @@
 type TextBlock = {
-  id: number
   strapi_component: "common-content.text-block"
-  text: string
+  id: number
+  text: {
+    data: {
+      text: string
+    }
+  }
 }
 
 export type StrapiPageContentBlock = TextBlock
@@ -23,12 +27,12 @@ export type NavigatesTo = {
 
 export type NavigationItem = {
   title: string
-  navigatesTo: NavigatesTo
-  parentSlug?: string
-  subItems?: NavigationItem[]
+  path: string
+  items?: NavigationItem[]
 }
 
 export type StrapiNavigation = {
+  locale: string
   items: NavigationItem[]
 }
 
