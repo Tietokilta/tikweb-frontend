@@ -1,57 +1,95 @@
-import { Link } from "gatsby"
-import { NavigationItem } from "../types/strapi"
+import { useLocation } from "@gatsbyjs/reach-router"
+import { graphql, Link, useStaticQuery } from "gatsby"
+import { useContext } from "react"
+import { LocaleContext } from "../contexts/PageContext"
+import { NavigationItem, StrapiNavigation } from "../types/strapi"
 
-export type SideBarProps = {
-  items: NavigationItem[]
-  children: React.ReactNode
+type ItemProps = {
+  item: NavigationItem
 }
 
-const SubItem: React.FC<NavigationItem> = (props: NavigationItem) => {
-  const { title, parentSlug, navigatesTo } = props
+const SubItem: React.FC<ItemProps> = ({ item: { title, path } }) => {
   return (
-    <Link className="pt-1 px-2" to={`/${parentSlug}/${navigatesTo.slug}`}>
+    <Link className="pt-1 px-2 text-lg font-normal text-white" to={path}>
       {title}
     </Link>
   )
 }
 
-const Item: React.FC<NavigationItem> = (props: NavigationItem) => {
-  const { navigatesTo, subItems } = props
+const Item: React.FC<ItemProps> = ({ item: { title, path, items } }) => {
   return (
     <>
       <Link
-        className="mt-4 font-mono font-semibold"
-        to={`/${navigatesTo.slug}`}
+        className="mt-4 font-mono text-xl font-semibold text-white"
+        to={path}
       >
-        {navigatesTo.title}
+        {title}
       </Link>
-      {subItems?.map((x) => (
-        <SubItem
-          key={x.title}
-          title={x.title}
-          parentSlug={navigatesTo.slug}
-          navigatesTo={x.navigatesTo}
-        />
+      {items?.map((item) => (
+        <SubItem key={item.path} item={item} />
       ))}
     </>
   )
 }
 
+type NavQuery = {
+  allStrapiPublicNavigation: {
+    nodes: StrapiNavigation[]
+  }
+}
+
+export type SideBarProps = {
+  children: React.ReactNode
+}
+
 const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
-  const { items, children } = props
+  const { children } = props
+  const locale = useContext(LocaleContext)
+
+  // get the nav structure in the current locale
+  const navigations = useStaticQuery(graphql`
+    query {
+      allStrapiPublicNavigation {
+        nodes {
+          locale
+          items {
+            title
+            path
+            items {
+              title
+              path
+              items {
+                title
+                path
+              }
+            }
+          }
+        }
+      }
+    }
+  `) as NavQuery
+  const nav = navigations.allStrapiPublicNavigation.nodes.find(
+    (n) => n.locale === locale
+  )
+
+  // use browser location to figure out which nav item to show in the sidebar
+  const { pathname } = useLocation()
+  const pathParts = pathname
+    .split("/")
+    .slice(1) // remove empty part before /
+    .filter((part, index) => index !== 0 || part !== locale) // remove locale name as first part
+  const rootItem = nav?.items?.find((item) =>
+    item.path.startsWith(`/${pathParts[0]}`)
+  )
+
   return (
     <div className="flex flex-row min-h-full">
-      <div className="flex flex-col min-h-full bg-gray-darkest text-white pt-5 pl-10 pr-5">
-        {items.map((x) => (
-          <Item
-            key={x.title}
-            title={x.title}
-            navigatesTo={x.navigatesTo}
-            subItems={x.subItems}
-          />
+      <nav className="flex flex-col min-h-full bg-gray-darkest text-white pl-10 pr-5">
+        {rootItem?.items?.map((item) => (
+          <Item key={item.path} item={item} />
         ))}
-      </div>
-      <div className="flex flex-col">{children}</div>
+      </nav>
+      <div className="px-5 py-4">{children}</div>
     </div>
   )
 }

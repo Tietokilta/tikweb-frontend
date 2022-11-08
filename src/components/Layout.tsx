@@ -19,7 +19,7 @@ const Layout: React.FC<Props> = ({ children }) => {
       style={{ alignItems: "stretch" }}
     >
       <Header />
-      <div className="w-full flex-grow">{children}</div>
+      <main className="w-full flex-grow">{children}</main>
       <Footer />
     </div>
   )

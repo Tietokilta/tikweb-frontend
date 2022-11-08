@@ -1,24 +1,54 @@
+import { graphql } from "gatsby"
 import ContentRenderer from "../components/ContentRenderer"
 import Layout from "../components/Layout"
 import SideBar from "../components/SideBar"
-import { StrapiNavigation, StrapiPage } from "../types/strapi"
+import { LocaleContext } from "../contexts/PageContext"
+import { StrapiPage } from "../types/strapi"
 
 type Props = {
   pageContext: {
-    page: StrapiPage
-    navigation: StrapiNavigation
+    locale: string
+  }
+  data: {
+    strapiPage: StrapiPage
   }
 }
 
-const Page: React.FC<Props> = ({ pageContext: { page, navigation } }) => {
+const Page: React.FC<Props> = ({
+  pageContext: { locale },
+  data: { strapiPage },
+}) => {
   return (
-    <Layout>
-      <SideBar items={navigation.items}>
-        <h1>{page.title}</h1>
-        <ContentRenderer contentBlocks={page.content} />
-      </SideBar>
-    </Layout>
+    <LocaleContext.Provider value={locale}>
+      <Layout>
+        <SideBar>
+          <article>
+            <h1>{strapiPage.title}</h1>
+            <ContentRenderer contentBlocks={strapiPage.content} />
+          </article>
+        </SideBar>
+      </Layout>
+    </LocaleContext.Provider>
   )
 }
+
+export const pageQuery = graphql`
+  query ($pageId: Int) {
+    strapiPage(strapi_id: { eq: $pageId }) {
+      title
+      content {
+        ... on STRAPI__COMPONENT_COMMON_CONTENT_TEXT_BLOCK {
+          strapi_component
+          id
+          text {
+            data {
+              text
+            }
+          }
+        }
+      }
+    }
+  }
+`
 
 export default Page

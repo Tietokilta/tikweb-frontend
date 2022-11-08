@@ -25,10 +25,10 @@ const Footer: React.FC = () => {
   const partners: StrapiPartners = data.allStrapiPartners.nodes[0]
 
   return (
-    <div className="flex w-full text-white justify-center bg-gray-darkest px-4 md:px-8 lg:px-16 py-6">
+    <div className="flex w-full text-white justify-center bg-black px-4 md:px-8 lg:px-16 py-6">
       <FullWidthContainer className="max-w-[90rem] flex flex-col items-center">
         <p className="text-3xl pt-4 pb-16">{partners.title}</p>
-        <div className="w-[60vw] flex mx-auto justify-center pb-40">
+        <div className="w-[60vw] flex gap-4 mx-auto justify-center pb-40">
           {partners.partner.map(({ logo, name, url }) => {
             return (
               <a href={url} key={name}>
