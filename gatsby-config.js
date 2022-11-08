@@ -30,36 +30,10 @@ module.exports = {
         ],
         singleTypes: [
           {
-            singularName: "navigation",
+            singularName: "landing-page",
             pluginOptions: {
               i18n: {
                 locale: "all",
-              },
-            },
-            queryParams: {
-              populate: {
-                items: {
-                  populate: {
-                    title: "*",
-                    navigatesTo: {
-                      populate: {
-                        slug: "*",
-                        title: "*",
-                      },
-                    },
-                    subItems: {
-                      populate: {
-                        title: "*",
-                        navigatesTo: {
-                          populate: {
-                            slug: "*",
-                            title: "*",
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
               },
             },
           },

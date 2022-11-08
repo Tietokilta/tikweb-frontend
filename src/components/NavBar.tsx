@@ -1,35 +1,48 @@
 import classNames from "classnames"
-import { Link } from "gatsby"
-import { useState } from "react"
+import { graphql, Link, useStaticQuery } from "gatsby"
+import { useContext, useState } from "react"
+import { LocaleContext } from "../contexts/PageContext"
+import { StrapiNavigation } from "../types/strapi"
 import BurgerButton from "./BurgerButton"
 
-type MenuItem = {
-  title: string
-  url: string
-  items?: MenuItem[]
+type NavQuery = {
+  allStrapiPublicNavigation: {
+    nodes: StrapiNavigation[]
+  }
 }
 
-const menuItems: MenuItem[] = [
-  { title: "Tapahtumat", url: "#" },
-  { title: "Kilta", url: "#" },
-  { title: "Fuksit", url: "#" },
-  { title: "Abeille", url: "#" },
-  { title: "Yritykset", url: "#" },
-]
-
 const NavBar: React.FC = () => {
+  const locale = useContext(LocaleContext)
   const [open, setOpen] = useState(false)
+  const navigations = useStaticQuery(graphql`
+    query {
+      allStrapiPublicNavigation {
+        nodes {
+          locale
+          items {
+            title
+            path
+          }
+        }
+      }
+    }
+  `) as NavQuery
+  const nav = navigations.allStrapiPublicNavigation.nodes.find(
+    (n) => n.locale === locale
+  )
 
   return (
     <>
       <nav className="hidden md:flex items-center font-mono text-lg">
-        {menuItems.map((menuItem) => (
+        {nav?.items.map((item) => (
           <Link
+            key={item.path}
+            to={item.path}
             className="font-mono ml-6 lg:ml-12 text-white"
-            to={menuItem.url}
-            key={`menu-item-${menuItem.title}-${menuItem.url}`}
+            activeClassName="underline"
+            partiallyActive
           >
-            {menuItem.title}
+            {item.title}
           </Link>
         ))}
       </nav>
@@ -48,13 +61,15 @@ const NavBar: React.FC = () => {
           )}
         >
           <div className="p-4">
-            {menuItems.map((menuItem) => (
+            {nav?.items.map((item) => (
               <Link
+                key={item.path}
+                to={item.path}
                 className="block font-mono text-2xl p-4 text-white"
-                to={menuItem.url}
-                key={`menu-item-${menuItem.title}-${menuItem.url}`}
+                activeClassName="underline"
+                partiallyActive
               >
-                {menuItem.title}
+                {item.title}
               </Link>
             ))}
           </div>
