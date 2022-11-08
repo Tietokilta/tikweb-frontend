@@ -24,7 +24,7 @@ jobs:
       GATSBY_IS_PREVIEW: ${{ inputs.gatsby_is_preview }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Cache public
         id: cache-public
@@ -36,10 +36,10 @@ jobs:
 
       - name: Check if cache hit
         if: ${{ steps.cache-public.outputs.cache-hit == 'false' }}
-        uses: actions/github-script@v3
+        uses: actions/github-script@v6
         with:
           script: |
-              core.setFailed('Failed to get build from cache')
+            core.setFailed('Failed to get build from cache')
 
       - name: Azure Login
         uses: azure/login@v1
@@ -51,4 +51,3 @@ jobs:
 
       - name: Upload new files
         run: az storage blob upload-batch -s public -d '$web' --account-name ${{ inputs.deployment_sa }}
-      
