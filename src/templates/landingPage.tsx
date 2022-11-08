@@ -1,10 +1,12 @@
+import { useStaticQuery, graphql } from "gatsby"
 import { FullWidthContainer } from "../components/Containers"
 import EventCard from "../components/EventCard"
 import Hero from "../components/Hero"
-import Layout from "../components/Layout"
-import { TextContainer } from "../components/TextContainer"
+import ContentRenderer from "../components/ContentRenderer"
 import Title from "../components/Title"
 import { LocaleContext } from "../contexts/PageContext"
+import Layout from "../components/Layout"
+import { Locale, StrapiPageContentBlock } from "../types/strapi"
 
 const testEvents = [
   {
@@ -29,17 +31,66 @@ const testEvents = [
 
 type Props = {
   pageContext: {
-    locale: string
+    locale: "fi" | "en"
   }
 }
 
 const LandingPage: React.FC<Props> = ({ pageContext: { locale } }) => {
+  const data = useStaticQuery(graphql`
+    query {
+      allStrapiLandingPage {
+        nodes {
+          headerText
+          headerPhoto {
+            url
+          }
+          buttonText
+          buttonLink {
+            id
+          }
+          content {
+            id
+            strapi_component
+            text {
+              data {
+                text
+              }
+            }
+          }
+          locale
+        }
+      }
+    }
+  `)
+
+  interface StrappiFrontPageData {
+    headerText: string
+    headerPhoto: {
+      url: string
+    }
+    buttonText: string
+    content: StrapiPageContentBlock[]
+    locale: Locale
+  }
+
+  const { headerText, headerPhoto, buttonText, content }: StrappiFrontPageData =
+    data.allStrapiLandingPage.nodes.find(
+      (node: StrappiFrontPageData) => node.locale === locale
+    )
+
   return (
     <LocaleContext.Provider value={locale}>
       <Layout>
-        <Hero />
+        <Hero
+          {...{
+            heroText: headerText,
+            heroImageUrl: headerPhoto.url,
+            heroButtonText: buttonText,
+            heroButtonLink: "/",
+          }}
+        />
         <div className="justify-center flex">
-          <TextContainer />
+          <ContentRenderer contentBlocks={content} />
           <FullWidthContainer className="p-3">
             <Title>Juuri Nyt</Title>
             <EventCard

@@ -1,19 +1,19 @@
 import { FullWidthContainer } from "./Containers"
 import parseImageUrl from "../utils/parseImageUrl"
 
-interface Props {
+type Props = {
   heroImageUrl: string
   heroText: string
   heroButtonText: string
   heroButtonLink: string
 }
 
-const Hero = ({
+const Hero: React.FC<Props> = ({
   heroImageUrl,
   heroText,
   heroButtonLink,
   heroButtonText,
-}: Props) => {
+}) => {
   return (
     <div className="w-full bg-black flex justify-center">
       <FullWidthContainer className="relative h-[calc(100vh-48px-48px)]">

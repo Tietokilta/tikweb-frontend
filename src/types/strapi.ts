@@ -50,3 +50,5 @@ export type StrapiPartners = {
   title: string
   partner: Partner[]
 }
+
+export type Locale = "en" | "fi"
