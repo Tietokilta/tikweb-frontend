@@ -47,14 +47,6 @@ module.exports = {
               },
             },
           },
-          {
-            singularName: "front-page",
-            pluginOptions: {
-              i18n: {
-                locale: "all",
-              },
-            },
-          },
         ],
         queryLimit: 1000,
       },
