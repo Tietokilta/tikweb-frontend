@@ -1,10 +1,12 @@
+import { graphql } from "gatsby"
 import { FullWidthContainer } from "../components/Containers"
 import EventCard from "../components/EventCard"
 import Hero from "../components/Hero"
-import Layout from "../components/Layout"
-import { TextContainer } from "../components/TextContainer"
+import ContentRenderer from "../components/ContentRenderer"
 import Title from "../components/Title"
 import { LocaleContext } from "../contexts/PageContext"
+import Layout from "../components/Layout"
+import { Locale, StrapiLandingPage } from "../types/strapi"
 
 const testEvents = [
   {
@@ -29,17 +31,37 @@ const testEvents = [
 
 type Props = {
   pageContext: {
-    locale: string
+    locale: Locale
+  }
+  data: {
+    strapiLandingPage: StrapiLandingPage
   }
 }
 
-const LandingPage: React.FC<Props> = ({ pageContext: { locale } }) => {
+const LandingPage: React.FC<Props> = ({
+  pageContext: { locale },
+  data: {
+    strapiLandingPage: {
+      headerText,
+      headerPhoto,
+      buttonText,
+      buttonColor,
+      content,
+    },
+  },
+}) => {
   return (
     <LocaleContext.Provider value={locale}>
       <Layout>
-        <Hero />
+        <Hero
+          text={headerText}
+          image={headerPhoto.url}
+          buttonText={buttonText}
+          buttonColor={buttonColor}
+          buttonLink="/"
+        />
         <div className="justify-center flex">
-          <TextContainer />
+          <ContentRenderer contentBlocks={content} />
           <FullWidthContainer className="p-3">
             <Title>Juuri Nyt</Title>
             <EventCard
@@ -68,5 +90,32 @@ const LandingPage: React.FC<Props> = ({ pageContext: { locale } }) => {
     </LocaleContext.Provider>
   )
 }
+
+export const pageQuery = graphql`
+  query ($locale: String) {
+    strapiLandingPage(locale: { eq: $locale }) {
+      headerText
+      headerPhoto {
+        url
+      }
+      buttonText
+      buttonColor
+      buttonLink {
+        id
+      }
+      content {
+        ... on STRAPI__COMPONENT_COMMON_CONTENT_TEXT_BLOCK {
+          strapi_component
+          id
+          text {
+            data {
+              text
+            }
+          }
+        }
+      }
+    }
+  }
+`
 
 export default LandingPage
