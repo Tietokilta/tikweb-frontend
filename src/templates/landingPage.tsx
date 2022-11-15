@@ -1,4 +1,4 @@
-import { useStaticQuery, graphql } from "gatsby"
+import { graphql } from "gatsby"
 import { FullWidthContainer } from "../components/Containers"
 import EventCard from "../components/EventCard"
 import Hero from "../components/Hero"
@@ -6,7 +6,7 @@ import ContentRenderer from "../components/ContentRenderer"
 import Title from "../components/Title"
 import { LocaleContext } from "../contexts/PageContext"
 import Layout from "../components/Layout"
-import { Locale, StrapiPageContentBlock } from "../types/strapi"
+import { Locale, StrapiLandingPage } from "../types/strapi"
 
 const testEvents = [
   {
@@ -31,63 +31,34 @@ const testEvents = [
 
 type Props = {
   pageContext: {
-    locale: "fi" | "en"
+    locale: Locale
+  }
+  data: {
+    strapiLandingPage: StrapiLandingPage
   }
 }
 
-const LandingPage: React.FC<Props> = ({ pageContext: { locale } }) => {
-  const data = useStaticQuery(graphql`
-    query {
-      allStrapiLandingPage {
-        nodes {
-          headerText
-          headerPhoto {
-            url
-          }
-          buttonText
-          buttonLink {
-            id
-          }
-          content {
-            id
-            strapi_component
-            text {
-              data {
-                text
-              }
-            }
-          }
-          locale
-        }
-      }
-    }
-  `)
-
-  interface StrappiFrontPageData {
-    headerText: string
-    headerPhoto: {
-      url: string
-    }
-    buttonText: string
-    content: StrapiPageContentBlock[]
-    locale: Locale
-  }
-
-  const { headerText, headerPhoto, buttonText, content }: StrappiFrontPageData =
-    data.allStrapiLandingPage.nodes.find(
-      (node: StrappiFrontPageData) => node.locale === locale
-    )
-
+const LandingPage: React.FC<Props> = ({
+  pageContext: { locale },
+  data: {
+    strapiLandingPage: {
+      headerText,
+      headerPhoto,
+      buttonText,
+      buttonColor,
+      content,
+    },
+  },
+}) => {
   return (
     <LocaleContext.Provider value={locale}>
       <Layout>
         <Hero
-          {...{
-            heroText: headerText,
-            heroImageUrl: headerPhoto.url,
-            heroButtonText: buttonText,
-            heroButtonLink: "/",
-          }}
+          text={headerText}
+          image={headerPhoto.url}
+          buttonText={buttonText}
+          buttonColor={buttonColor}
+          buttonLink="/"
         />
         <div className="justify-center flex">
           <ContentRenderer contentBlocks={content} />
@@ -119,5 +90,32 @@ const LandingPage: React.FC<Props> = ({ pageContext: { locale } }) => {
     </LocaleContext.Provider>
   )
 }
+
+export const pageQuery = graphql`
+  query ($locale: String) {
+    strapiLandingPage(locale: { eq: $locale }) {
+      headerText
+      headerPhoto {
+        url
+      }
+      buttonText
+      buttonColor
+      buttonLink {
+        id
+      }
+      content {
+        ... on STRAPI__COMPONENT_COMMON_CONTENT_TEXT_BLOCK {
+          strapi_component
+          id
+          text {
+            data {
+              text
+            }
+          }
+        }
+      }
+    }
+  }
+`
 
 export default LandingPage

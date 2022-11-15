@@ -11,13 +11,9 @@ type TextBlock = {
 export type StrapiPageContentBlock = TextBlock
 
 export type StrapiPage = {
-  content: StrapiPageContentBlock[]
   id: number
-  slug: string
   title: string
-  unlisted: boolean
-  strapiChildren: Pick<StrapiPage, "id" | "slug" | "title">[]
-  strapi_parent: Pick<StrapiPage, "id">
+  content: StrapiPageContentBlock[]
 }
 
 export type NavigatesTo = {
@@ -52,3 +48,13 @@ export type StrapiPartners = {
 }
 
 export type Locale = "en" | "fi"
+
+export type StrapiLandingPage = {
+  headerText: string
+  headerPhoto: {
+    url: string
+  }
+  buttonText: string
+  buttonColor: string
+  content: StrapiPageContentBlock[]
+}
