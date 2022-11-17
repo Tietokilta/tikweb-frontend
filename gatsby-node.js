@@ -2,7 +2,7 @@
 /* eslint-disable no-restricted-syntax, @typescript-eslint/no-var-requires */
 
 const fetch = require("node-fetch")
-const { EVENTS_URLS, pathWithLocale } = require("./src/paths")
+const { EVENTS_PATHS, pathWithLocale } = require("./src/paths")
 
 exports.onCreateBabelConfig = ({ actions }) => {
   // Enable new React JSX transform (no "import React" needed)
@@ -167,11 +167,10 @@ exports.createPages = async ({ actions: { createPage }, graphql }) => {
   })
 
   // Create events pages
-  Object.entries(EVENTS_URLS).forEach(([locale, path]) => {
-    const basePath = pathWithLocale(path, locale)
+  Object.entries(EVENTS_PATHS).forEach(([locale, paths]) => {
     createPage({
-      path: basePath,
-      matchPath: `${basePath}/*`,
+      path: paths.eventsList,
+      matchPath: `${paths.eventsList}/*`,
       component: require.resolve("./src/templates/eventsPage.tsx"),
       context: {
         locale,

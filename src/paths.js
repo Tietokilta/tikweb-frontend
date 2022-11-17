@@ -1,7 +1,15 @@
-/** Events page paths without locales */
-const EVENTS_URLS = {
-  fi: "/tapahtumat",
-  en: "/events",
+/** Events page paths with locales */
+const EVENTS_PATHS = {
+  fi: {
+    eventsList: "/tapahtumat",
+    eventDetails: (slug) => `/tapahtumat/${slug}`,
+    editSignup: (id, editToken) => `/tapahtumat/ilmo/${id}/${editToken}`,
+  },
+  en: {
+    eventsList: "/en/events",
+    eventDetails: (slug) => `/en/events/${slug}`,
+    editSignup: (id, editToken) => `/en/events/signup/${id}/${editToken}`,
+  },
 }
 
 /** Prepends the locale in the path if not Finnish */
@@ -19,7 +27,7 @@ const pathWithOtherLocale = (path, locale) =>
   pathWithLocale(path, otherLocale(locale))
 
 module.exports = {
-  EVENTS_URLS,
+  EVENTS_PATHS,
   pathWithLocale,
   otherLocale,
   pathWithOtherLocale,
