@@ -5,13 +5,16 @@ import {
   useParams,
 } from "@gatsbyjs/reach-router"
 import { configure } from "@tietokilta/ilmomasiina-components/dist/config"
+import { LinkProps } from "@tietokilta/ilmomasiina-components/dist/config/router"
+import EditSignupOrig from "@tietokilta/ilmomasiina-components/dist/routes/EditSignup"
 import EventsOrig from "@tietokilta/ilmomasiina-components/dist/routes/Events"
 import SingleEventOrig from "@tietokilta/ilmomasiina-components/dist/routes/SingleEvent"
-import EditSignupOrig from "@tietokilta/ilmomasiina-components/dist/routes/EditSignup"
-import { LinkProps } from "@tietokilta/ilmomasiina-components/dist/config/router"
 import { Link } from "gatsby"
+import { useMemo } from "react"
 import Layout from "../components/Layout"
-import { LocaleContext } from "../contexts/PageContext"
+import { PageContext, PageInfo } from "../contexts/PageContext"
+import { EVENTS_URLS, otherLocale } from "../paths"
+import { Locale } from "../types/strapi"
 
 const LinkAdapter: React.FC<LinkProps> = ({ to, replace, children }) => (
   <Link to={to} replace={replace}>
@@ -44,14 +47,21 @@ const EditSignup: React.FC<RouteComponentProps> = () => <EditSignupOrig />
 
 type Props = {
   pageContext: {
-    locale: string
+    locale: Locale
   }
   uri: string
 }
 
 const EventsPage: React.FC<Props> = ({ pageContext: { locale }, uri }) => {
+  const context: PageInfo = useMemo(
+    () => ({
+      locale,
+      localeLink: EVENTS_URLS[otherLocale(locale)],
+    }),
+    [locale]
+  )
   return (
-    <LocaleContext.Provider value={locale}>
+    <PageContext.Provider value={context}>
       <Layout>
         <div className="ilmo px-5 py-4">
           <Router basepath={uri}>
@@ -61,7 +71,7 @@ const EventsPage: React.FC<Props> = ({ pageContext: { locale }, uri }) => {
           </Router>
         </div>
       </Layout>
-    </LocaleContext.Provider>
+    </PageContext.Provider>
   )
 }
 
