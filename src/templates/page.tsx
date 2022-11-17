@@ -5,29 +5,24 @@ import Layout from "../components/Layout"
 import SideBar from "../components/SideBar"
 import { PageContext, PageInfo } from "../contexts/PageContext"
 import { pathWithOtherLocale } from "../paths"
-import { Locale, StrapiPage } from "../types/strapi"
+import { StrapiPage } from "../types/strapi"
 
 type Props = {
-  pageContext: {
-    locale: Locale
-  }
   data: {
     strapiPage: StrapiPage
   }
 }
 
-const Page: React.FC<Props> = ({
-  pageContext: { locale },
-  data: { strapiPage },
-}) => {
+const Page: React.FC<Props> = ({ data: { strapiPage } }) => {
   const context: PageInfo = useMemo(
     () => ({
-      locale,
+      locale: strapiPage.locale,
       path: strapiPage.fields.path,
       localeLink:
-        strapiPage.fields.localeLink ?? pathWithOtherLocale("", locale),
+        strapiPage.fields.localeLink ??
+        pathWithOtherLocale("", strapiPage.locale),
     }),
-    [locale, strapiPage]
+    [strapiPage]
   )
   return (
     <PageContext.Provider value={context}>
@@ -47,6 +42,7 @@ export const pageQuery = graphql`
   query ($pageId: String) {
     strapiPage(id: { eq: $pageId }) {
       title
+      locale
       content {
         ... on STRAPI__COMPONENT_COMMON_CONTENT_TEXT_BLOCK {
           strapi_component
