@@ -19,7 +19,7 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # Read node version from `.nvmrc` file
       - id: nvmrc
@@ -79,4 +79,3 @@ jobs:
       gatsby_is_preview: false
       environment: production
     secrets: inherit
-    
