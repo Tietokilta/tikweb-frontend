@@ -1,25 +1,31 @@
 import { graphql } from "gatsby"
+import { useMemo } from "react"
 import ContentRenderer from "../components/ContentRenderer"
 import Layout from "../components/Layout"
 import SideBar from "../components/SideBar"
-import { LocaleContext } from "../contexts/PageContext"
+import { PageContext, PageInfo } from "../contexts/PageContext"
+import { pathWithOtherLocale } from "../paths"
 import { StrapiPage } from "../types/strapi"
 
 type Props = {
-  pageContext: {
-    locale: string
-  }
   data: {
     strapiPage: StrapiPage
   }
 }
 
-const Page: React.FC<Props> = ({
-  pageContext: { locale },
-  data: { strapiPage },
-}) => {
+const Page: React.FC<Props> = ({ data: { strapiPage } }) => {
+  const context: PageInfo = useMemo(
+    () => ({
+      locale: strapiPage.locale,
+      path: strapiPage.fields.path,
+      localeLink:
+        strapiPage.fields.localeLink ??
+        pathWithOtherLocale("", strapiPage.locale),
+    }),
+    [strapiPage]
+  )
   return (
-    <LocaleContext.Provider value={locale}>
+    <PageContext.Provider value={context}>
       <Layout>
         <SideBar>
           <article>
@@ -28,14 +34,15 @@ const Page: React.FC<Props> = ({
           </article>
         </SideBar>
       </Layout>
-    </LocaleContext.Provider>
+    </PageContext.Provider>
   )
 }
 
 export const pageQuery = graphql`
-  query ($pageId: Int) {
-    strapiPage(strapi_id: { eq: $pageId }) {
+  query ($pageId: String) {
+    strapiPage(id: { eq: $pageId }) {
       title
+      locale
       content {
         ... on STRAPI__COMPONENT_COMMON_CONTENT_TEXT_BLOCK {
           strapi_component
@@ -46,6 +53,10 @@ export const pageQuery = graphql`
             }
           }
         }
+      }
+      fields {
+        path
+        localeLink
       }
     }
   }

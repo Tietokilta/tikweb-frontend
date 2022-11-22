@@ -2,6 +2,7 @@
 /* eslint-disable no-restricted-syntax, @typescript-eslint/no-var-requires */
 
 const fetch = require("node-fetch")
+const { EVENTS_PATHS, pathWithLocale } = require("./src/paths")
 
 exports.onCreateBabelConfig = ({ actions }) => {
   // Enable new React JSX transform (no "import React" needed)
@@ -29,20 +30,11 @@ const NAV_SLUGS = {
   en: "main-navigation-en",
 }
 
-// Without locales
-const EVENTS_URLS = {
-  fi: "/tapahtumat",
-  en: "/events",
-}
-
-// Include locale in path if not Finnish
-const pathWithLocale = (path, locale) =>
-  locale === "fi" ? path : `/${locale}${path}`
-
 exports.sourceNodes = async ({
-  actions: { createNode },
+  actions: { createNode, createNodeField },
   createNodeId,
   createContentDigest,
+  getNodesByType,
   reporter,
 }) => {
   // First, fetch all navigations.
@@ -64,18 +56,34 @@ exports.sourceNodes = async ({
     })
   )
 
-  // Then create nodes of them.
-  for (const nav of navs) {
-    createNode({
-      ...nav,
-      id: createNodeId(`Navigation-${nav.locale}`),
-      parent: null,
-      children: [],
-      internal: {
-        type: "StrapiNavigation",
-        contentDigest: createContentDigest(nav),
-      },
-    })
+  // Fetch all page nodes already in GraphQL and map them to Strapi IDs.
+  const pages = getNodesByType("STRAPI_PAGE")
+  const pagesById = new Map(pages.map((page) => [page.strapi_id, page]))
+
+  // Add paths to Strapi page nodes based on the nav structure.
+  const addPagePaths = (nav, locale) => {
+    if (nav.path && nav.related) {
+      const page = pagesById.get(nav.related.id)
+      const path = pathWithLocale(nav.path, locale)
+      createNodeField({ node: page, name: "path", value: path })
+    }
+    nav.items?.forEach((item) => addPagePaths(item, locale))
+  }
+  navs.forEach((nav) => addPagePaths(nav, nav.locale))
+
+  // Add localized paths to pages as well.
+  for (const page of pages) {
+    const localization = page.localizations.data[0]
+    if (localization) {
+      const otherPage = pagesById.get(localization.id)
+      // Ideally this would use @link, but there's not really a good way of doing
+      // that without recreating the node
+      createNodeField({
+        node: page,
+        name: "localeLink",
+        value: otherPage.fields?.path,
+      })
+    }
   }
 
   // Clean the nav structure for public consumption:
@@ -110,63 +118,38 @@ exports.sourceNodes = async ({
 
 exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
   createTypes(`
-  type StrapiNavigation implements Node {
-    locale: String!
-    items: [StrapiNavigationItem!]!
-  }
-  type StrapiPublicNavigation implements Node {
-    locale: String!
-    items: [StrapiNavigationItem!]!
-  }
-  type StrapiNavigationItem {
-    title: String!
-    slug: String!
-    path: String!
-    menuAttached: Boolean!
-    related: StrapiNavigatesTo
-    items: [StrapiNavigationItem!]!
-  }
-  type StrapiNavigatesTo {
-    title: String!
-  }
+    type StrapiPublicNavigation implements Node {
+      locale: String!
+      items: [StrapiNavigationItem!]!
+    }
+    type StrapiNavigationItem {
+      title: String!
+      slug: String!
+      path: String!
+      menuAttached: Boolean!
+      related: StrapiNavigatesTo
+      items: [StrapiNavigationItem!]!
+    }
+    type StrapiNavigatesTo {
+      title: String!
+    }
   `)
 }
 
 exports.createPages = async ({ actions: { createPage }, graphql }) => {
   const { data } = await graphql(`
     query {
+      allStrapiPage {
+        nodes {
+          id
+          fields {
+            path
+          }
+        }
+      }
       allStrapiLandingPage {
         nodes {
           locale
-        }
-      }
-      allStrapiNavigation {
-        nodes {
-          locale
-          items {
-            title
-            path
-            menuAttached
-            related {
-              id
-            }
-            items {
-              title
-              path
-              menuAttached
-              related {
-                id
-              }
-              items {
-                title
-                path
-                menuAttached
-                related {
-                  id
-                }
-              }
-            }
-          }
         }
       }
     }
@@ -184,11 +167,10 @@ exports.createPages = async ({ actions: { createPage }, graphql }) => {
   })
 
   // Create events pages
-  Object.entries(EVENTS_URLS).forEach(([locale, path]) => {
-    const basePath = pathWithLocale(path, locale)
+  Object.entries(EVENTS_PATHS).forEach(([locale, paths]) => {
     createPage({
-      path: basePath,
-      matchPath: `${basePath}/*`,
+      path: paths.eventsList,
+      matchPath: `${paths.eventsList}/*`,
       component: require.resolve("./src/templates/eventsPage.tsx"),
       context: {
         locale,
@@ -196,22 +178,15 @@ exports.createPages = async ({ actions: { createPage }, graphql }) => {
     })
   })
 
-  // Create content pages from the navigation tree
-  const createPagesFromNav = (nav, locale) => {
-    if (nav.related && nav.path) {
-      createPage({
-        path: pathWithLocale(nav.path, locale),
-        component: require.resolve("./src/templates/page.tsx"),
-        context: {
-          locale,
-          pageId: nav.related.id,
-        },
-      })
-    }
-    // Process child items
-    nav.items?.forEach((item) => createPagesFromNav(item, locale))
-  }
-  data.allStrapiNavigation.nodes.forEach((nav) =>
-    createPagesFromNav(nav, nav.locale)
-  )
+  // Create content pages
+  data.allStrapiPage.nodes.forEach((page) => {
+    if (!page.fields?.path) return
+    createPage({
+      path: page.fields.path,
+      component: require.resolve("./src/templates/page.tsx"),
+      context: {
+        pageId: page.id,
+      },
+    })
+  })
 }

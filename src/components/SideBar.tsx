@@ -1,7 +1,7 @@
 import { useLocation } from "@gatsbyjs/reach-router"
 import { graphql, Link, useStaticQuery } from "gatsby"
 import { useContext } from "react"
-import { LocaleContext } from "../contexts/PageContext"
+import { PageContext } from "../contexts/PageContext"
 import { NavigationItem, StrapiNavigation } from "../types/strapi"
 
 type ItemProps = {
@@ -44,7 +44,7 @@ export type SideBarProps = {
 
 const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
   const { children } = props
-  const locale = useContext(LocaleContext)
+  const { locale } = useContext(PageContext)
 
   // get the nav structure in the current locale
   const navigations = useStaticQuery(graphql`

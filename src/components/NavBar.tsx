@@ -1,7 +1,7 @@
 import classNames from "classnames"
 import { graphql, Link, useStaticQuery } from "gatsby"
 import { useContext, useState } from "react"
-import { LocaleContext } from "../contexts/PageContext"
+import { PageContext } from "../contexts/PageContext"
 import { StrapiNavigation } from "../types/strapi"
 import BurgerButton from "./BurgerButton"
 
@@ -12,7 +12,7 @@ type NavQuery = {
 }
 
 const NavBar: React.FC = () => {
-  const locale = useContext(LocaleContext)
+  const { locale, localeLink } = useContext(PageContext)
   const [open, setOpen] = useState(false)
   const navigations = useStaticQuery(graphql`
     query {
@@ -45,6 +45,9 @@ const NavBar: React.FC = () => {
             {item.title}
           </Link>
         ))}
+        <Link to={localeLink} className="font-mono ml-6 lg:ml-12 text-white">
+          {locale === "fi" ? "In English" : "Suomeksi"}
+        </Link>
       </nav>
       <div className="flex md:hidden items-center">
         <BurgerButton
@@ -72,6 +75,12 @@ const NavBar: React.FC = () => {
                 {item.title}
               </Link>
             ))}
+            <Link
+              to={localeLink}
+              className="block font-mono text-2xl p-4 text-white"
+            >
+              {locale === "fi" ? "In English" : "Suomeksi"}
+            </Link>
           </div>
         </div>
       </div>

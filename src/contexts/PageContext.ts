@@ -1,6 +1,10 @@
 import { createContext } from "react"
-import { StrapiPage } from "../types/strapi"
+import { Locale } from "../types/strapi"
 
-export const LocaleContext = createContext<string>("")
+export type PageInfo = {
+  locale: Locale
+  path?: string
+  localeLink: string
+}
 
-export const PageContext = createContext<StrapiPage>(null!)
+export const PageContext = createContext<PageInfo>(null!)

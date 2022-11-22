@@ -13,7 +13,13 @@ export type StrapiPageContentBlock = TextBlock
 export type StrapiPage = {
   id: number
   title: string
+  locale: Locale
   content: StrapiPageContentBlock[]
+  fields: {
+    // Path is always present if a page ends up rendered
+    path: string
+    localeLink?: string
+  }
 }
 
 export type NavigatesTo = {

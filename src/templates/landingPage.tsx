@@ -1,12 +1,14 @@
 import { graphql } from "gatsby"
+import { useMemo } from "react"
 import { FullWidthContainer } from "../components/Containers"
 import EventCard from "../components/EventCard"
 import Hero from "../components/Hero"
 import ContentRenderer from "../components/ContentRenderer"
 import Title from "../components/Title"
-import { LocaleContext } from "../contexts/PageContext"
+import { PageContext, PageInfo } from "../contexts/PageContext"
 import Layout from "../components/Layout"
 import { Locale, StrapiLandingPage } from "../types/strapi"
+import { pathWithOtherLocale } from "../paths"
 
 const testEvents = [
   {
@@ -50,8 +52,15 @@ const LandingPage: React.FC<Props> = ({
     },
   },
 }) => {
+  const context: PageInfo = useMemo(
+    () => ({
+      locale,
+      localeLink: pathWithOtherLocale("", locale),
+    }),
+    [locale]
+  )
   return (
-    <LocaleContext.Provider value={locale}>
+    <PageContext.Provider value={context}>
       <Layout>
         <Hero
           text={headerText}
@@ -87,7 +96,7 @@ const LandingPage: React.FC<Props> = ({
           </FullWidthContainer>
         </div>
       </Layout>
-    </LocaleContext.Provider>
+    </PageContext.Provider>
   )
 }
 

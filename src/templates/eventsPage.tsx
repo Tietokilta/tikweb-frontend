@@ -5,14 +5,21 @@ import {
   useParams,
 } from "@gatsbyjs/reach-router"
 import { configure } from "@tietokilta/ilmomasiina-components/dist/config"
+import { LinkProps } from "@tietokilta/ilmomasiina-components/dist/config/router"
+import { PathsContext } from "@tietokilta/ilmomasiina-components/dist/contexts/paths"
+import { EditSignupProps } from "@tietokilta/ilmomasiina-components/dist/modules/editSignup"
+import { SingleEventProps } from "@tietokilta/ilmomasiina-components/dist/modules/singleEvent"
+import EditSignupOrig from "@tietokilta/ilmomasiina-components/dist/routes/EditSignup"
 import EventsOrig from "@tietokilta/ilmomasiina-components/dist/routes/Events"
 import SingleEventOrig from "@tietokilta/ilmomasiina-components/dist/routes/SingleEvent"
-import EditSignupOrig from "@tietokilta/ilmomasiina-components/dist/routes/EditSignup"
-import { LinkProps } from "@tietokilta/ilmomasiina-components/dist/config/router"
 import { Link } from "gatsby"
+import React, { PropsWithChildren, useMemo } from "react"
 import Layout from "../components/Layout"
-import { LocaleContext } from "../contexts/PageContext"
+import { PageContext, PageInfo } from "../contexts/PageContext"
+import { EVENTS_PATHS, otherLocale } from "../paths"
+import { Locale } from "../types/strapi"
 
+/** Adapts @reach/router Link to Ilmomasiina */
 const LinkAdapter: React.FC<LinkProps> = ({ to, replace, children }) => (
   <Link to={to} replace={replace}>
     {children}
@@ -20,14 +27,7 @@ const LinkAdapter: React.FC<LinkProps> = ({ to, replace, children }) => (
 )
 
 configure({
-  paths: {
-    hasAdmin: false,
-    api: "https://tik-ilmo-prod-app.azurewebsites.net/api",
-    eventsList: "/tapahtumat",
-    eventDetails: (slug) => `/tapahtumat/${slug}`,
-    editSignup: (signupId, editToken) =>
-      `/tapahtumat/ilmot/${signupId}/${editToken}`,
-  },
+  api: "https://tik-ilmo-prod-app.azurewebsites.net/api",
   router: {
     Link: LinkAdapter,
     useNavigate,
@@ -36,32 +36,87 @@ configure({
   timezone: "Europe/Helsinki",
 })
 
-const EventsList: React.FC<RouteComponentProps> = () => <EventsOrig />
+type WrapperProps = PropsWithChildren<PageInfo>
 
-const EventDetails: React.FC<RouteComponentProps> = () => <SingleEventOrig />
+/** Common code for all routes */
+const RouteWrapper: React.FC<WrapperProps> = ({
+  locale,
+  localeLink,
+  children,
+}) => {
+  const context: PageInfo = useMemo(
+    () => ({ locale, localeLink }),
+    [locale, localeLink]
+  )
+  return (
+    <PageContext.Provider value={context}>
+      <Layout>
+        <div className="ilmo px-5 py-4">{children}</div>
+      </Layout>
+    </PageContext.Provider>
+  )
+}
 
-const EditSignup: React.FC<RouteComponentProps> = () => <EditSignupOrig />
+const otherLocalePaths = (locale: Locale) => EVENTS_PATHS[otherLocale(locale)]
+
+type RouteProps<P = unknown> = RouteComponentProps<P> & {
+  locale: Locale
+}
+
+const EventsList: React.FC<RouteProps> = ({ locale }) => {
+  const localeLink = otherLocalePaths(locale).eventsList
+  return (
+    <RouteWrapper locale={locale} localeLink={localeLink}>
+      <EventsOrig />
+    </RouteWrapper>
+  )
+}
+
+const EventDetails: React.FC<RouteProps<SingleEventProps>> = ({
+  locale,
+  slug,
+}) => {
+  const localeLink = otherLocalePaths(locale).eventDetails(slug!)
+  return (
+    <RouteWrapper locale={locale} localeLink={localeLink}>
+      <SingleEventOrig />
+    </RouteWrapper>
+  )
+}
+
+const EditSignup: React.FC<RouteProps<EditSignupProps>> = ({
+  locale,
+  id,
+  editToken,
+}) => {
+  const localeLink = otherLocalePaths(locale).editSignup(id!, editToken!)
+  return (
+    <RouteWrapper locale={locale} localeLink={localeLink}>
+      <EditSignupOrig />
+    </RouteWrapper>
+  )
+}
 
 type Props = {
   pageContext: {
-    locale: string
+    locale: Locale
   }
-  uri: string
 }
 
-const EventsPage: React.FC<Props> = ({ pageContext: { locale }, uri }) => {
+const EventsPage: React.FC<Props> = ({ pageContext: { locale } }) => {
+  // Paths depend on locale
+  const paths = EVENTS_PATHS[locale]
   return (
-    <LocaleContext.Provider value={locale}>
-      <Layout>
-        <div className="ilmo px-5 py-4">
-          <Router basepath={uri}>
-            <EventsList path="/" />
-            <EventDetails path="/:slug" />
-            <EditSignup path="/ilmot/:id/:editToken" />
-          </Router>
-        </div>
-      </Layout>
-    </LocaleContext.Provider>
+    <PathsContext.Provider value={paths}>
+      <Router>
+        <EventsList path={paths.eventsList} locale={locale} />
+        <EventDetails path={paths.eventDetails(":slug")} locale={locale} />
+        <EditSignup
+          path={paths.editSignup(":id", ":editToken")}
+          locale={locale}
+        />
+      </Router>
+    </PathsContext.Provider>
   )
 }
 
