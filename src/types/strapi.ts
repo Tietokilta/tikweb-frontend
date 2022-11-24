@@ -12,6 +12,17 @@ type CommitteeBlock = {
   strapi_component: "common-content.committee"
   id: number
   name: string
+  members: ComitteeMember[]
+}
+
+export type ComitteeMember = {
+  id: number
+  name: string
+  position: string
+  email: string
+  phoneNumber: string
+  telegramUsername: string
+  picture: Picture
 }
 
 export type StrapiPageContentBlock = TextBlock | CommitteeBlock
@@ -44,12 +55,12 @@ export type StrapiNavigation = {
   items: NavigationItem[]
 }
 
-type Logo = {
+type Picture = {
   url: string
 }
 
 type Partner = {
-  logo: Logo
+  logo: Picture
   name: string
   url: string
 }

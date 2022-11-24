@@ -23,6 +23,7 @@ module.exports = {
               },
             },
             queryParams: {
+              populate: "deep",
               publicationState:
                 process.env.GATSBY_IS_PREVIEW === "true" ? "preview" : "live",
             },
@@ -35,6 +36,9 @@ module.exports = {
               i18n: {
                 locale: "all",
               },
+            },
+            queryParams: {
+              populate: "deep",
             },
           },
           {
