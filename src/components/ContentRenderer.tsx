@@ -15,7 +15,7 @@ type Props = {
 
 const ContentRenderer: React.FC<Props> = ({ contentBlocks }) => {
   return (
-    <FullWidthContainer className="relative p-3">
+    <FullWidthContainer className="relative">
       {(contentBlocks ?? []).map((block) => {
         if (
           block.strapi_component === "common-content.text-block" &&
@@ -32,12 +32,12 @@ const ContentRenderer: React.FC<Props> = ({ contentBlocks }) => {
         if (block.strapi_component === "common-content.committee") {
           return (
             <div key={block.id}>
-              <h2>{block.name}</h2>
-              <div className="flex flex-wrap justify-around">
+              <h2 className="font-mono">{block.name}</h2>
+              <div className="flex flex-wrap">
                 {block?.members?.map((member) => {
                   return (
                     <div
-                      className="md:m-4 m-1 md:w-[45%] w-9/10  "
+                      className="md:mr-8 mb-4 w-full md:w-5/12 ld"
                       key={member.id}
                     >
                       <CommitteeCard member={member} />

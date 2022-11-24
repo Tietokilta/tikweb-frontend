@@ -1,33 +1,38 @@
-import Telegram from "../assets/icons/telegram.png"
-import Email from "../assets/icons/email.png"
+import TelegramIcon from "../assets/icons/telegram.svg"
+import EmailIcon from "../assets/icons/email.svg"
+import PhoneIcon from "../assets/icons/phone.svg"
 import { ComitteeMember } from "../types/strapi"
 import parseImageUrl from "../utils/parseImageUrl"
+import TextWithIcon from "./TextWithIcon"
 
 type Props = {
   member: ComitteeMember
 }
 
 const CommitteeCard: React.FC<Props> = ({ member }) => {
-  const { name, email, phoneNumber, position, picture } = member
+  const { name, email, phoneNumber, position, picture, telegramUsername } =
+    member
   return (
-    <div className="display flex w-full rounded-lg bg-black flex-initial ">
+    <div className="flex w-full h-full rounded-xl bg-gray-darkest">
       <div className="w-2/5">
         <img
           src={parseImageUrl(picture.url)}
           alt="member"
-          className="w-full h-full object-cover"
+          className="h-full w-full rounded-l-xl"
         />
       </div>
-      <div className="w-3/5 flex flex-col text-white p-4 font-normal text-xs ">
-        <div className="tracking-widest text-xl font-bold">{name} </div>
-        <div className="text-sm flex-grow">{position}</div>
-        <div className="flex items-center mb-1">
-          <img className="h-2 mr-2" src={Email} alt="email" /> {email}
+      <div className="w-3/5 flex flex-col text-white p-4">
+        <div className="tracking-widest text-xl font-bold font-mono">
+          {name}
         </div>
-        <div className="flex items-center">
-          <img className="h-2 mr-2" src={Telegram} alt="telegram" />
-          {phoneNumber}
-        </div>
+        <div className="flex-grow">{position}</div>
+        <TextWithIcon icon={EmailIcon} text={email} alt="email" />
+        <TextWithIcon icon={PhoneIcon} text={phoneNumber} alt="phone" />
+        <TextWithIcon
+          icon={TelegramIcon}
+          text={telegramUsername}
+          alt="telegram"
+        />
       </div>
     </div>
   )

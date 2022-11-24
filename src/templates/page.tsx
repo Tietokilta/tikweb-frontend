@@ -28,7 +28,7 @@ const Page: React.FC<Props> = ({ data: { strapiPage } }) => {
     <PageContext.Provider value={context}>
       <Layout>
         <SideBar>
-          <article>
+          <article className="md:w-11/12">
             <h1>{strapiPage.title}</h1>
             <ContentRenderer contentBlocks={strapiPage.content} />
           </article>
