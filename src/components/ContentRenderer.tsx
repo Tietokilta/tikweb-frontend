@@ -1,3 +1,4 @@
+import { graphql } from "gatsby"
 import ReactMarkdown, { Components } from "react-markdown"
 import { StrapiPageContentBlock } from "../types/strapi"
 import { FullWidthContainer } from "./Containers"
@@ -27,10 +28,33 @@ const ContentRenderer: React.FC<Props> = ({ contentBlocks }) => {
             </div>
           )
         }
+        if (block.strapi_component === "common-content.committee") {
+          return <p>{block.name}</p>
+        }
         return null
       })}
     </FullWidthContainer>
   )
 }
+
+// THIS ONLY WORKS FOR STRAPI_PAGE, AND NOT FOR STRAPI_LANDING_PAGE
+export const query = graphql`
+  fragment CommonContent on COMMON_CONTENT {
+    ... on STRAPI__COMPONENT_COMMON_CONTENT_TEXT_BLOCK {
+      strapi_component
+      id
+      text {
+        data {
+          text
+        }
+      }
+    }
+    ... on STRAPI__COMPONENT_COMMON_CONTENT_COMMITTEE {
+      strapi_component
+      id
+      name
+    }
+  }
+`
 
 export default ContentRenderer

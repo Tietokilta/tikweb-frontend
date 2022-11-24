@@ -8,7 +8,13 @@ type TextBlock = {
   }
 }
 
-export type StrapiPageContentBlock = TextBlock
+type CommitteeBlock = {
+  strapi_component: "common-content.committee"
+  id: number
+  name: string
+}
+
+export type StrapiPageContentBlock = TextBlock | CommitteeBlock
 
 export type StrapiPage = {
   id: number
