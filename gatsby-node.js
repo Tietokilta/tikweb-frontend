@@ -133,6 +133,7 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
     type StrapiNavigatesTo {
       title: String!
     }
+    union COMMON_CONTENT = STRAPI__COMPONENT_COMMON_CONTENT_TEXT_BLOCK | STRAPI__COMPONENT_COMMON_CONTENT_COMMITTEE
   `)
 }
 
