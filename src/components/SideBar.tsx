@@ -89,7 +89,7 @@ const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
           <Item key={item.path} item={item} />
         ))}
       </nav>
-      <div className="px-5 py-4">{children}</div>
+      <div className="px-5 py-4 w-full">{children}</div>
     </main>
   )
 }

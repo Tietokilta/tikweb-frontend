@@ -115,15 +115,7 @@ export const pageQuery = graphql`
         id
       }
       content {
-        ... on STRAPI__COMPONENT_COMMON_CONTENT_TEXT_BLOCK {
-          strapi_component
-          id
-          text {
-            data {
-              text
-            }
-          }
-        }
+        ...CommonContent
       }
     }
   }
