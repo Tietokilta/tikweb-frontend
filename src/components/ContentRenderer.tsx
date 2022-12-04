@@ -20,11 +20,11 @@ const ContentRenderer: React.FC<Props> = ({ contentBlocks }) => {
           block?.text?.data?.text
         ) {
           return (
-            <div className="font-sans pb-3 text-sm">
-              <ReactMarkdown key={block.id} components={markdownComponents}>
+            <article key={block.id} className="font-sans leading-normal prose pb-3 text-sm">
+              <ReactMarkdown className="leading-normal" components={markdownComponents}>
                 {block.text.data.text}
               </ReactMarkdown>
-            </div>
+            </article>
           )
         }
         return null

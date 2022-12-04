@@ -27,15 +27,15 @@ const Footer: React.FC = () => {
   return (
     <div className="flex w-full text-white justify-center bg-black px-4 md:px-8 lg:px-16 py-6">
       <FullWidthContainer className="max-w-[90rem] flex flex-col items-center">
-        <p className="text-3xl pt-4 pb-16">{partners.title}</p>
-        <div className="w-[60vw] flex gap-4 mx-auto justify-center pb-40">
+        <p className="text-3xl pt-4 pb-16 font-mono">{partners.title}</p>
+        <div className="flex flex-wrap justify-center pb-40 items-center">
           {partners.partner.map(({ logo, name, url }) => {
             return (
-              <a href={url} key={name}>
+              <a href={url} key={name} className="grow-1 shrink-0 basis-full md:basis-1/2 lg:basis-1/3 p-3 justify-center">
                 <img
                   src={parseImageUrl(logo.url)}
                   alt={name}
-                  className="h-[5vw] mx-[2vw]"
+                  className="max-h-[10vw] mx-auto"
                 />
               </a>
             )

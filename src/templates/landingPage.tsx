@@ -69,7 +69,7 @@ const LandingPage: React.FC<Props> = ({
           buttonColor={buttonColor}
           buttonLink="/"
         />
-        <div className="justify-center flex">
+        <div className="justify-center flex flex-col md:flex-row">
           <ContentRenderer contentBlocks={content} />
           <FullWidthContainer className="p-3">
             <Title>Juuri Nyt</Title>
