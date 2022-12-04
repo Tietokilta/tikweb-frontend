@@ -1,6 +1,7 @@
 import { graphql } from "gatsby"
 import { useMemo } from "react"
 import ContentRenderer from "../components/ContentRenderer"
+import H1 from "../components/H1"
 import Layout from "../components/Layout"
 import SideBar from "../components/SideBar"
 import { PageContext, PageInfo } from "../contexts/PageContext"
@@ -29,7 +30,7 @@ const Page: React.FC<Props> = ({ data: { strapiPage } }) => {
       <Layout>
         <SideBar>
           <article>
-            <h1>{strapiPage.title}</h1>
+            <H1>{strapiPage.title}</H1>
             <ContentRenderer contentBlocks={strapiPage.content} />
           </article>
         </SideBar>

@@ -1,11 +1,6 @@
-import ReactMarkdown, { Components } from "react-markdown"
 import { StrapiPageContentBlock } from "../types/strapi"
 import { FullWidthContainer } from "./Containers"
-import Title from "./Title"
-
-const markdownComponents: Components = {
-  h1: Title,
-}
+import Markdown from "./Markdown"
 
 type Props = {
   contentBlocks: StrapiPageContentBlock[]
@@ -21,9 +16,7 @@ const ContentRenderer: React.FC<Props> = ({ contentBlocks }) => {
         ) {
           return (
             <div className="font-sans pb-3 text-sm">
-              <ReactMarkdown key={block.id} components={markdownComponents}>
-                {block.text.data.text}
-              </ReactMarkdown>
+              <Markdown key={block.id}>{block.text.data.text}</Markdown>
             </div>
           )
         }

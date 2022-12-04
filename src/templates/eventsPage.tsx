@@ -1,22 +1,22 @@
+import { Router, useNavigate, useParams } from "@gatsbyjs/reach-router"
 import {
-  RouteComponentProps,
-  Router,
-  useNavigate,
-  useParams,
-} from "@gatsbyjs/reach-router"
-import { configure } from "@tietokilta/ilmomasiina-components/dist/config"
+  configure,
+  EditSignup as EditSignupOrig,
+  EditSignupProps,
+  PathsContext,
+} from "@tietokilta/ilmomasiina-components"
 import { LinkProps } from "@tietokilta/ilmomasiina-components/dist/config/router"
-import { PathsContext } from "@tietokilta/ilmomasiina-components/dist/contexts/paths"
-import { EditSignupProps } from "@tietokilta/ilmomasiina-components/dist/modules/editSignup"
-import { SingleEventProps } from "@tietokilta/ilmomasiina-components/dist/modules/singleEvent"
-import EditSignupOrig from "@tietokilta/ilmomasiina-components/dist/routes/EditSignup"
-import EventsOrig from "@tietokilta/ilmomasiina-components/dist/routes/Events"
-import SingleEventOrig from "@tietokilta/ilmomasiina-components/dist/routes/SingleEvent"
 import { Link } from "gatsby"
-import React, { PropsWithChildren, useMemo } from "react"
-import Layout from "../components/Layout"
-import { PageContext, PageInfo } from "../contexts/PageContext"
-import { EVENTS_PATHS, otherLocale } from "../paths"
+import React from "react"
+import { timezone } from "../components/events/config"
+import EventDetails from "../components/events/EventDetails"
+import EventsList from "../components/events/EventsList"
+import {
+  EventsRouteProps,
+  otherLocalePaths,
+  RouteWrapper,
+} from "../components/events/utils"
+import { EVENTS_PATHS } from "../paths"
 import { Locale } from "../types/strapi"
 
 /** Adapts @reach/router Link to Ilmomasiina */
@@ -33,58 +33,10 @@ configure({
     useNavigate,
     useParams,
   },
-  timezone: "Europe/Helsinki",
+  timezone,
 })
 
-type WrapperProps = PropsWithChildren<PageInfo>
-
-/** Common code for all routes */
-const RouteWrapper: React.FC<WrapperProps> = ({
-  locale,
-  localeLink,
-  children,
-}) => {
-  const context: PageInfo = useMemo(
-    () => ({ locale, localeLink }),
-    [locale, localeLink]
-  )
-  return (
-    <PageContext.Provider value={context}>
-      <Layout>
-        <div className="ilmo px-5 py-4">{children}</div>
-      </Layout>
-    </PageContext.Provider>
-  )
-}
-
-const otherLocalePaths = (locale: Locale) => EVENTS_PATHS[otherLocale(locale)]
-
-type RouteProps<P = unknown> = RouteComponentProps<P> & {
-  locale: Locale
-}
-
-const EventsList: React.FC<RouteProps> = ({ locale }) => {
-  const localeLink = otherLocalePaths(locale).eventsList
-  return (
-    <RouteWrapper locale={locale} localeLink={localeLink}>
-      <EventsOrig />
-    </RouteWrapper>
-  )
-}
-
-const EventDetails: React.FC<RouteProps<SingleEventProps>> = ({
-  locale,
-  slug,
-}) => {
-  const localeLink = otherLocalePaths(locale).eventDetails(slug!)
-  return (
-    <RouteWrapper locale={locale} localeLink={localeLink}>
-      <SingleEventOrig />
-    </RouteWrapper>
-  )
-}
-
-const EditSignup: React.FC<RouteProps<EditSignupProps>> = ({
+const EditSignup: React.FC<EventsRouteProps<EditSignupProps>> = ({
   locale,
   id,
   editToken,
