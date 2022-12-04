@@ -12,10 +12,10 @@ type CommitteeBlock = {
   strapi_component: "common-content.committee"
   id: number
   name: string
-  members: ComitteeMember[]
+  members: CommitteeMember[]
 }
 
-export type ComitteeMember = {
+export type CommitteeMember = {
   id: number
   name: string
   position: string

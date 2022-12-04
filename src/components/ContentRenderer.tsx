@@ -15,7 +15,7 @@ type Props = {
 
 const ContentRenderer: React.FC<Props> = ({ contentBlocks }) => {
   return (
-    <FullWidthContainer className="relative">
+    <FullWidthContainer>
       {(contentBlocks ?? []).map((block) => {
         if (
           block.strapi_component === "common-content.text-block" &&
@@ -33,16 +33,9 @@ const ContentRenderer: React.FC<Props> = ({ contentBlocks }) => {
           return (
             <div key={block.id}>
               <h2 className="font-mono">{block.name}</h2>
-              <div className="flex flex-wrap">
+              <div className="grid gap-4 grid-cols-1 md:grid-cols-2 auto-rows-fr max-w-4xl">
                 {block?.members?.map((member) => {
-                  return (
-                    <div
-                      className="md:mr-8 mb-4 w-full md:w-5/12 ld"
-                      key={member.id}
-                    >
-                      <CommitteeCard member={member} />
-                    </div>
-                  )
+                  return <CommitteeCard member={member} key={member.id} />
                 })}
               </div>
             </div>
