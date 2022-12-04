@@ -28,7 +28,7 @@ export const RouteWrapper: React.FC<WrapperProps> = ({
   return (
     <PageContext.Provider value={context}>
       <Layout>
-        <div className="ilmo px-5 py-4">{children}</div>
+        <main className="ilmo flex-grow px-5 py-4">{children}</main>
       </Layout>
     </PageContext.Provider>
   )

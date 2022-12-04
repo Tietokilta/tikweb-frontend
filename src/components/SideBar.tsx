@@ -83,14 +83,14 @@ const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
   )
 
   return (
-    <div className="flex flex-row min-h-full">
+    <main className="flex-grow flex flex-row min-h-full">
       <nav className="flex flex-col min-h-full bg-gray-darkest text-white pl-10 pr-5">
         {rootItem?.items?.map((item) => (
           <Item key={item.path} item={item} />
         ))}
       </nav>
       <div className="px-5 py-4">{children}</div>
-    </div>
+    </main>
   )
 }
 
