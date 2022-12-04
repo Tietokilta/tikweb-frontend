@@ -21,7 +21,7 @@ const SignupList = ({ quota }: Props) => {
       {!signups?.length ? (
         <p>Ei ilmoittautumisia.</p>
       ) : (
-        <div className="table-responsive">
+        <div className="w-full">
           <table>
             <thead className="thead-light">
               <tr>

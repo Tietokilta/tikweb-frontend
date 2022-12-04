@@ -35,10 +35,6 @@
   a {
     @apply no-underline cursor-pointer font-normal font-bold text-orange;
   }
-
-  article p {
-    @apply my-2 leading-6;
-  }
 }
 
 /* TODO: Add Ilmomasiina styles - not committing this temporary stylesheet now */

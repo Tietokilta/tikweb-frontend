@@ -4,7 +4,7 @@ import {
   useSingleEventContext,
 } from "@tietokilta/ilmomasiina-components"
 import { Link } from "gatsby"
-import H1 from "../H1"
+import { H1 } from "../typography"
 import EventDescription from "./EventDescription"
 import SignupList from "./SignupList"
 import Spinner from "./Spinner"

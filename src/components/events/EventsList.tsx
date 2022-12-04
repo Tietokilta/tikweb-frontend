@@ -17,8 +17,8 @@ import {
   useEventsPaths,
 } from "./utils"
 import Spinner from "./Spinner"
-import TableRow from "./TableRow"
-import H1 from "../H1"
+import EventsListRow from "./EventsListRow"
+import { H1 } from "../typography"
 
 const EventsListView: React.FC = () => {
   const { events, error, pending } = useEventListContext()
@@ -47,8 +47,8 @@ const EventsListView: React.FC = () => {
       const { slug, title, date, signupState, signupCount, quotaSize } = row
       const stateText = signupStateText(signupState)
       return (
-        <TableRow
-          className={stateText.class}
+        <EventsListRow
+          stateClass={stateText.class}
           title={<Link to={paths.eventDetails(slug)}>{title}</Link>}
           date={date ? date.tz(timezone).format("DD.MM.YYYY") : ""}
           signupStatus={stateText}
@@ -61,8 +61,8 @@ const EventsListView: React.FC = () => {
     if (row.title !== WAITLIST) {
       const { title, signupCount, quotaSize } = row
       return (
-        <TableRow
-          className="ilmo--quota-row"
+        <EventsListRow
+          isQuota
           title={title === OPENQUOTA ? "Avoin" : title}
           signupCount={signupCount}
           quotaSize={quotaSize}
@@ -79,7 +79,7 @@ const EventsListView: React.FC = () => {
     <>
       <H1>Tapahtumat</H1>
       <table className="w-full">
-        <thead className="hidden sm:table-header-group">
+        <thead className="hidden sm:table-header-group border-b border-solid border-gray-lightest">
           <tr className="font-mono">
             <th className="text-left p-3">Nimi</th>
             <th className="text-left p-3">Ajankohta</th>

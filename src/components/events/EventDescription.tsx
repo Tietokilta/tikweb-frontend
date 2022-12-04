@@ -1,46 +1,44 @@
 import moment from "moment-timezone"
-import ReactMarkdown from "react-markdown"
-import remarkGfm from "remark-gfm"
-
 import { useSingleEventContext } from "@tietokilta/ilmomasiina-components"
-import H1 from "../H1"
+import { H1 } from "../typography"
 import { timezone } from "./config"
+import Markdown from "../Markdown"
 
 const EventDescription = () => {
   const event = useSingleEventContext().event!
   return (
-    <article className="md:w-2/3">
-      <H1>{event.title}</H1>
-      <div className="ilmo--event-heading">
+    <div className="md:w-2/3">
+      <H1 className="my-3">{event.title}</H1>
+      <div className=" border-y-2 border-solid border-gray-lightest py-1">
         {event.category && (
-          <p>
+          <p className="my-1">
             <strong>Kategoria:</strong> {event.category}
           </p>
         )}
         {event.date && (
-          <p>
+          <p className="my-1">
             <strong>{event.endDate ? "Alkaa:" : "Ajankohta:"}</strong>{" "}
             {moment(event.date).tz(timezone).format("D.M.Y [klo] HH:mm")}
           </p>
         )}
         {event.endDate && (
-          <p>
+          <p className="my-1">
             <strong>Loppuu:</strong>{" "}
             {moment(event.endDate).tz(timezone).format("D.M.Y [klo] HH:mm")}
           </p>
         )}
         {event.location && (
-          <p>
+          <p className="my-1">
             <strong>Sijainti:</strong> {event.location}
           </p>
         )}
         {event.price && (
-          <p>
+          <p className="my-1">
             <strong>Hinta:</strong> {event.price}
           </p>
         )}
         {event.webpageUrl && (
-          <p>
+          <p className="my-1">
             <strong>Kotisivut:</strong>{" "}
             <a
               href={event.webpageUrl}
@@ -53,7 +51,7 @@ const EventDescription = () => {
           </p>
         )}
         {event.facebookUrl && (
-          <p>
+          <p className="my-1">
             <strong>Facebook-tapahtuma:</strong>{" "}
             <a
               href={event.facebookUrl}
@@ -66,12 +64,10 @@ const EventDescription = () => {
           </p>
         )}
       </div>
-      <div className="ilmo--event-description">
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-          {event.description || ""}
-        </ReactMarkdown>
+      <div>
+        <Markdown>{event.description || ""}</Markdown>
       </div>
-    </article>
+    </div>
   )
 }
 
