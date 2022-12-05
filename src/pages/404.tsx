@@ -3,6 +3,7 @@ import { PageProps } from "gatsby"
 import { useMemo } from "react"
 import Layout from "../components/Layout"
 import SideBar from "../components/SideBar"
+import { H1 } from "../components/typography"
 import { PageContext, PageInfo } from "../contexts/PageContext"
 import { pathWithOtherLocale } from "../paths"
 
@@ -19,13 +20,13 @@ const NotFoundPage: React.FC<PageProps> = () => {
         <SideBar>
           {locale === "fi" ? (
             <>
-              <h1>Sivua {pathname} ei löytynyt</h1>
+              <H1>Sivua {pathname} ei löytynyt</H1>
               <a href="/">Takaisin kotisivulle</a>
             </>
           ) : (
             <>
-              <h1>Page {pathname} Not Found</h1>
-              <a href="/en">Back to Homepage</a>
+              <H1>Page {pathname} Not Found</H1>
+              <a href="/en">Back to homepage</a>
             </>
           )}
         </SideBar>
