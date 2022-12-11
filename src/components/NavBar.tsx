@@ -59,14 +59,14 @@ const NavBar: React.FC = () => {
         />
         <div
           className={classNames(
-            "fixed top-0 left-0 h-full bg-gray-darkest transition-all ease-in-out duration-500 mt-12",
+            "fixed top-0 left-0 w-full h-full transition-[max-width] ease-in-out duration-500 pt-12",
             {
-              "max-w-[80%] w-full overflow-y-auto": open,
-              "max-w-0 w-0 overflow-hidden": !open,
+              "max-w-[80%] overflow-x-hidden overflow-y-auto": open,
+              "max-w-0 overflow-hidden": !open,
             }
           )}
         >
-          <div className="p-4">
+          <div className="p-4 bg-gray-darkest w-[80vw] min-h-full">
             {nav?.items.map((item) => (
               <>
                 <Link
