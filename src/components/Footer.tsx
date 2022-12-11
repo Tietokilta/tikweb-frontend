@@ -31,7 +31,11 @@ const Footer: React.FC = () => {
         <div className="flex flex-wrap justify-center pb-40 items-center">
           {partners.partner.map(({ logo, name, url }) => {
             return (
-              <a href={url} key={name} className="grow-1 shrink-0 basis-full md:basis-1/2 lg:basis-1/3 p-3 justify-center">
+              <a
+                href={url}
+                key={name}
+                className="grow-1 shrink-0 basis-full md:basis-1/2 lg:basis-1/3 p-3 justify-center"
+              >
                 <img
                   src={parseImageUrl(logo.url)}
                   alt={name}
