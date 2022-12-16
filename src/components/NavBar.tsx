@@ -1,7 +1,7 @@
 import { useLocation } from "@gatsbyjs/reach-router"
 import classNames from "classnames"
 import { graphql, Link, useStaticQuery } from "gatsby"
-import { useContext, useState } from "react"
+import { Fragment, useContext, useState } from "react"
 import { PageContext } from "../contexts/PageContext"
 import { StrapiNavigation } from "../types/strapi"
 import BurgerButton from "./BurgerButton"
@@ -74,9 +74,9 @@ const NavBar: React.FC = () => {
             }
           )}
         >
-          <div className="p-4 bg-gray-darkest w-[80vw] min-h-full">
+          <nav className="flex flex-col items-start p-4 bg-gray-darkest w-[80vw] min-h-full">
             {nav?.items.map((item) => (
-              <div key={item.path}>
+              <Fragment key={item.path}>
                 <Link
                   to={item.path}
                   className="block font-mono text-2xl p-4 text-white"
@@ -86,15 +86,15 @@ const NavBar: React.FC = () => {
                   {item.title}
                 </Link>
                 {pathname.includes(item.path) && <NavPages rootItem={item} />}
-              </div>
+              </Fragment>
             ))}
             <Link
               to={localeLink}
-              className="inline-block font-mono text-2xl p-4 text-white overflow-hidden w-60"
+              className="block font-mono text-2xl p-4 text-white"
             >
               {locale === "fi" ? "In English" : "Suomeksi"}
             </Link>
-          </div>
+          </nav>
         </div>
       </div>
     </>
