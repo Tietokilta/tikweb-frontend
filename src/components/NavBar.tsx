@@ -1,9 +1,11 @@
+import { useLocation } from "@gatsbyjs/reach-router"
 import classNames from "classnames"
 import { graphql, Link, useStaticQuery } from "gatsby"
-import { useContext, useState } from "react"
+import { Fragment, useContext, useState } from "react"
 import { PageContext } from "../contexts/PageContext"
 import { StrapiNavigation } from "../types/strapi"
 import BurgerButton from "./BurgerButton"
+import NavPages from "./NavPages"
 
 type NavQuery = {
   allStrapiPublicNavigation: {
@@ -14,6 +16,7 @@ type NavQuery = {
 const NavBar: React.FC = () => {
   const { locale, localeLink } = useContext(PageContext)
   const [open, setOpen] = useState(false)
+  const { pathname } = useLocation()
   const navigations = useStaticQuery(graphql`
     query {
       allStrapiPublicNavigation {
@@ -22,6 +25,14 @@ const NavBar: React.FC = () => {
           items {
             title
             path
+            items {
+              title
+              path
+              items {
+                title
+                path
+              }
+            }
           }
         }
       }
@@ -56,24 +67,26 @@ const NavBar: React.FC = () => {
         />
         <div
           className={classNames(
-            "fixed top-0 left-0 h-full bg-gray-darkest transition-[max-width] ease-in-out duration-500",
+            "fixed top-0 left-0 w-full h-full transition-[max-width] ease-in-out duration-500 pt-12",
             {
-              "max-w-[80%] w-full overflow-y-auto": open,
-              "max-w-0 w-0 overflow-hidden": !open,
+              "max-w-[80%] overflow-x-hidden overflow-y-auto": open,
+              "max-w-0 overflow-hidden": !open,
             }
           )}
         >
-          <div className="p-4">
+          <nav className="flex flex-col items-start p-4 bg-gray-darkest w-[80vw] min-h-full">
             {nav?.items.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className="block font-mono text-2xl p-4 text-white"
-                activeClassName="underline"
-                partiallyActive
-              >
-                {item.title}
-              </Link>
+              <Fragment key={item.path}>
+                <Link
+                  to={item.path}
+                  className="block font-mono text-2xl p-4 text-white"
+                  activeClassName="underline"
+                  partiallyActive
+                >
+                  {item.title}
+                </Link>
+                {pathname.includes(item.path) && <NavPages rootItem={item} />}
+              </Fragment>
             ))}
             <Link
               to={localeLink}
@@ -81,7 +94,7 @@ const NavBar: React.FC = () => {
             >
               {locale === "fi" ? "In English" : "Suomeksi"}
             </Link>
-          </div>
+          </nav>
         </div>
       </div>
     </>
