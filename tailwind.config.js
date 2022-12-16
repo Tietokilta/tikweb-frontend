@@ -4,6 +4,7 @@ module.exports = {
     fontFamily: {
       sans: ["Roboto"],
       mono: ["Source Code Pro"],
+      pixel: ["VT323"],
     },
     extend: {
       colors: {

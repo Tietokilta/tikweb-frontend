@@ -6,6 +6,7 @@ import SideBar from "../components/SideBar"
 import { H1 } from "../components/typography"
 import { PageContext, PageInfo } from "../contexts/PageContext"
 import { pathWithOtherLocale } from "../paths"
+import DinoGame from "../components/DinoGame"
 
 const NotFoundPage: React.FC<PageProps> = () => {
   const { pathname } = useLocation()
@@ -29,6 +30,7 @@ const NotFoundPage: React.FC<PageProps> = () => {
               <a href="/en">Back to homepage</a>
             </>
           )}
+          <DinoGame />
         </SideBar>
       </Layout>
     </PageContext.Provider>
