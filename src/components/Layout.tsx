@@ -4,6 +4,7 @@ import "@fontsource/roboto/700.css"
 import "@fontsource/source-code-pro/300.css"
 import "@fontsource/source-code-pro/400.css"
 import "@fontsource/source-code-pro/700.css"
+import "@fontsource/vt323"
 
 import Footer from "./Footer"
 import Header from "./Header"
