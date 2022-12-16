@@ -25,6 +25,14 @@ const NavBar: React.FC = () => {
           items {
             title
             path
+            items {
+              title
+              path
+              items {
+                title
+                path
+              }
+            }
           }
         }
       }
@@ -68,9 +76,8 @@ const NavBar: React.FC = () => {
         >
           <div className="p-4 bg-gray-darkest w-[80vw] min-h-full">
             {nav?.items.map((item) => (
-              <>
+              <div key={item.path}>
                 <Link
-                  key={item.path}
                   to={item.path}
                   className="block font-mono text-2xl p-4 text-white"
                   activeClassName="underline"
@@ -78,8 +85,8 @@ const NavBar: React.FC = () => {
                 >
                   {item.title}
                 </Link>
-                {pathname.includes(item.path) && <NavPages />}
-              </>
+                {pathname.includes(item.path) && <NavPages rootItem={item} />}
+              </div>
             ))}
             <Link
               to={localeLink}
