@@ -62,7 +62,7 @@ const DinoGame = () => {
   const jumpRef = useRef(false)
   const [isEnd, setIsEnd] = useState(false)
   const [isStarted, setIsStarted] = useState(false)
-  const [restart, setRestart] = useState(false)
+  const [restart, setRestart] = useState(0)
 
   const jump = () => {
     jumpRef.current = true
@@ -70,7 +70,7 @@ const DinoGame = () => {
 
   const doRestart = () => {
     setIsEnd(false)
-    setRestart(!restart)
+    setRestart(Date.now())
   }
 
   const doAction = () => {
@@ -107,13 +107,14 @@ const DinoGame = () => {
     let frameCount = 0
     let playerY = 0
     let playerYVelocity = 0
-    let lastJumpPressFrame = 0
+    let lastJumpPressFrame = -1000
     const playerHeight = 120
     const groundHeight = 30
     const startObstacleMoveSpeed = 2.5
     let obstacleMoveSpeed = startObstacleMoveSpeed
     let currentRunTickCount = 0
     let gameHasEnded = false
+    let amountVisibleFromLeft = restart > 0 ? context?.canvas.width : 160
     let currentObstacles: Obstacle[] = []
     let groundSpecs: Point[] = []
     const createSpec = (x?: number): Point => {
@@ -230,6 +231,21 @@ const DinoGame = () => {
       )
     }
 
+    const clearInvisiblePartOfGame = (ctx: CanvasRenderingContext2D) => {
+      ctx.clearRect(
+        amountVisibleFromLeft,
+        0,
+        ctx.canvas.width - amountVisibleFromLeft,
+        ctx.canvas.height
+      )
+    }
+
+    const addVisibilityIfGameIsStarted = () => {
+      if (isStarted) {
+        amountVisibleFromLeft += 10
+      }
+    }
+
     const draw = (ctx: CanvasRenderingContext2D) => {
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
       drawGround(ctx)
@@ -238,6 +254,12 @@ const DinoGame = () => {
       drawScoreText(ctx)
       if (gameHasEnded) {
         drawGameOverText(ctx)
+      }
+      const gameIsNotCompletelyVisible =
+        amountVisibleFromLeft < ctx.canvas.width
+      if (gameIsNotCompletelyVisible) {
+        clearInvisiblePartOfGame(ctx)
+        addVisibilityIfGameIsStarted()
       }
     }
 
@@ -367,7 +389,7 @@ const DinoGame = () => {
         onClick={handleClick}
         onKeyDown={handleKeyPress}
         tabIndex={0}
-        className="relative border-2 border-black w-full md:w-1/2"
+        className="relative w-full md:w-1/2"
       >
         <canvas ref={canvasRef} height="310" width="750" className="w-full" />
         {isEnd && (
