@@ -7,6 +7,7 @@
     "gatsby-browser.js",
     "gatsby-config.js",
     "gatsby-node.js",
+    "gatsby-ssr.js",
     ".eslintrc.js",
     "jest.config.js",
     "jest-preprocess.js",
