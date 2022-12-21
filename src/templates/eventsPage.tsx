@@ -8,6 +8,7 @@ import { timezone } from "../components/events/config"
 import EditSignup from "../components/events/EditSignup"
 import EventDetails from "../components/events/EventDetails"
 import EventsList from "../components/events/EventsList"
+import Meta from "../components/Meta"
 import { EVENTS_PATHS } from "../paths"
 import { Locale } from "../types/strapi"
 
@@ -53,5 +54,9 @@ const EventsPage: React.FC<Props> = ({ pageContext: { locale } }) => {
     </>
   )
 }
+
+export const Head: React.FC<Props> = ({ pageContext: { locale } }) => (
+  <Meta title={locale === "fi" ? "Tapahtumat" : "Events"} />
+)
 
 export default EventsPage

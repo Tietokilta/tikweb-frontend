@@ -1,12 +1,13 @@
 import { useLocation } from "@gatsbyjs/reach-router"
 import { PageProps } from "gatsby"
 import { useMemo } from "react"
+import DinoGame from "../components/DinoGame"
 import Layout from "../components/Layout"
+import Meta from "../components/Meta"
 import SideBar from "../components/SideBar"
 import { H1 } from "../components/typography"
 import { PageContext, PageInfo } from "../contexts/PageContext"
 import { pathWithOtherLocale } from "../paths"
-import DinoGame from "../components/DinoGame"
 
 const NotFoundPage: React.FC<PageProps> = () => {
   const { pathname } = useLocation()
@@ -37,4 +38,11 @@ const NotFoundPage: React.FC<PageProps> = () => {
   )
 }
 
+export const Head = () => {
+  const { pathname } = useLocation()
+  const locale = pathname.startsWith("/en/") ? "en" : "fi"
+  return (
+    <Meta title={locale === "fi" ? "Sivua ei löytynyt" : "Page not found"} />
+  )
+}
 export default NotFoundPage

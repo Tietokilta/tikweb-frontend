@@ -9,6 +9,8 @@ import { PageContext, PageInfo } from "../contexts/PageContext"
 import Layout from "../components/Layout"
 import { Locale, StrapiLandingPage } from "../types/strapi"
 import { pathWithOtherLocale } from "../paths"
+import Meta from "../components/Meta"
+import firstSentenceFromContent from "../utils/firstSentenceFromContent"
 
 const testEvents = [
   {
@@ -118,5 +120,20 @@ export const pageQuery = graphql`
     }
   }
 `
+
+export const Head: React.FC<Props> = ({
+  pageContext: { locale },
+  data: {
+    strapiLandingPage: { content },
+  },
+}) => {
+  const description = firstSentenceFromContent(content)
+  return (
+    <Meta
+      title={locale === "fi" ? "Etusivu" : "Front Page"}
+      description={description}
+    />
+  )
+}
 
 export default LandingPage

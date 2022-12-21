@@ -3,10 +3,12 @@ import { useMemo } from "react"
 import ContentRenderer from "../components/ContentRenderer"
 import { H1 } from "../components/typography"
 import Layout from "../components/Layout"
+import Meta from "../components/Meta"
 import SideBar from "../components/SideBar"
 import { PageContext, PageInfo } from "../contexts/PageContext"
 import { pathWithOtherLocale } from "../paths"
 import { StrapiPage } from "../types/strapi"
+import firstSentenceFromContent from "../utils/firstSentenceFromContent"
 
 type Props = {
   data: {
@@ -52,5 +54,14 @@ export const pageQuery = graphql`
     }
   }
 `
+
+export const Head: React.FC<Props> = ({
+  data: {
+    strapiPage: { content, title },
+  },
+}) => {
+  const description = firstSentenceFromContent(content)
+  return <Meta title={title} description={description} />
+}
 
 export default Page
