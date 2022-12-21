@@ -13,7 +13,7 @@ const NotFoundPage: React.FC<PageProps> = () => {
   const locale = pathname.startsWith("/en/") ? "en" : "fi"
   const context: PageInfo = useMemo(
     () => ({ locale, localeLink: pathWithOtherLocale("", locale) }),
-    []
+    [locale]
   )
   return (
     <PageContext.Provider value={context}>

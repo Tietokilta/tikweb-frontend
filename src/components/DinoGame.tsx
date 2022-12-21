@@ -114,7 +114,7 @@ const DinoGame = () => {
     let obstacleMoveSpeed = startObstacleMoveSpeed
     let currentRunTickCount = 0
     let gameHasEnded = false
-    let amountVisibleFromLeft = restart > 0 ? context?.canvas.width : 160
+    let amountVisibleFromLeft = restart > 0 ? context?.canvas.width || 750 : 160
     let currentObstacles: Obstacle[] = []
     let groundSpecs: Point[] = []
     const createSpec = (x?: number): Point => {
