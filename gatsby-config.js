@@ -8,6 +8,14 @@ module.exports = {
     title: "Tietokilta",
   },
   plugins: [
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: `Tietokilta`,
+        short_name: `Tietokilta`,
+        icon: `src/assets/favicon.svg`,
+      },
+    },
     "gatsby-plugin-postcss",
     {
       resolve: "gatsby-source-strapi",
