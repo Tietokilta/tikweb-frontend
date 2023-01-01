@@ -6,7 +6,9 @@ type Props = HTMLAttributes<HTMLHeadingElement>
 // We can't declare these as React.FC because it'd break react-markdown typings
 
 export const H1 = ({ children, className }: Props) => (
-  <h1 className={classNames("font-mono text-4xl", className)}>{children}</h1>
+  <h1 className={classNames("font-mono text-3xl sm:text-4xl", className)}>
+    {children}
+  </h1>
 )
 
 export const H2 = ({ children, className }: Props) => (

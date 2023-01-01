@@ -1,9 +1,22 @@
 import { useSingleEventContext } from "@tietokilta/ilmomasiina-components"
 import { SignupWithQuota } from "@tietokilta/ilmomasiina-components/dist/utils/signupUtils"
+import classNames from "classnames"
 import filter from "lodash/filter"
 import find from "lodash/find"
 import moment from "moment-timezone"
+import { FC, TdHTMLAttributes } from "react"
 import { timezone } from "./config"
+
+const Td: FC<TdHTMLAttributes<HTMLTableCellElement>> = ({
+  className,
+  ...props
+}) => (
+  <td
+    className={classNames("p-1", className)}
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...props}
+  />
+)
 
 type Props = {
   index: number
@@ -11,7 +24,7 @@ type Props = {
   signup: SignupWithQuota
 }
 
-const SignupListRow = ({ showQuota, signup, index }: Props) => {
+const SignupListRow: FC<Props> = ({ showQuota, signup, index }) => {
   const {
     firstName,
     lastName,
@@ -34,25 +47,32 @@ const SignupListRow = ({ showQuota, signup, index }: Props) => {
   }
 
   return (
-    <tr className={!confirmed ? "ilmo--unconfirmed" : ""}>
-      <td>{`${index}.`}</td>
+    <tr
+      className={classNames(
+        !confirmed && "text-gray-light",
+        "first:border-t-0"
+      )}
+    >
+      <Td>{`${index}.`}</Td>
       {nameQuestion && (
-        <td className={!confirmed || !namePublic ? "ilmo--hidden-name" : ""}>
+        <Td
+          className={!confirmed || !namePublic ? "text-gray-light italic" : ""}
+        >
           {fullName}
-        </td>
+        </Td>
       )}
       {filter(questions, "public").map((question) => (
-        <td key={question.id}>
+        <Td key={question.id}>
           {find(answers, { questionId: question.id })?.answer || ""}
-        </td>
+        </Td>
       ))}
-      {showQuota && <td>{`${quotaName || ""}`}</td>}
-      <td>
+      {showQuota && <Td>{`${quotaName || ""}`}</Td>}
+      <Td className="group">
         {moment(createdAt).tz(timezone).format("DD.MM.YYYY HH:mm:ss")}
-        <span className="ilmo--hover-only">
+        <span className="invisible group-hover:visible">
           {moment(createdAt).tz(timezone).format(".SSS")}
         </span>
-      </td>
+      </Td>
     </tr>
   )
 }

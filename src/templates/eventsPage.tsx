@@ -1,21 +1,13 @@
 import { Router, useNavigate, useParams } from "@gatsbyjs/reach-router"
-import {
-  configure,
-  EditSignup as EditSignupOrig,
-  EditSignupProps,
-  PathsContext,
-} from "@tietokilta/ilmomasiina-components"
+import { configure, PathsContext } from "@tietokilta/ilmomasiina-components"
 import { LinkProps } from "@tietokilta/ilmomasiina-components/dist/config/router"
 import { Link } from "gatsby"
 import React from "react"
+import { ToastContainer } from "react-toastify"
 import { timezone } from "../components/events/config"
+import EditSignup from "../components/events/EditSignup"
 import EventDetails from "../components/events/EventDetails"
 import EventsList from "../components/events/EventsList"
-import {
-  EventsRouteProps,
-  otherLocalePaths,
-  RouteWrapper,
-} from "../components/events/utils"
 import { EVENTS_PATHS } from "../paths"
 import { Locale } from "../types/strapi"
 
@@ -36,19 +28,6 @@ configure({
   timezone,
 })
 
-const EditSignup: React.FC<EventsRouteProps<EditSignupProps>> = ({
-  locale,
-  id,
-  editToken,
-}) => {
-  const localeLink = otherLocalePaths(locale).editSignup(id!, editToken!)
-  return (
-    <RouteWrapper locale={locale} localeLink={localeLink}>
-      <EditSignupOrig />
-    </RouteWrapper>
-  )
-}
-
 type Props = {
   pageContext: {
     locale: Locale
@@ -59,16 +38,19 @@ const EventsPage: React.FC<Props> = ({ pageContext: { locale } }) => {
   // Paths depend on locale
   const paths = EVENTS_PATHS[locale]
   return (
-    <PathsContext.Provider value={paths}>
-      <Router>
-        <EventsList path={paths.eventsList} locale={locale} />
-        <EventDetails path={paths.eventDetails(":slug")} locale={locale} />
-        <EditSignup
-          path={paths.editSignup(":id", ":editToken")}
-          locale={locale}
-        />
-      </Router>
-    </PathsContext.Provider>
+    <>
+      <PathsContext.Provider value={paths}>
+        <Router>
+          <EventsList path={paths.eventsList} locale={locale} />
+          <EventDetails path={paths.eventDetails(":slug")} locale={locale} />
+          <EditSignup
+            path={paths.editSignup(":id", ":editToken")}
+            locale={locale}
+          />
+        </Router>
+      </PathsContext.Provider>
+      <ToastContainer />
+    </>
   )
 }
 

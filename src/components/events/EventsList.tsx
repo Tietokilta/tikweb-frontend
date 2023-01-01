@@ -18,7 +18,7 @@ import {
 } from "./utils"
 import Spinner from "./Spinner"
 import EventsListRow from "./EventsListRow"
-import { H1 } from "../typography"
+import { H1, P } from "../typography"
 
 const EventsListView: React.FC = () => {
   const { events, error, pending } = useEventListContext()
@@ -27,8 +27,8 @@ const EventsListView: React.FC = () => {
   if (error) {
     return (
       <>
-        <H1>Hups, jotain meni pieleen</H1>
-        <p>Tapahtumien lataus epäonnistui</p>
+        <H1>Virhe</H1>
+        <P>Tapahtumien lataus epäonnistui</P>
       </>
     )
   }
@@ -79,12 +79,20 @@ const EventsListView: React.FC = () => {
     <>
       <H1>Tapahtumat</H1>
       <table className="w-full">
-        <thead className="hidden sm:table-header-group border-b border-solid border-gray-lightest">
+        <thead className="hidden sm:table-header-group">
           <tr className="font-mono">
-            <th className="text-left p-3">Nimi</th>
-            <th className="text-left p-3">Ajankohta</th>
-            <th className="text-left p-3">Ilmoittautuminen</th>
-            <th className="text-left p-3">Ilmoittautuneita</th>
+            <th className="text-left py-3 px-2 border-b border-solid border-gray-lightest">
+              Nimi
+            </th>
+            <th className="text-left py-3 px-2 border-b border-solid border-gray-lightest">
+              Ajankohta
+            </th>
+            <th className="text-left py-3 px-2 border-b border-solid border-gray-lightest">
+              Ilmoittautuminen
+            </th>
+            <th className="text-left py-3 px-2 border-b border-solid border-gray-lightest">
+              Ilmoittautuneita
+            </th>
           </tr>
         </thead>
         <tbody>{tableRows}</tbody>

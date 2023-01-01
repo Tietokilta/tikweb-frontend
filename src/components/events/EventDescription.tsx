@@ -7,9 +7,9 @@ import Markdown from "../Markdown"
 const EventDescription = () => {
   const event = useSingleEventContext().event!
   return (
-    <div className="md:w-2/3">
+    <div className="md:w-2/3 mb-6">
       <H1 className="my-3">{event.title}</H1>
-      <div className=" border-y-2 border-solid border-gray-lightest py-1">
+      <div className="border-y-2 border-solid border-gray-lightest py-1">
         {event.category && (
           <p className="my-1">
             <strong>Kategoria:</strong> {event.category}

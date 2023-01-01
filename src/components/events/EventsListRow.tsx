@@ -30,7 +30,7 @@ const EventsListRow = ({
     <tr className={`flex flex-col sm:table-row ${rowClass}`}>
       <td
         key="title"
-        className={`p-0 sm:p-3 align-top ${quotaClass} ${titleClass} sm:min-w-[300px]`}
+        className={`p-0 sm:p-3 align-top ${quotaClass} ${titleClass} sm:min-w-[240px] md:min-w-[300px]`}
       >
         {title}
       </td>

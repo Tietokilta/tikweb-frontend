@@ -1,8 +1,11 @@
-const Spinner: React.FC = () => (
-  <div role="status">
+import { FC, HTMLAttributes } from "react"
+
+const Spinner: FC<HTMLAttributes<HTMLDivElement>> = (props) => (
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  <div role="status" {...props}>
     <svg
       aria-hidden="true"
-      className="mr-2 w-8 h-8 text-gray-light animate-spin fill-orange"
+      className="w-8 h-8 text-gray-light animate-spin fill-orange"
       viewBox="0 0 100 101"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

@@ -4,8 +4,10 @@ import {
   useSingleEventContext,
 } from "@tietokilta/ilmomasiina-components"
 import { Link } from "gatsby"
-import { H1 } from "../typography"
+import { H1, H2, P } from "../typography"
 import EventDescription from "./EventDescription"
+import QuotaBars from "./QuotaBars"
+import SignupButtons from "./SignupButtons"
 import SignupList from "./SignupList"
 import Spinner from "./Spinner"
 import {
@@ -21,36 +23,39 @@ const SingleEventView: React.FC = () => {
 
   if (error) {
     return (
-      <div className="ilmo--loading-container">
-        <H1>Hups, jotain meni pieleen</H1>
-        <p>
-          Tapahtumaa ei löytynyt. Se saattaa olla menneisyydessä tai poistettu.
-        </p>
-        <Link to={paths.eventsList}>Palaa tapahtumalistaukseen</Link>
-      </div>
+      <>
+        <H1>Tapahtumaa ei löytynyt</H1>
+        <P>Tapahtuma saattaa olla menneisyydessä tai poistettu.</P>
+        <P>
+          <Link to={paths.eventsList}>Palaa tapahtumalistaukseen</Link>
+        </P>
+      </>
     )
   }
 
   if (pending) {
-    return <Spinner />
+    return (
+      <>
+        <Link to={paths.eventsList}>&#8592; Takaisin</Link>
+        <div className="mt-3" />
+        <Spinner />
+      </>
+    )
   }
 
   return (
     <>
-      <Link to={paths.eventsList} style={{ margin: 0 }}>
-        &#8592; Takaisin
-      </Link>
-      <div className="md:flex">
+      <Link to={paths.eventsList}>&#8592; Takaisin</Link>
+      <div className="md:flex gap-4">
         <EventDescription />
-        <div className="md:w-1/3">
-          {/* <SignupCountdown /> */}
-          {/* <QuotaStatus /> */}
-          here be dragons
+        <div className="md:w-1/3 flex flex-col gap-3 mb-6">
+          <SignupButtons />
+          <QuotaBars />
         </div>
       </div>
       {event!.signupsPublic && (
         <>
-          <h2>Ilmoittautuneet</h2>
+          <H2>Ilmoittautuneet</H2>
           {signupsByQuota!.map((quota) => (
             <SignupList key={quota.id} quota={quota} />
           ))}

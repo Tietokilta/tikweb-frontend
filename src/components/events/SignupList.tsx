@@ -4,8 +4,22 @@ import {
   QuotaSignups,
   WAITLIST,
 } from "@tietokilta/ilmomasiina-components/dist/utils/signupUtils"
+import classNames from "classnames"
 import filter from "lodash/filter"
+import { FC, ThHTMLAttributes } from "react"
+import { H3 } from "../typography"
 import SignupListRow from "./SignupListRow"
+
+const Th: FC<ThHTMLAttributes<HTMLTableCellElement>> = ({
+  className,
+  ...props
+}) => (
+  <th
+    className={classNames("text-left p-1 bg-gray-lightest", className)}
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...props}
+  />
+)
 
 type Props = {
   quota: QuotaSignups
@@ -16,31 +30,39 @@ const SignupList = ({ quota }: Props) => {
   const { questions, nameQuestion } = useSingleEventContext().event!
   const showQuotas = quota.id === OPENQUOTA || quota.id === WAITLIST
   return (
-    <div className="ilmo--quota-signups">
-      <h3>{quota.title}</h3>
+    <div className="mt-4 mb-8">
+      <H3>{quota.title}</H3>
       {!signups?.length ? (
         <p>Ei ilmoittautumisia.</p>
       ) : (
-        <div className="w-full">
-          <table>
+        <div className="w-full overflow-x-auto">
+          <table className="w-full text-[0.9em]">
             <thead className="thead-light">
               <tr>
-                <th key="position">Sija</th>
+                <Th key="position" className="min-w-[40px]">
+                  Sija
+                </Th>
                 {nameQuestion && (
-                  <th key="attendee" style={{ minWidth: 90 }}>
+                  <Th key="attendee" className="min-w-[90px]">
                     Nimi
-                  </th>
+                  </Th>
                 )}
                 {filter(questions, "public").map((question) => (
-                  <th key={question.id}>{question.question}</th>
+                  <Th key={question.id} className="min-w-[120px]">
+                    {question.question}
+                  </Th>
                 ))}
-                {showQuotas && <th key="quota">Kiintiö</th>}
-                <th key="datetime" style={{ minWidth: 130 }}>
+                {showQuotas && (
+                  <Th key="quota" className="min-w-[120px]">
+                    Kiintiö
+                  </Th>
+                )}
+                <Th key="datetime" className="min-w-[130px]">
                   Ilmoittautumisaika
-                </th>
+                </Th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-gray-lightest">
               {signups.map((signup, i) => (
                 <SignupListRow
                   index={i + 1}

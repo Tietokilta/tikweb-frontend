@@ -28,5 +28,15 @@ module.exports = {
     "import/prefer-default-export": "off",
     "react/require-default-props": "off",
     "prettier/prettier": ["error", { endOfLine: "auto" }],
+    // Custom components
+    "jsx-a11y/label-has-associated-control": [
+      "error",
+      {
+        labelComponents: ["FieldRow"],
+        labelAttributes: ["label"],
+        controlComponents: ["Field"],
+        depth: 25,
+      },
+    ],
   },
 }

@@ -15,7 +15,7 @@ export const otherLocalePaths = (locale: Locale) =>
 
 export type WrapperProps = PropsWithChildren<PageInfo>
 
-/** Common code for all routes */
+/** Common code for all routes: PageContext.Provider and main layout */
 export const RouteWrapper: React.FC<WrapperProps> = ({
   locale,
   localeLink,
@@ -28,7 +28,9 @@ export const RouteWrapper: React.FC<WrapperProps> = ({
   return (
     <PageContext.Provider value={context}>
       <Layout>
-        <main className="ilmo flex-grow px-5 py-4">{children}</main>
+        <main className="ilmo flex-grow px-5 py-4 mx-auto w-full max-w-screen-xl">
+          {children}
+        </main>
       </Layout>
     </PageContext.Provider>
   )
