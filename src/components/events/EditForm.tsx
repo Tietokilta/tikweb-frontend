@@ -17,7 +17,7 @@ import SignupStatus from "./SignupStatus"
 import { useEventsPaths } from "./utils"
 
 const EditForm = () => {
-  const { event, signup } = useEditSignupContext()
+  const { event, signup, registrationClosed } = useEditSignupContext()
   const isNew = signup!.confirmedAt === null
   const updateSignup = useUpdateSignup()
   const navigate = useNavigate()
@@ -77,6 +77,12 @@ const EditForm = () => {
               Ilmoittautumisessasi on virheitä.
             </p>
           )}
+          {registrationClosed && (
+            <p className="text-red font-semibold my-2 p-3 rounded-lg border border-red bg-red bg-opacity-20">
+              Ilmoittautumistasi ei voi enää muokata tai perua, koska tapahtuman
+              ilmoittautuminen on sulkeutunut.
+            </p>
+          )}
           <form onSubmit={handleSubmit}>
             {event!.nameQuestion && (
               <>
@@ -86,7 +92,8 @@ const EditForm = () => {
                     name="firstName"
                     id="firstName"
                     placeholder="Etunimi"
-                    disabled={!isNew}
+                    required
+                    readOnly={!isNew || registrationClosed}
                   />
                 </FieldRow>
                 <FieldRow id="lastName" label="Sukunimi / Last name" required>
@@ -95,7 +102,8 @@ const EditForm = () => {
                     name="lastName"
                     id="lastName"
                     placeholder="Sukunimi"
-                    disabled={!isNew}
+                    required
+                    readOnly={!isNew || registrationClosed}
                   />
                 </FieldRow>
                 <FieldRow id="namePublic">
@@ -104,6 +112,7 @@ const EditForm = () => {
                     name="namePublic"
                     id="namePublic"
                     type="checkbox"
+                    disabled={registrationClosed}
                     label={
                       <div>
                         Näytä nimi julkisessa osallistujalistassa
@@ -122,35 +131,44 @@ const EditForm = () => {
                   name="email"
                   id="email"
                   placeholder="Sähköpostisi"
-                  disabled={!isNew}
+                  required
+                  readOnly={!isNew || registrationClosed}
                 />
               </FieldRow>
             )}
 
-            <QuestionFields name="answers" questions={event!.questions} />
+            <QuestionFields
+              name="answers"
+              questions={event!.questions}
+              disabled={registrationClosed}
+            />
 
-            <P>
-              Voit muokata ilmoittautumistasi tai poistaa sen myöhemmin
-              tallentamalla tämän sivun URL-osoitteen.
-              {event!.emailQuestion &&
-                " Linkki lähetetään myös sähköpostiisi vahvistusviestissä."}
-            </P>
+            {!registrationClosed && (
+              <P>
+                Voit muokata ilmoittautumistasi tai poistaa sen myöhemmin
+                tallentamalla tämän sivun URL-osoitteen.
+                {event!.emailQuestion &&
+                  " Linkki lähetetään myös sähköpostiisi vahvistusviestissä."}
+              </P>
+            )}
 
-            <nav className="flex justify-end items-baseline gap-3">
-              {!isNew && (
-                <Link to={paths.eventDetails(event!.slug)}>Peruuta</Link>
-              )}
-              <Button
-                type="submit"
-                formNoValidate
-                loading={isSubmitting}
-                className="font-bold"
-              >
-                {isNew ? "Lähetä" : "Päivitä"}
-              </Button>
-            </nav>
+            {!registrationClosed && (
+              <nav className="flex justify-end items-baseline gap-3">
+                {!isNew && (
+                  <Link to={paths.eventDetails(event!.slug)}>Peruuta</Link>
+                )}
+                <Button
+                  type="submit"
+                  formNoValidate
+                  loading={isSubmitting}
+                  className="font-bold"
+                >
+                  {isNew ? "Lähetä" : "Päivitä"}
+                </Button>
+              </nav>
+            )}
           </form>
-          <DeleteSignup />
+          {!registrationClosed && <DeleteSignup />}
         </>
       )}
     </Formik>

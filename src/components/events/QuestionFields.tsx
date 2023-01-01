@@ -11,9 +11,10 @@ import { CheckBox, Select, Textarea, TextInput } from "./inputs"
 type Props = {
   name: string
   questions: Event.Details.Question[]
+  disabled?: boolean
 }
 
-const QuestionFields = ({ name, questions }: Props) => {
+const QuestionFields = ({ name, questions, disabled }: Props) => {
   // TODO: add formik-based validation
   const [{ value }, , { setValue }] =
     useField<Signup.Update.Body.Answer[]>(name)
@@ -52,6 +53,7 @@ const QuestionFields = ({ name, questions }: Props) => {
                 type="text"
                 id={question.id}
                 required={question.required}
+                readOnly={disabled}
                 value={currentAnswer}
                 onChange={(e) => updateAnswer(e.target.value)}
               />
@@ -63,6 +65,7 @@ const QuestionFields = ({ name, questions }: Props) => {
                 type="number"
                 id={question.id}
                 required={question.required}
+                readOnly={disabled}
                 value={currentAnswer}
                 onChange={(e) => updateAnswer(e.target.value)}
               />
@@ -82,6 +85,7 @@ const QuestionFields = ({ name, questions }: Props) => {
                       question.required &&
                       !currentAnswers.some((answer) => answer !== option)
                     }
+                    disabled={disabled}
                     checked={currentAnswers.includes(option)}
                     onChange={(e) => toggleChecked(option, e.target.checked)}
                     label={option}
@@ -98,6 +102,7 @@ const QuestionFields = ({ name, questions }: Props) => {
                 rows={3}
                 cols={40}
                 required={question.required}
+                readOnly={disabled}
                 value={currentAnswer}
                 onChange={(e) => updateAnswer(e.target.value)}
               />
@@ -109,14 +114,16 @@ const QuestionFields = ({ name, questions }: Props) => {
                 <Select
                   id={question.id}
                   required={question.required}
+                  disabled={disabled}
                   value={currentAnswer}
                   onChange={(e) => updateAnswer(e.target.value)}
                 >
                   <option disabled={question.required} value="">
                     Valitse&hellip;
                   </option>
-                  {question.options?.map((option) => (
-                    <option key={question.id} value={option}>
+                  {question.options?.map((option, optIndex) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <option key={optIndex} value={option}>
                       {option}
                     </option>
                   ))}
@@ -132,6 +139,7 @@ const QuestionFields = ({ name, questions }: Props) => {
                       type="radio"
                       value={option}
                       required={question.required}
+                      disabled={disabled}
                       checked={currentAnswer === option}
                       onChange={(e) => updateAnswer(e.target.value)}
                       label={option}

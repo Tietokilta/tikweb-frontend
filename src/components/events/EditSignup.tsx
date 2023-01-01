@@ -15,7 +15,7 @@ import {
 } from "./utils"
 
 const EditSignupView = () => {
-  const { error, pending, event } = useEditSignupContext()
+  const { error, pending } = useEditSignupContext()
   const paths = useEventsPaths()
 
   if (error) {
@@ -35,24 +35,6 @@ const EditSignupView = () => {
       <div className="flex justify-center pt-6">
         <Spinner />
       </div>
-    )
-  }
-
-  if (
-    event!.registrationEndDate === null ||
-    new Date(event!.registrationEndDate) < new Date()
-  ) {
-    return (
-      <>
-        <H1>Ilmoittautuminen sulkeutunut</H1>
-        <P>
-          Ilmoittautumistasi ei voi enää muokata tai perua, koska tapahtuman
-          ilmoittautuminen on sulkeutunut.
-        </P>
-        <P>
-          <Link to={paths.eventDetails(event!.slug)}>Takaisin</Link>
-        </P>
-      </>
     )
   }
 
