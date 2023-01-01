@@ -1,45 +1,18 @@
 import { useLocation } from "@gatsbyjs/reach-router"
-import { graphql, Link, useStaticQuery } from "gatsby"
+import { graphql, useStaticQuery } from "gatsby"
 import { useContext } from "react"
+import NavPages from "./NavPages"
 import { PageContext } from "../contexts/PageContext"
-import { NavigationItem, StrapiNavigation } from "../types/strapi"
+import { StrapiNavigation } from "../types/strapi"
 
-type ItemProps = {
-  item: NavigationItem
-}
-
-const SubItem: React.FC<ItemProps> = ({ item: { title, path } }) => {
-  return (
-    <Link className="pt-1 px-2 text-lg font-normal text-white" to={path}>
-      {title}
-    </Link>
-  )
-}
-
-const Item: React.FC<ItemProps> = ({ item: { title, path, items } }) => {
-  return (
-    <>
-      <Link
-        className="mt-4 font-mono text-xl font-semibold text-white"
-        to={path}
-      >
-        {title}
-      </Link>
-      {items?.map((item) => (
-        <SubItem key={item.path} item={item} />
-      ))}
-    </>
-  )
+export type SideBarProps = {
+  children: React.ReactNode
 }
 
 type NavQuery = {
   allStrapiPublicNavigation: {
     nodes: StrapiNavigation[]
   }
-}
-
-export type SideBarProps = {
-  children: React.ReactNode
 }
 
 const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
@@ -84,11 +57,9 @@ const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
 
   return (
     <main className="flex-grow flex flex-row min-h-full">
-      <nav className="flex flex-col min-h-full bg-gray-darkest text-white pl-10 pr-5">
-        {rootItem?.items?.map((item) => (
-          <Item key={item.path} item={item} />
-        ))}
-      </nav>
+      <div className="hidden md:block">
+        <NavPages rootItem={rootItem} />
+      </div>
       <div className="px-5 py-4 w-full">{children}</div>
     </main>
   )
