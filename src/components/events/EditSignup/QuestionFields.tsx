@@ -6,7 +6,7 @@ import reject from "lodash/reject"
 import without from "lodash/without"
 import { ReactNode } from "react"
 import FieldRow from "./FieldRow"
-import { CheckBox, Select, Textarea, TextInput } from "./inputs"
+import { CheckBox, Select, Textarea, TextInput } from "../inputs"
 
 type Props = {
   name: string

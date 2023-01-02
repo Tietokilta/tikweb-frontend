@@ -4,18 +4,18 @@ import {
   useSingleEventContext,
 } from "@tietokilta/ilmomasiina-components"
 import { Link } from "gatsby"
-import { H1, H2, P } from "../typography"
+import { H1, H2, P } from "../../typography"
 import EventDescription from "./EventDescription"
 import QuotaBars from "./QuotaBars"
 import SignupButtons from "./SignupButtons"
 import SignupList from "./SignupList"
-import Spinner from "./Spinner"
+import Spinner from "../Spinner"
 import {
   EventsRouteProps,
   otherLocalePaths,
   RouteWrapper,
   useEventsPaths,
-} from "./utils"
+} from "../utils"
 
 const SingleEventView: React.FC = () => {
   const { event, signupsByQuota, pending, error } = useSingleEventContext()

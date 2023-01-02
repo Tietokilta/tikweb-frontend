@@ -6,9 +6,9 @@ import {
 import { useFormikContext } from "formik"
 import { useCallback, useState } from "react"
 import { toast } from "react-toastify"
-import { H2, P } from "../typography"
-import { ConfirmButton } from "./inputs"
-import { useEventsPaths } from "./utils"
+import { H2, P } from "../../typography"
+import { ConfirmButton } from "../inputs"
+import { useEventsPaths } from "../utils"
 
 const DELETE_CONFIRM_MS = 4000
 

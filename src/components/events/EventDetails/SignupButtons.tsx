@@ -12,9 +12,9 @@ import moment from "moment-timezone"
 import { useCallback, useState } from "react"
 import Countdown from "react-countdown"
 import { toast } from "react-toastify"
-import { H3 } from "../typography"
-import { Button } from "./inputs"
-import { useEventsPaths } from "./utils"
+import { H3 } from "../../typography"
+import { Button } from "../inputs"
+import { useEventsPaths } from "../utils"
 
 /** How long before opening the signup to show a countdown. */
 const COUNTDOWN_DURATION = 60 * 1000

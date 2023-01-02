@@ -5,7 +5,7 @@ import filter from "lodash/filter"
 import find from "lodash/find"
 import moment from "moment-timezone"
 import { FC, TdHTMLAttributes } from "react"
-import { timezone } from "./config"
+import { timezone } from "../config"
 
 const Td: FC<TdHTMLAttributes<HTMLTableCellElement>> = ({
   className,

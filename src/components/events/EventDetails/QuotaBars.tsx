@@ -4,7 +4,7 @@ import {
   WAITLIST,
 } from "@tietokilta/ilmomasiina-components/dist/utils/signupUtils"
 import { FC } from "react"
-import { H3 } from "../typography"
+import { H3 } from "../../typography"
 
 type QuotaBarProps = {
   title: string

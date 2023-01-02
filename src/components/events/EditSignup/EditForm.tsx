@@ -8,13 +8,13 @@ import { Field, Formik, FormikHelpers } from "formik"
 import { Link } from "gatsby"
 import { useCallback, useState } from "react"
 import { toast } from "react-toastify"
-import { H1, P } from "../typography"
+import { H1, P } from "../../typography"
 import DeleteSignup from "./DeleteSignup"
 import FieldRow from "./FieldRow"
-import { Button, CheckBox, TextInput } from "./inputs"
+import { Button, CheckBox, TextInput } from "../inputs"
 import QuestionFields from "./QuestionFields"
 import SignupStatus from "./SignupStatus"
-import { useEventsPaths } from "./utils"
+import { useEventsPaths } from "../utils"
 
 const EditForm = () => {
   const { event, signup, registrationClosed } = useEditSignupContext()

@@ -7,7 +7,7 @@ import {
 import classNames from "classnames"
 import filter from "lodash/filter"
 import { FC, ThHTMLAttributes } from "react"
-import { H3 } from "../typography"
+import { H3 } from "../../typography"
 import SignupListRow from "./SignupListRow"
 
 const Th: FC<ThHTMLAttributes<HTMLTableCellElement>> = ({

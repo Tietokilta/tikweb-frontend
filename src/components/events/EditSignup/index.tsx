@@ -4,15 +4,15 @@ import {
   useEditSignupContext,
 } from "@tietokilta/ilmomasiina-components"
 import { Link } from "gatsby"
-import { H1, P } from "../typography"
+import { H1, P } from "../../typography"
 import EditForm from "./EditForm"
-import Spinner from "./Spinner"
+import Spinner from "../Spinner"
 import {
   EventsRouteProps,
   otherLocalePaths,
   RouteWrapper,
   useEventsPaths,
-} from "./utils"
+} from "../utils"
 
 const EditSignupView = () => {
   const { error, pending } = useEditSignupContext()

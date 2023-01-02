@@ -1,8 +1,8 @@
 import moment from "moment-timezone"
 import { useSingleEventContext } from "@tietokilta/ilmomasiina-components"
-import { H1 } from "../typography"
-import { timezone } from "./config"
-import Markdown from "../Markdown"
+import { H1 } from "../../typography"
+import { timezone } from "../config"
+import Markdown from "../../Markdown"
 
 const EventDescription = () => {
   const event = useSingleEventContext().event!

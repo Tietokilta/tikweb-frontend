@@ -1,5 +1,5 @@
 import { useEditSignupContext } from "@tietokilta/ilmomasiina-components"
-import { P } from "../typography"
+import { P } from "../../typography"
 
 const SignupStatus = () => {
   const { event, signup } = useEditSignupContext()

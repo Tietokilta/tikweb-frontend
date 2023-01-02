@@ -9,16 +9,16 @@ import {
 } from "@tietokilta/ilmomasiina-components/dist/utils/eventListUtils"
 import { signupStateText } from "@tietokilta/ilmomasiina-components/dist/utils/signupStateText"
 import { Link } from "gatsby"
-import { timezone } from "./config"
+import { timezone } from "../config"
 import {
   EventsRouteProps,
   otherLocalePaths,
   RouteWrapper,
   useEventsPaths,
-} from "./utils"
-import Spinner from "./Spinner"
+} from "../utils"
+import Spinner from "../Spinner"
 import EventsListRow from "./EventsListRow"
-import { H1, P } from "../typography"
+import { H1, P } from "../../typography"
 
 const EventsListView: React.FC = () => {
   const { events, error, pending } = useEventListContext()
