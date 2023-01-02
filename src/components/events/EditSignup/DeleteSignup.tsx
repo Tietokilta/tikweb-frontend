@@ -3,6 +3,8 @@ import {
   useDeleteSignup,
   useEditSignupContext,
 } from "@tietokilta/ilmomasiina-components"
+import { SignupGetEventItem } from "@tietokilta/ilmomasiina-models/dist/services/signups/getForEdit"
+import { StringifyApi } from "@tietokilta/ilmomasiina-models/dist/utils"
 import { useFormikContext } from "formik"
 import { useCallback, useState } from "react"
 import { toast } from "react-toastify"
@@ -12,7 +14,9 @@ import { useEventsPaths } from "../utils"
 
 const DELETE_CONFIRM_MS = 4000
 
-const DeleteSignup = () => {
+const DeleteSignup: React.FC<{
+  event: StringifyApi<SignupGetEventItem>
+}> = () => {
   const { event } = useEditSignupContext()
   const deleteSignup = useDeleteSignup()
   const navigate = useNavigate()

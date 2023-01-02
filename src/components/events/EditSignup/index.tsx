@@ -15,7 +15,8 @@ import {
 } from "../utils"
 
 const EditSignupView = () => {
-  const { error, pending } = useEditSignupContext()
+  const { error, pending, event, signup, registrationClosed } =
+    useEditSignupContext()
   const paths = useEventsPaths()
 
   if (pending) {
@@ -25,7 +26,7 @@ const EditSignupView = () => {
       </div>
     )
   }
-  if (error) {
+  if (error || !event || !signup) {
     return (
       <>
         <H1>Ilmoittautumista ei löytynyt</H1>
@@ -39,7 +40,11 @@ const EditSignupView = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <EditForm />
+      <EditForm
+        event={event}
+        signup={signup}
+        registrationClosed={registrationClosed}
+      />
     </div>
   )
 }
