@@ -15,8 +15,7 @@ import {
 } from "../utils"
 
 const EditSignupView = () => {
-  const { error, pending, event, signup, registrationClosed } =
-    useEditSignupContext()
+  const { error, pending } = useEditSignupContext()
   const paths = useEventsPaths()
 
   if (pending) {
@@ -26,7 +25,8 @@ const EditSignupView = () => {
       </div>
     )
   }
-  if (error || !event || !signup) {
+
+  if (error) {
     return (
       <>
         <H1>Ilmoittautumista ei löytynyt</H1>
@@ -40,18 +40,16 @@ const EditSignupView = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <EditForm
-        event={event}
-        signup={signup}
-        registrationClosed={registrationClosed}
-      />
+      <EditForm />
     </div>
   )
 }
 
 const EditSignup: React.FC<EventsRouteProps<EditSignupProps>> = ({
   locale,
+  /** Injected from URL by reach-router */
   id = "",
+  /** Injected from URL by reach-router */
   editToken = "",
 }) => {
   const localeLink = otherLocalePaths(locale).editSignup(id, editToken)

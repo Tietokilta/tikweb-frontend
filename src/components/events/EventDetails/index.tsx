@@ -66,6 +66,7 @@ const SingleEventView: React.FC = () => {
 
 const EventDetails: React.FC<EventsRouteProps<SingleEventProps>> = ({
   locale,
+  /** Injected from URL by reach-router */
   slug = "",
 }) => {
   const localeLink = otherLocalePaths(locale).eventDetails(slug)

@@ -1,8 +1,10 @@
 import { useNavigate } from "@gatsbyjs/reach-router"
-import { useDeleteSignup } from "@tietokilta/ilmomasiina-components"
-import { Signup } from "@tietokilta/ilmomasiina-models"
+import {
+  useDeleteSignup,
+  useEditSignupContext,
+} from "@tietokilta/ilmomasiina-components"
 import { useFormikContext } from "formik"
-import { useCallback, useState } from "react"
+import { FC, useCallback, useState } from "react"
 import { toast } from "react-toastify"
 import { H2, P } from "../../typography"
 import { ConfirmButton } from "../inputs"
@@ -10,11 +12,8 @@ import { useEventsPaths } from "../utils"
 
 const DELETE_CONFIRM_MS = 4000
 
-type Props = {
-  event: Signup.Details.Event
-}
-
-const DeleteSignup: React.FC<Props> = ({ event }) => {
+const DeleteSignup: FC = () => {
+  const { event } = useEditSignupContext()
   const deleteSignup = useDeleteSignup()
   const navigate = useNavigate()
   const paths = useEventsPaths()
@@ -30,7 +29,7 @@ const DeleteSignup: React.FC<Props> = ({ event }) => {
       toast.success("Ilmoittautumisesi poistettiin onnistuneesti.", {
         autoClose: 10000,
       })
-      navigate(paths.eventDetails(event.slug))
+      if (event) navigate(paths.eventDetails(event.slug))
     } catch (error) {
       setSubmitting(false)
       setDeleting(false)
@@ -39,6 +38,8 @@ const DeleteSignup: React.FC<Props> = ({ event }) => {
       })
     }
   }, [deleteSignup, event, navigate, paths, setSubmitting])
+
+  if (!event) return null
 
   return (
     <div className="mt-6">

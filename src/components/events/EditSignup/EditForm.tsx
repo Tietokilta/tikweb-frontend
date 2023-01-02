@@ -1,5 +1,8 @@
 import { useNavigate } from "@gatsbyjs/reach-router"
-import { useUpdateSignup } from "@tietokilta/ilmomasiina-components"
+import {
+  useEditSignupContext,
+  useUpdateSignup,
+} from "@tietokilta/ilmomasiina-components"
 import { Signup } from "@tietokilta/ilmomasiina-models"
 import { Field, Formik, FormikHelpers } from "formik"
 import { Link } from "gatsby"
@@ -13,17 +16,12 @@ import QuestionFields from "./QuestionFields"
 import SignupStatus from "./SignupStatus"
 import { useEventsPaths } from "../utils"
 
-type Props = {
-  event: Signup.Details.Event
-  signup: Signup.Details.Signup
-  registrationClosed: boolean
-}
-
-const EditForm: React.FC<Props> = ({ event, signup, registrationClosed }) => {
-  const isNew = signup.confirmedAt === null
+const EditForm: React.FC = () => {
+  const { event, signup, registrationClosed } = useEditSignupContext()
   const updateSignup = useUpdateSignup()
   const navigate = useNavigate()
   const paths = useEventsPaths()
+  const isNew = !signup?.confirmedAt
 
   // TODO: actually use errors from API
   const [submitError, setSubmitError] = useState(false)
@@ -49,9 +47,7 @@ const EditForm: React.FC<Props> = ({ event, signup, registrationClosed }) => {
         })
         setSubmitError(false)
         setSubmitting(false)
-        if (isNew) {
-          navigate(paths.eventDetails(event.slug))
-        }
+        if (isNew && event) navigate(paths.eventDetails(event.slug))
       } catch (error) {
         toast.update(progressToast, {
           render: `${action} ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.`,
@@ -67,6 +63,8 @@ const EditForm: React.FC<Props> = ({ event, signup, registrationClosed }) => {
     },
     [event, isNew, updateSignup, navigate, paths]
   )
+
+  if (!event || !signup) return null
 
   return (
     <Formik initialValues={signup as Signup.Update.Body} onSubmit={onSubmit}>
@@ -170,7 +168,7 @@ const EditForm: React.FC<Props> = ({ event, signup, registrationClosed }) => {
               </nav>
             )}
           </form>
-          {!registrationClosed && <DeleteSignup event={event} />}
+          {!registrationClosed && <DeleteSignup />}
         </>
       )}
     </Formik>
