@@ -1,10 +1,6 @@
 import { useNavigate } from "@gatsbyjs/reach-router"
-import {
-  useDeleteSignup,
-  useEditSignupContext,
-} from "@tietokilta/ilmomasiina-components"
-import { SignupGetEventItem } from "@tietokilta/ilmomasiina-models/dist/services/signups/getForEdit"
-import { StringifyApi } from "@tietokilta/ilmomasiina-models/dist/utils"
+import { useDeleteSignup } from "@tietokilta/ilmomasiina-components"
+import { Signup } from "@tietokilta/ilmomasiina-models"
 import { useFormikContext } from "formik"
 import { useCallback, useState } from "react"
 import { toast } from "react-toastify"
@@ -14,10 +10,11 @@ import { useEventsPaths } from "../utils"
 
 const DELETE_CONFIRM_MS = 4000
 
-const DeleteSignup: React.FC<{
-  event: StringifyApi<SignupGetEventItem>
-}> = () => {
-  const { event } = useEditSignupContext()
+type Props = {
+  event: Signup.Details.Event
+}
+
+const DeleteSignup: React.FC<Props> = ({ event }) => {
   const deleteSignup = useDeleteSignup()
   const navigate = useNavigate()
   const paths = useEventsPaths()
@@ -33,7 +30,7 @@ const DeleteSignup: React.FC<{
       toast.success("Ilmoittautumisesi poistettiin onnistuneesti.", {
         autoClose: 10000,
       })
-      navigate(paths.eventDetails(event?.slug ?? ""))
+      navigate(paths.eventDetails(event.slug))
     } catch (error) {
       setSubmitting(false)
       setDeleting(false)
@@ -42,9 +39,7 @@ const DeleteSignup: React.FC<{
       })
     }
   }, [deleteSignup, event, navigate, paths, setSubmitting])
-  if (!event) {
-    return null
-  }
+
   return (
     <div className="mt-6">
       <H2>Poista ilmoittautuminen</H2>

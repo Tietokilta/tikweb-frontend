@@ -68,9 +68,6 @@ const EventDetails: React.FC<EventsRouteProps<SingleEventProps>> = ({
   locale,
   slug,
 }) => {
-  if (!slug) {
-    return null
-  }
   const localeLink = otherLocalePaths(locale).eventDetails(slug)
   return (
     <RouteWrapper locale={locale} localeLink={localeLink}>

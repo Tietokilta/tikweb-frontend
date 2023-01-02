@@ -36,6 +36,7 @@ export const RouteWrapper: React.FC<WrapperProps> = ({
   )
 }
 
-export type EventsRouteProps<P = unknown> = RouteComponentProps<P> & {
-  locale: Locale
-}
+export type EventsRouteProps<P = unknown> = RouteComponentProps<P> &
+  P & {
+    locale: Locale
+  }

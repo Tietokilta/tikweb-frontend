@@ -54,9 +54,6 @@ const EditSignup: React.FC<EventsRouteProps<EditSignupProps>> = ({
   id,
   editToken,
 }) => {
-  if (!id || !editToken) {
-    return null
-  }
   const localeLink = otherLocalePaths(locale).editSignup(id, editToken)
   return (
     <RouteWrapper locale={locale} localeLink={localeLink}>

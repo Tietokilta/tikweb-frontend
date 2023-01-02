@@ -37,11 +37,6 @@ const SignupButton = ({
   const paths = useEventsPaths()
   const { event } = useSingleEventContext()
   const [submitting, setSubmitting] = useState<string>()
-  if (!event) return null
-
-  const { registrationStartDate, registrationEndDate, quotas } = event
-  const eventState = signupState(registrationStartDate, registrationEndDate)
-  const isOnly = quotas.length === 1
 
   const onClick = useCallback(
     async (quotaId: Quota.Id) => {
@@ -59,6 +54,12 @@ const SignupButton = ({
     },
     [navigate, paths, isOpen]
   )
+
+  if (!event) return null
+
+  const { registrationStartDate, registrationEndDate, quotas } = event
+  const eventState = signupState(registrationStartDate, registrationEndDate)
+  const isOnly = quotas.length === 1
 
   return (
     <div className="bg-gray-lightest p-4 flex flex-col">
