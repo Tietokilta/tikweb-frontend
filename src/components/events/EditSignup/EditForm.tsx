@@ -18,7 +18,7 @@ import { useEventsPaths } from "../utils"
 
 const EditForm = () => {
   const { event, signup, registrationClosed } = useEditSignupContext()
-  const isNew = signup!.confirmedAt === null
+  const isNew = signup?.confirmedAt === null
   const updateSignup = useUpdateSignup()
   const navigate = useNavigate()
   const paths = useEventsPaths()
@@ -48,7 +48,7 @@ const EditForm = () => {
         setSubmitError(false)
         setSubmitting(false)
         if (isNew) {
-          navigate(paths.eventDetails(event!.slug))
+          navigate(paths.eventDetails(event?.slug ?? ""))
         }
       } catch (error) {
         toast.update(progressToast, {
@@ -65,9 +65,11 @@ const EditForm = () => {
     },
     [event, isNew, updateSignup, navigate, paths]
   )
-
+  if (!signup || !event) {
+    return null
+  }
   return (
-    <Formik initialValues={signup! as Signup.Update.Body} onSubmit={onSubmit}>
+    <Formik initialValues={signup as Signup.Update.Body} onSubmit={onSubmit}>
       {({ handleSubmit, isSubmitting }) => (
         <>
           <H1>{isNew ? "Ilmoittaudu" : "Muokkaa ilmoittautumista"}</H1>
@@ -84,7 +86,7 @@ const EditForm = () => {
             </p>
           )}
           <form onSubmit={handleSubmit}>
-            {event!.nameQuestion && (
+            {event.nameQuestion && (
               <>
                 <FieldRow id="firstName" label="Etunimi / First name" required>
                   <Field
@@ -124,7 +126,7 @@ const EditForm = () => {
                 </FieldRow>
               </>
             )}
-            {event!.emailQuestion && (
+            {event.emailQuestion && (
               <FieldRow id="email" label="Sähköposti / Email" required>
                 <Field
                   as={TextInput}
@@ -139,7 +141,7 @@ const EditForm = () => {
 
             <QuestionFields
               name="answers"
-              questions={event!.questions}
+              questions={event.questions}
               disabled={registrationClosed}
             />
 
@@ -147,7 +149,7 @@ const EditForm = () => {
               <P>
                 Voit muokata ilmoittautumistasi tai poistaa sen myöhemmin
                 tallentamalla tämän sivun URL-osoitteen.
-                {event!.emailQuestion &&
+                {event.emailQuestion &&
                   " Linkki lähetetään myös sähköpostiisi vahvistusviestissä."}
               </P>
             )}
@@ -155,7 +157,7 @@ const EditForm = () => {
             {!registrationClosed && (
               <nav className="flex justify-end items-baseline gap-3">
                 {!isNew && (
-                  <Link to={paths.eventDetails(event!.slug)}>Peruuta</Link>
+                  <Link to={paths.eventDetails(event.slug)}>Peruuta</Link>
                 )}
                 <Button
                   type="submit"

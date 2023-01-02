@@ -29,7 +29,7 @@ const DeleteSignup = () => {
       toast.success("Ilmoittautumisesi poistettiin onnistuneesti.", {
         autoClose: 10000,
       })
-      navigate(paths.eventDetails(event!.slug))
+      navigate(paths.eventDetails(event?.slug ?? ""))
     } catch (error) {
       setSubmitting(false)
       setDeleting(false)
@@ -38,13 +38,15 @@ const DeleteSignup = () => {
       })
     }
   }, [deleteSignup, event, navigate, paths, setSubmitting])
-
+  if (!event) {
+    return null
+  }
   return (
     <div className="mt-6">
       <H2>Poista ilmoittautuminen</H2>
       <P>
         Oletko varma, että haluat poistaa ilmoittautumisesi tapahtumaan{" "}
-        <strong>{event!.title}</strong>?
+        <strong>{event.title}</strong>?
       </P>
       <P>
         Jos poistat ilmoittautumisesi, menetät paikkasi jonossa. Jos muutat
