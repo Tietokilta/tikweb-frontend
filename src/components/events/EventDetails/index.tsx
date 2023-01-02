@@ -66,7 +66,7 @@ const SingleEventView: React.FC = () => {
 
 const EventDetails: React.FC<EventsRouteProps<SingleEventProps>> = ({
   locale,
-  slug,
+  slug = "",
 }) => {
   const localeLink = otherLocalePaths(locale).eventDetails(slug)
   return (

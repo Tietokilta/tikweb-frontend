@@ -51,8 +51,8 @@ const EditSignupView = () => {
 
 const EditSignup: React.FC<EventsRouteProps<EditSignupProps>> = ({
   locale,
-  id,
-  editToken,
+  id = "",
+  editToken = "",
 }) => {
   const localeLink = otherLocalePaths(locale).editSignup(id, editToken)
   return (
