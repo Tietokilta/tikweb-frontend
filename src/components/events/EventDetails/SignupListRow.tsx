@@ -34,8 +34,9 @@ const SignupListRow: FC<Props> = ({ showQuota, signup, index }) => {
     createdAt,
     confirmed,
   } = signup
-
-  const { questions, nameQuestion } = useSingleEventContext().event!
+  const { event } = useSingleEventContext()
+  if (!event) return null
+  const { questions, nameQuestion } = event
 
   let fullName
   if (!confirmed) {

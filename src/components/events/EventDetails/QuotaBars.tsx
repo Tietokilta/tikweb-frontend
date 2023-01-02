@@ -37,17 +37,20 @@ const QuotaBar: FC<QuotaBarProps> = ({ title, value, max }) => (
 /** Progress bars for all quotas' signup counts. */
 const QuotaBars: FC = () => {
   const { event, signupsByQuota } = useSingleEventContext()
+  if (!event || !signupsByQuota) {
+    return null
+  }
   return (
     <div className="bg-gray-lightest p-4 flex flex-col gap-2">
       <H3>Ilmoittautuneet</H3>
-      {signupsByQuota!.map((quota) => {
+      {signupsByQuota.map((quota) => {
         if (quota.id === OPENQUOTA) {
           return (
             <QuotaBar
               key={quota.id}
               title="Avoin"
               value={quota.signupCount}
-              max={event!.openQuotaSize}
+              max={event.openQuotaSize}
             />
           )
         }
@@ -60,7 +63,7 @@ const QuotaBars: FC = () => {
         return (
           <QuotaBar
             key={quota.id}
-            title={quota.title!}
+            title={quota.title}
             value={quota.signupCount}
             max={quota.size || Infinity}
           />

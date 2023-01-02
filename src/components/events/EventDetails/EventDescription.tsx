@@ -5,7 +5,10 @@ import { timezone } from "../config"
 import Markdown from "../../Markdown"
 
 const EventDescription = () => {
-  const event = useSingleEventContext().event!
+  const { event } = useSingleEventContext()
+  if (!event) {
+    return null
+  }
   return (
     <div className="md:w-2/3 mb-6">
       <H1 className="my-3">{event.title}</H1>

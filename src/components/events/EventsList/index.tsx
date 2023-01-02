@@ -24,15 +24,6 @@ const EventsListView: React.FC = () => {
   const { events, error, pending } = useEventListContext()
   const paths = useEventsPaths()
 
-  if (error) {
-    return (
-      <>
-        <H1>Virhe</H1>
-        <P>Tapahtumien lataus epäonnistui</P>
-      </>
-    )
-  }
-
   if (pending) {
     return (
       <>
@@ -41,8 +32,16 @@ const EventsListView: React.FC = () => {
       </>
     )
   }
+  if (error || !events) {
+    return (
+      <>
+        <H1>Virhe</H1>
+        <P>Tapahtumien lataus epäonnistui</P>
+      </>
+    )
+  }
 
-  const tableRows = eventsToRows(events!).map((row, index) => {
+  const tableRows = eventsToRows(events).map((row, index) => {
     if (row.isEvent) {
       const { slug, title, date, signupState, signupCount, quotaSize } = row
       const stateText = signupStateText(signupState)

@@ -3,10 +3,9 @@ import { P } from "../../typography"
 
 const SignupStatus = () => {
   const { event, signup } = useEditSignupContext()
-  const { status, position, quota } = signup!
-  const { openQuotaSize } = event!
-
-  if (!status) return null
+  if (!event || !signup) return null
+  const { status, position, quota } = signup
+  const { openQuotaSize } = event
 
   if (status === "in-quota") {
     return (

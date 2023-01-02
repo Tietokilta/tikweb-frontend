@@ -27,7 +27,9 @@ type Props = {
 
 const SignupList = ({ quota }: Props) => {
   const { signups } = quota
-  const { questions, nameQuestion } = useSingleEventContext().event!
+  const { event } = useSingleEventContext()
+  if (!event) return null
+  const { questions, nameQuestion } = event
   const showQuotas = quota.id === OPENQUOTA || quota.id === WAITLIST
   return (
     <div className="mt-4 mb-8">

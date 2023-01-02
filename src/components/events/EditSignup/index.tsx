@@ -18,6 +18,13 @@ const EditSignupView = () => {
   const { error, pending } = useEditSignupContext()
   const paths = useEventsPaths()
 
+  if (pending) {
+    return (
+      <div className="flex justify-center pt-6">
+        <Spinner />
+      </div>
+    )
+  }
   if (error) {
     return (
       <>
@@ -27,14 +34,6 @@ const EditSignupView = () => {
           <Link to={paths.eventsList}>Palaa tapahtumalistaukseen</Link>
         </P>
       </>
-    )
-  }
-
-  if (pending) {
-    return (
-      <div className="flex justify-center pt-6">
-        <Spinner />
-      </div>
     )
   }
 
@@ -50,10 +49,13 @@ const EditSignup: React.FC<EventsRouteProps<EditSignupProps>> = ({
   id,
   editToken,
 }) => {
-  const localeLink = otherLocalePaths(locale).editSignup(id!, editToken!)
+  if (!id || !editToken) {
+    return null
+  }
+  const localeLink = otherLocalePaths(locale).editSignup(id, editToken)
   return (
     <RouteWrapper locale={locale} localeLink={localeLink}>
-      <EditSignupProvider id={id!} editToken={editToken!}>
+      <EditSignupProvider id={id} editToken={editToken}>
         <EditSignupView />
       </EditSignupProvider>
     </RouteWrapper>

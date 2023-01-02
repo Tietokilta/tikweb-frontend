@@ -35,10 +35,12 @@ const SignupButton = ({
 }: SignupButtonProps) => {
   const navigate = useNavigate()
   const paths = useEventsPaths()
-  const { registrationStartDate, registrationEndDate, quotas } =
-    useSingleEventContext().event!
-  const eventState = signupState(registrationStartDate, registrationEndDate)
+  const { event } = useSingleEventContext()
   const [submitting, setSubmitting] = useState<string>()
+  if (!event) return null
+
+  const { registrationStartDate, registrationEndDate, quotas } = event
+  const eventState = signupState(registrationStartDate, registrationEndDate)
   const isOnly = quotas.length === 1
 
   const onClick = useCallback(
@@ -84,9 +86,9 @@ const SignupButton = ({
 
 /** Signup buttons for all quotas. */
 const SignupButtons = () => {
-  const event = useSingleEventContext().event!
+  const { event } = useSingleEventContext()
   const openingTime = moment()
-    .add(event.millisTillOpening || 0, "ms")
+    .add(event?.millisTillOpening || 0, "ms")
     .toDate()
 
   return (
@@ -95,8 +97,8 @@ const SignupButtons = () => {
       date={openingTime}
       renderer={({ completed, seconds, total }) => (
         <SignupButton
-          isOpen={completed && !event.registrationClosed}
-          isClosed={event.registrationClosed}
+          isOpen={completed && !event?.registrationClosed}
+          isClosed={event?.registrationClosed === true}
           seconds={seconds}
           total={total}
         />

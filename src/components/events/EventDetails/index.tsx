@@ -21,7 +21,16 @@ const SingleEventView: React.FC = () => {
   const { event, signupsByQuota, pending, error } = useSingleEventContext()
   const paths = useEventsPaths()
 
-  if (error) {
+  if (pending) {
+    return (
+      <>
+        <Link to={paths.eventsList}>&#8592; Takaisin</Link>
+        <div className="mt-3" />
+        <Spinner />
+      </>
+    )
+  }
+  if (error || !event) {
     return (
       <>
         <H1>Tapahtumaa ei löytynyt</H1>
@@ -29,16 +38,6 @@ const SingleEventView: React.FC = () => {
         <P>
           <Link to={paths.eventsList}>Palaa tapahtumalistaukseen</Link>
         </P>
-      </>
-    )
-  }
-
-  if (pending) {
-    return (
-      <>
-        <Link to={paths.eventsList}>&#8592; Takaisin</Link>
-        <div className="mt-3" />
-        <Spinner />
       </>
     )
   }
@@ -53,10 +52,10 @@ const SingleEventView: React.FC = () => {
           <QuotaBars />
         </div>
       </div>
-      {event!.signupsPublic && (
+      {event.signupsPublic && (
         <>
           <H2>Ilmoittautuneet</H2>
-          {signupsByQuota!.map((quota) => (
+          {signupsByQuota?.map((quota) => (
             <SignupList key={quota.id} quota={quota} />
           ))}
         </>
@@ -69,10 +68,13 @@ const EventDetails: React.FC<EventsRouteProps<SingleEventProps>> = ({
   locale,
   slug,
 }) => {
-  const localeLink = otherLocalePaths(locale).eventDetails(slug!)
+  if (!slug) {
+    return null
+  }
+  const localeLink = otherLocalePaths(locale).eventDetails(slug)
   return (
     <RouteWrapper locale={locale} localeLink={localeLink}>
-      <SingleEventProvider slug={slug!}>
+      <SingleEventProvider slug={slug}>
         <SingleEventView />
       </SingleEventProvider>
     </RouteWrapper>
