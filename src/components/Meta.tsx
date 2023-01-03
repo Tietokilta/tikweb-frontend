@@ -6,7 +6,7 @@ type Props = {
 const Meta: React.FC<Props> = ({ title, description }) => {
   return (
     <>
-      <title>Tietokilta{title && ` - ${title}`}</title>
+      <title>{title && `${title} \u2013`} Tietokilta</title>
       {description && <meta name="description" content={description} />}
     </>
   )

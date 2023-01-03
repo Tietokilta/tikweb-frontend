@@ -71,9 +71,9 @@ const LandingPage: React.FC<Props> = ({
           buttonColor={buttonColor}
           buttonLink="/"
         />
-        <main className="flex-grow justify-center flex flex-col md:flex-row">
+        <main className="flex-grow justify-center flex flex-col md:flex-row gap-3 p-3">
           <ContentRenderer contentBlocks={content} />
-          <FullWidthContainer className="p-3">
+          <FullWidthContainer>
             <H2>Juuri Nyt</H2>
             <EventCard
               title="Wappusitsit"
@@ -121,19 +121,8 @@ export const pageQuery = graphql`
   }
 `
 
-export const Head: React.FC<Props> = ({
-  pageContext: { locale },
-  data: {
-    strapiLandingPage: { content },
-  },
-}) => {
-  const description = firstSentenceFromContent(content)
-  return (
-    <Meta
-      title={locale === "fi" ? "Etusivu" : "Front Page"}
-      description={description}
-    />
-  )
+export const Head: React.FC<Props> = ({ pageContext: { locale } }) => {
+  return <Meta title={locale === "fi" ? "Etusivu" : "Front Page"} />
 }
 
 export default LandingPage
