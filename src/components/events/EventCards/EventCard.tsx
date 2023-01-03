@@ -3,7 +3,7 @@ import classNames from "classnames"
 type Props = {
   title: string
   description?: string
-  date: Date
+  date: string
   location: string
   numberOfAttendees?: number
   maxCapacity?: number
@@ -28,13 +28,13 @@ const EventCard: React.FC<Props> = (props: Props) => {
     className,
     title,
     numberOfAttendees,
-    date,
+    date: dateString,
     location,
     signUpLink,
     description,
     maxCapacity,
   } = props
-
+  const date = new Date(dateString)
   return (
     <div
       className={classNames(

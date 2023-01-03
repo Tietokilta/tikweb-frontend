@@ -16,7 +16,7 @@ import {
   RouteWrapper,
   useEventsPaths,
 } from "../utils"
-import Spinner from "../Spinner"
+import { Loading } from "../Spinner"
 import EventsListRow from "./EventsListRow"
 import { H1, P } from "../../typography"
 
@@ -28,7 +28,7 @@ const EventsListView: React.FC = () => {
     return (
       <>
         <H1>Tapahtumat</H1>
-        <Spinner />
+        <Loading />
       </>
     )
   }

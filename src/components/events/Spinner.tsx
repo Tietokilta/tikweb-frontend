@@ -22,5 +22,9 @@ const Spinner: FC<HTMLAttributes<HTMLDivElement>> = (props) => (
     <span className="sr-only">Loading&hellip;</span>
   </div>
 )
-
+export const Loading: FC = () => (
+  <div className="flex justify-center">
+    <Spinner />
+  </div>
+)
 export default Spinner
