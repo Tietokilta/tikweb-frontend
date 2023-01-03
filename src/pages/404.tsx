@@ -42,7 +42,10 @@ export const Head = () => {
   const { pathname } = useLocation()
   const locale = pathname.startsWith("/en/") ? "en" : "fi"
   return (
-    <Meta title={locale === "fi" ? "Sivua ei löytynyt" : "Page not found"} />
+    <Meta
+      title={locale === "fi" ? "Sivua ei löytynyt" : "Page not found"}
+      noIndex
+    />
   )
 }
 export default NotFoundPage
