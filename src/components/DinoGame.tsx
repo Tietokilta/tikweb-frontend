@@ -1,14 +1,13 @@
-"use client"
-
 /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { useRef, useEffect, KeyboardEvent, useState, useMemo } from "react"
+import { useRef, useEffect, KeyboardEvent, useState } from "react"
 import ErrorImage from "../assets/DinoGame/Error.svg"
 import TaxiImage from "../assets/DinoGame/Taxi.svg"
 import StandImage from "../assets/DinoGame/Stand.svg"
 import WalkImage1 from "../assets/DinoGame/Walk1.svg"
 import WalkImage2 from "../assets/DinoGame/Walk2.svg"
 import RestartImage from "../assets/DinoGame/Restart.svg"
+import awaitProperties from "../utils/awaitProperties"
 
 type LoadedImages = {
   stand: HTMLImageElement
@@ -61,7 +60,7 @@ class HitBox {
     return this.bottomLeft.y + this.height
   }
 
-  isCollisionWith(other: HitBox) {
+  overlaps(other: HitBox) {
     const xCollide = this.minX <= other.maxX && this.maxX >= other.minX
     const yCollide = this.minY <= other.maxY && this.maxY >= other.minY
     return xCollide && yCollide
@@ -70,46 +69,44 @@ class HitBox {
 
 const DinoGame = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const jumpRef = useRef(false)
-  const [isEnd, setIsEnd] = useState(false)
-  const [isStarted, setIsStarted] = useState(false)
-  const [restart, setRestart] = useState(0)
+  const jumpEventReceived = useRef(false)
+  const [startCount, setStartCount] = useState(0)
+  const hasStarted = startCount > 0
+  const isRestart = startCount > 1
+  const [hasEnded, setEnded] = useState(false)
   const [images, setImages] = useState<LoadedImages>()
 
-  const loadImage = (src: string) => {
+  const loadImage = async (src: string) => {
     const img = document.createElement("img")
     img.src = src
-    return img
+    return new Promise<HTMLImageElement>((resolve, reject) => {
+      img.addEventListener("load", () => resolve(img))
+      img.addEventListener("error", () => reject())
+    })
   }
 
   useEffect(() => {
-    setImages({
+    awaitProperties({
       stand: loadImage(StandImage),
       walk1: loadImage(WalkImage1),
       walk2: loadImage(WalkImage2),
       error: loadImage(ErrorImage),
       taxi: loadImage(TaxiImage),
       restart: loadImage(RestartImage),
-    })
+    }).then(setImages)
   }, [])
 
   const jump = () => {
-    jumpRef.current = true
-  }
-
-  const doRestart = () => {
-    setIsEnd(false)
-    setRestart(Date.now())
+    jumpEventReceived.current = true
   }
 
   const doAction = () => {
-    if (isEnd) {
-      doRestart()
-    } else {
-      jump()
-    }
-    if (!isStarted) {
-      setIsStarted(true)
+    // Jump when game running or starting first game
+    if (!hasEnded) jump()
+    // (Re)start game if not running
+    if (!hasStarted || hasEnded) {
+      setStartCount(startCount + 1)
+      setEnded(false)
     }
   }
 
@@ -118,9 +115,7 @@ const DinoGame = () => {
   }
 
   const handleKeyPress = (event: KeyboardEvent) => {
-    const isJumpButton =
-      event.key === " " || event.key === "ArrowUp" || event.key === "w"
-    if (isJumpButton) {
+    if (event.key === " " || event.key === "ArrowUp" || event.key === "w") {
       doAction()
     }
   }
@@ -129,46 +124,66 @@ const DinoGame = () => {
     if (!images) return undefined
     const canvas = canvasRef.current
     if (!canvas) return undefined
-    const context = canvas.getContext("2d")
-    if (!context) return undefined
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return undefined
+
+    /** sec */
+    const maxTimeFromPressToJump = 0.5
+
+    /** px/s^2 */
+    const gravity = 1000
+    /** px/s */
+    const maxFallSpeed = -1200
+    /** px/s */
+    const jumpSpeed = 600
+
+    /** px, from right side of canvas */
+    const minimumSpaceForNewObstacle = 500
+
+    /** px/s */
+    const initialObstacleSpeed = 300
+    /** px/s */
+    const maxObstacleSpeed = 660
+    /** px/s^2 */
+    const obstacleAcceleration = 7.2
+
+    /** 1/s */
+    const pointsPerSecond = 4
+
+    /** px */
+    const playerHeight = 120
+    /** px */
+    const groundHeight = 30
+
+    /** sec, for player walking animation */
+    const initialFrameDuration = 0.25
+
+    /** sec */
+    const maxDeltaTime = 0.25
+
     const obstacleTypes = [
       { targetHeight: 130, image: images.error },
       { targetHeight: 75, image: images.taxi },
     ]
-    let animationFrameId: number
-    let frameCount = 0
-    let playerY = 0
-    let playerYVelocity = 0
-    let lastJumpPressFrame = -1000
-    const playerHeight = 120
-    const groundHeight = 30
-    const startObstacleMoveSpeed = 2.5
-    let obstacleMoveSpeed = startObstacleMoveSpeed
-    let currentRunTickCount = 0
-    let gameHasEnded = false
-    let amountVisibleFromLeft = restart > 0 ? context.canvas.width || 750 : 160
-    let currentObstacles: Obstacle[] = []
-    let groundSpecs: Point[] = []
-    const createSpec = (x?: number): Point => {
-      return {
-        x: x || canvas.width,
-        y: Math.random() * groundHeight,
-      }
-    }
-    for (let i = 0; i <= canvas.width; i += 1) {
-      const everyFourth = i % 4 === 0
-      if (everyFourth) {
-        groundSpecs.push(createSpec(i))
-      }
-    }
 
-    const drawGround = (ctx: CanvasRenderingContext2D) => {
-      ctx.fillStyle = "black"
-      ctx.fillRect(0, ctx.canvas.height - groundHeight, ctx.canvas.width, 2)
-      groundSpecs.forEach((spec) => {
-        ctx.fillRect(spec.x, canvas.height - spec.y, 1, 1)
-      })
-    }
+    /** ms, from epoch */
+    let lastFrame = Date.now()
+    /** sec, from start */
+    let time = 0
+    /** sec, from start */
+    let lastJumpEvent = 0
+    /** px */
+    let playerY = 0
+    /** px/s */
+    let playerYSpeed = 0
+    /** px/s */
+    let obstacleSpeed = initialObstacleSpeed
+
+    let gameHasEnded = false
+    let visibleAreaWidth = isRestart ? canvas.width : 160
+
+    let obstacles: Obstacle[] = []
+    let groundSpecks: Point[] = []
 
     const getScaledImageDimensions = (
       image: HTMLImageElement,
@@ -177,87 +192,97 @@ const DinoGame = () => {
       const multiplier = targetHeight / image.height
       const scaledWidth = image.width * multiplier
       const scaledHeight = image.height * multiplier
-      return { scaledWidth, scaledHeight }
+      return [scaledWidth, scaledHeight]
     }
 
-    const drawPlayerAndReturnHitbox = (ctx: CanvasRenderingContext2D) => {
-      const distanceFromBottom = 10
-      const playerDrawY =
-        ctx.canvas.height - playerHeight - playerY - distanceFromBottom
-      const animationSlowMult = 3 * (2.5 / obstacleMoveSpeed)
-      const picIndex = Math.floor(
-        (currentRunTickCount % (40 * animationSlowMult)) /
-          (10 * animationSlowMult)
-      )
-      const pictureIfOnGround = [
+    const createSpeck = (x?: number): Point => {
+      return {
+        x: x || canvas.width,
+        y: Math.random() * groundHeight,
+      }
+    }
+
+    const createObstacle = (): Obstacle => {
+      const { image, targetHeight } =
+        obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)]
+      const [width, height] = getScaledImageDimensions(image, targetHeight)
+      const minDistanceFromScreenEdge = 250
+      const distanceVariation = 100
+      const minDistanceFromGroundLine = 5
+      return {
+        x:
+          canvas.width +
+          Math.random() * distanceVariation +
+          minDistanceFromScreenEdge,
+        y: height + Math.random() * (groundHeight - minDistanceFromGroundLine),
+        width,
+        height,
+        image,
+      }
+    }
+
+    for (let i = 0; i <= canvas.width; i += 1) {
+      if (i % 4 === 0) {
+        groundSpecks.push(createSpeck(i))
+      }
+    }
+
+    const drawGround = () => {
+      ctx.fillStyle = "black"
+      ctx.fillRect(0, ctx.canvas.height - groundHeight, ctx.canvas.width, 2)
+      groundSpecks.forEach((speck) => {
+        ctx.fillRect(speck.x, canvas.height - speck.y, 1, 1)
+      })
+    }
+
+    const drawPlayerAndReturnHitbox = () => {
+      const frameDuration =
+        initialFrameDuration * (initialObstacleSpeed / obstacleSpeed)
+      const picIndex = Math.floor((time / frameDuration) % 4)
+
+      const groundFrame = [
         images.stand,
         images.walk1,
         images.stand,
         images.walk2,
       ][picIndex]
-      const pictureIfInAir = images.stand
-      const playerPicture = playerY === 0 ? pictureIfOnGround : pictureIfInAir
-      const { scaledWidth, scaledHeight } = getScaledImageDimensions(
-        playerPicture,
-        playerHeight
-      )
-      let playerX = 50
-      const isStandPicture = playerPicture === images.stand
-      if (isStandPicture) {
-        playerX += scaledWidth / 4 // Animation looks better with offset
-      }
-      ctx.drawImage(
-        playerPicture,
-        playerX,
-        playerDrawY,
-        scaledWidth,
-        scaledHeight
-      )
-      const playerHitBox = new HitBox(scaledWidth, scaledHeight, {
-        x: 50,
-        y: playerDrawY,
-      })
-      return playerHitBox
+      const jumpFrame = images.stand
+      const frame = playerY === 0 ? groundFrame : jumpFrame
+
+      const [width, height] = getScaledImageDimensions(frame, playerHeight)
+      const distanceFromBottom = 10
+      const isStanding = frame === images.stand
+      // Animation looks better when standing frame is offset
+      const x = isStanding ? 50 + width / 4 : 50
+      const canvasY =
+        canvas.height - playerHeight - playerY - distanceFromBottom
+
+      ctx.drawImage(frame, x, canvasY, width, height)
+      return new HitBox(width, height, { x, y: canvasY })
     }
 
-    const drawObstaclesAndDetectCollisions = (
-      ctx: CanvasRenderingContext2D,
-      playerHitBox: HitBox
-    ) => {
-      currentObstacles.forEach((obstacle) => {
-        const obstacleY = ctx.canvas.height - obstacle.y
-        const hitBox = new HitBox(obstacle.width, obstacle.height, {
-          x: obstacle.x,
-          y: obstacleY,
-        })
-        if (hitBox.isCollisionWith(playerHitBox)) {
-          if (!gameHasEnded) {
-            setIsEnd(true)
-            gameHasEnded = true
-          }
+    const drawObstaclesAndDetectCollisions = (playerHitBox: HitBox) => {
+      obstacles.forEach(({ width, height, x, y, image }) => {
+        const canvasY = canvas.height - y
+        const hitBox = new HitBox(width, height, { x, y: canvasY })
+        if (hitBox.overlaps(playerHitBox) && !gameHasEnded) {
+          setEnded(true)
+          gameHasEnded = true
         }
-        ctx.drawImage(
-          obstacle.image,
-          obstacle.x,
-          obstacleY,
-          obstacle.width,
-          obstacle.height
-        )
+        ctx.drawImage(image, x, canvasY, width, height)
       })
     }
 
-    const drawScoreText = (ctx: CanvasRenderingContext2D) => {
-      const score = currentRunTickCount / 30
+    const drawScore = () => {
+      const score = time * pointsPerSecond
       ctx.fillStyle = "black"
       ctx.font = "40px VT323"
       const digits = 5
-      const scoreText = score.toFixed(0)
-      const zeroes = "0".repeat(digits - scoreText.length)
-      const scoreTextWithZeroes = zeroes + scoreText
-      ctx.fillText(scoreTextWithZeroes, ctx.canvas.width - 100, 40)
+      const scoreText = score.toFixed(0).padStart(digits, "0")
+      ctx.fillText(scoreText, ctx.canvas.width - 100, 40)
     }
 
-    const drawGameOverText = (ctx: CanvasRenderingContext2D) => {
+    const drawGameOverText = () => {
       const gameOverText = "GAME OVER"
       ctx.font = "40px VT323"
       ctx.fillText(
@@ -267,153 +292,119 @@ const DinoGame = () => {
       )
     }
 
-    const clearInvisiblePartOfGame = (ctx: CanvasRenderingContext2D) => {
+    const clearInvisiblePartOfGame = () => {
       ctx.clearRect(
-        amountVisibleFromLeft,
+        visibleAreaWidth,
         0,
-        ctx.canvas.width - amountVisibleFromLeft,
+        ctx.canvas.width - visibleAreaWidth,
         ctx.canvas.height
       )
     }
 
-    const addVisibilityIfGameIsStarted = () => {
-      if (isStarted) {
-        amountVisibleFromLeft += 10
-      }
-    }
-
-    const draw = (ctx: CanvasRenderingContext2D) => {
+    const draw = () => {
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-      drawGround(ctx)
-      const playerHitBox = drawPlayerAndReturnHitbox(ctx)
-      drawObstaclesAndDetectCollisions(ctx, playerHitBox)
-      drawScoreText(ctx)
+      drawGround()
+      const playerHitBox = drawPlayerAndReturnHitbox()
+      drawObstaclesAndDetectCollisions(playerHitBox)
+      drawScore()
       if (gameHasEnded) {
-        drawGameOverText(ctx)
+        drawGameOverText()
       }
-      const gameIsNotCompletelyVisible =
-        amountVisibleFromLeft < ctx.canvas.width
-      if (gameIsNotCompletelyVisible) {
-        clearInvisiblePartOfGame(ctx)
-        addVisibilityIfGameIsStarted()
-      }
-    }
-
-    const createObstacle = (): Obstacle => {
-      const obstacleType =
-        obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)]
-      const { scaledWidth, scaledHeight } = getScaledImageDimensions(
-        obstacleType.image,
-        obstacleType.targetHeight
-      )
-      const minDistanceFromScreenEdge = 250
-      const distanceVariation = 100
-      const minDistanceFromGroundLine = 5
-      return {
-        x:
-          canvas.width +
-          Math.random() * distanceVariation +
-          minDistanceFromScreenEdge,
-        y:
-          scaledHeight +
-          Math.random() * (groundHeight - minDistanceFromGroundLine),
-        width: scaledWidth,
-        height: scaledHeight,
-        image: obstacleType.image,
+      if (visibleAreaWidth < canvas.width) {
+        clearInvisiblePartOfGame()
+        if (hasStarted) {
+          visibleAreaWidth += 10
+        }
       }
     }
 
-    const updateObstacleMoveSpeed = () => {
-      const newObstacleMoveSpeed =
-        startObstacleMoveSpeed + currentRunTickCount / 2000
-      const maxObstacleMoveSpeed = 5.5
-      obstacleMoveSpeed = Math.min(newObstacleMoveSpeed, maxObstacleMoveSpeed)
-    }
+    const handleJumpEvents = () => {
+      // Handle jump events
+      if (jumpEventReceived.current) {
+        lastJumpEvent = time
+      }
+      jumpEventReceived.current = false
 
-    const setLastJumpFrame = () => {
-      const isJumping = jumpRef.current
-      if (isJumping) {
-        lastJumpPressFrame = frameCount
-        jumpRef.current = false
+      // Start a jump if we've recently received an event and are on ground
+      const hasRecentJumpEvent = lastJumpEvent > time - maxTimeFromPressToJump
+      const onGround = playerY === 0
+      if (hasRecentJumpEvent && onGround) {
+        playerYSpeed = jumpSpeed
       }
     }
 
-    const possiblyJump = () => {
-      const isShortTimeSinceLastTimeJumped =
-        frameCount - lastJumpPressFrame < 30
-      const playerIsOnGround = playerY === 0
-      const shouldJump = isShortTimeSinceLastTimeJumped && playerIsOnGround
-      if (shouldJump) {
-        playerYVelocity = 5
+    const updatePlayer = (deltaTime: number) => {
+      // Gravity
+      if (playerYSpeed > maxFallSpeed) {
+        playerYSpeed -= gravity * deltaTime
       }
-    }
-
-    const accelerateDown = () => {
-      const notYetMaxDropSpeed = playerYVelocity > -10
-      if (notYetMaxDropSpeed) {
-        playerYVelocity -= 0.07
-      }
-    }
-
-    const stopIfPlayerIsOnGround = () => {
-      const playerIsOnGroundOrBelow = playerY <= 0
-      if (playerIsOnGroundOrBelow) {
+      // Velocity
+      playerY += playerYSpeed * deltaTime
+      // Stop if on ground
+      if (playerY <= 0) {
         playerY = 0
-        playerYVelocity = 0
+        playerYSpeed = 0
       }
     }
 
-    const moveGroundSpecsAndRemoveOldOnes = () => {
-      groundSpecs = groundSpecs
-        .map((spec) => {
-          return { ...spec, x: spec.x - obstacleMoveSpeed }
-        })
-        .filter((spec) => spec.x > -1000)
-    }
+    const updateObjects = (deltaTime: number) => {
+      // Speed up obstacles
+      obstacleSpeed = Math.min(
+        initialObstacleSpeed + time * obstacleAcceleration,
+        maxObstacleSpeed
+      )
 
-    const moveObstaclesAndRemoveOldOnes = () => {
-      currentObstacles = currentObstacles
+      // Move specks
+      groundSpecks = groundSpecks
+        .map((speck) => {
+          return { ...speck, x: speck.x - obstacleSpeed * deltaTime }
+        })
+        // Delete specks offscreen
+        .filter((speck) => speck.x > -1000)
+      // Add one speck per frame
+      groundSpecks.push(createSpeck())
+
+      // Move obstacles
+      obstacles = obstacles
         .map((obstacle) => {
-          return { ...obstacle, x: obstacle.x - obstacleMoveSpeed }
+          return { ...obstacle, x: obstacle.x - obstacleSpeed * deltaTime }
         })
+        // Delete obstacles offscreen
         .filter((obstacle) => obstacle.x > -1000)
-    }
 
-    const possiblyCreateNewObstacle = () => {
-      const noObstacles = currentObstacles.length === 0
-      const lastObstacle = currentObstacles[currentObstacles.length - 1]
-      const lastObstacleIsFarEnoughAway = lastObstacle?.x < canvas.width - 500
-      if (noObstacles || lastObstacleIsFarEnoughAway) {
-        currentObstacles = [...currentObstacles, createObstacle()]
+      // Create new obstacle if none exist or there is enough room
+      const noObstacles = obstacles.length === 0
+      const lastObstacle = obstacles[obstacles.length - 1]
+      const farEnoughAway =
+        lastObstacle?.x < canvas.width - minimumSpaceForNewObstacle
+      if (noObstacles || farEnoughAway) {
+        obstacles.push(createObstacle())
       }
     }
 
+    let animationFrameId: number
     const render = () => {
-      draw(context)
-      const gameIsRunning = !gameHasEnded && isStarted
+      const now = Date.now()
+      const deltaTime = Math.min((now - lastFrame) / 1000, maxDeltaTime)
+      time += deltaTime
+      lastFrame = now
+      draw()
+      const gameIsRunning = hasStarted && !gameHasEnded
       if (gameIsRunning) {
-        currentRunTickCount += 1
-        updateObstacleMoveSpeed()
-        setLastJumpFrame()
-        possiblyJump()
-        accelerateDown()
-        playerY += playerYVelocity
-        moveObstaclesAndRemoveOldOnes()
-        possiblyCreateNewObstacle()
-        stopIfPlayerIsOnGround()
-        moveGroundSpecsAndRemoveOldOnes()
-        groundSpecs = [...groundSpecs, createSpec()]
+        handleJumpEvents()
+        updatePlayer(deltaTime)
+        updateObjects(deltaTime)
+        // Stop requesting frames when game is not running
+        animationFrameId = window.requestAnimationFrame(render)
       }
-      frameCount += 1
-      animationFrameId = window.requestAnimationFrame(render)
     }
-
     render()
 
     return () => {
       window.cancelAnimationFrame(animationFrameId)
     }
-  }, [restart, isStarted, images])
+    // Reset game state when startCount changes
+  }, [hasStarted, isRestart, startCount, images])
 
   return (
     <div className="w-full flex justify-center py-10 px-2">
@@ -424,7 +415,7 @@ const DinoGame = () => {
         className="relative w-full md:w-1/2"
       >
         <canvas ref={canvasRef} height="310" width="750" className="w-full" />
-        {isEnd && (
+        {hasEnded && (
           <button
             type="button"
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-none w-1/12 h-1/12 bg-none z-10 cursor-pointer"
