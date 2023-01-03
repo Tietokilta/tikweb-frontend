@@ -26,9 +26,14 @@ const otherLocale = (locale) => (locale === "fi" ? "en" : "fi")
 const pathWithOtherLocale = (path, locale) =>
   pathWithLocale(path, otherLocale(locale))
 
+/** Extracts the locale from a path with locale */
+const localeFromPath = (path) =>
+  path === "/en" || path.startsWith("/en/") ? "en" : "fi"
+
 module.exports = {
   EVENTS_PATHS,
   pathWithLocale,
   otherLocale,
   pathWithOtherLocale,
+  localeFromPath,
 }

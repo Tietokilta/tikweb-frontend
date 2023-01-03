@@ -7,11 +7,11 @@ import Meta from "../components/Meta"
 import SideBar from "../components/SideBar"
 import { H1 } from "../components/typography"
 import { PageContext, PageInfo } from "../contexts/PageContext"
-import { pathWithOtherLocale } from "../paths"
+import { localeFromPath, pathWithOtherLocale } from "../paths"
 
 const NotFoundPage: React.FC<PageProps> = () => {
   const { pathname } = useLocation()
-  const locale = pathname.startsWith("/en/") ? "en" : "fi"
+  const locale = localeFromPath(pathname)
   const context: PageInfo = useMemo(
     () => ({ locale, localeLink: pathWithOtherLocale("", locale) }),
     [locale]
@@ -40,7 +40,7 @@ const NotFoundPage: React.FC<PageProps> = () => {
 
 export const Head = () => {
   const { pathname } = useLocation()
-  const locale = pathname.startsWith("/en/") ? "en" : "fi"
+  const locale = localeFromPath(pathname)
   return (
     <Meta
       title={locale === "fi" ? "Sivua ei löytynyt" : "Page not found"}
