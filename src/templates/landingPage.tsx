@@ -121,8 +121,8 @@ export const pageQuery = graphql`
   }
 `
 
-export const Head: React.FC<Props> = ({ pageContext: { locale } }) => {
-  return <Meta title={locale === "fi" ? "Etusivu" : "Front Page"} />
+export const Head: React.FC<Props> = () => {
+  return <Meta title="Tietokilta" titleSuffix={false} />
 }
 
 export default LandingPage
