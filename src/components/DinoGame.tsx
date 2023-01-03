@@ -1,12 +1,23 @@
+"use client"
+
 /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { useRef, useEffect, KeyboardEvent, useState } from "react"
+import { useRef, useEffect, KeyboardEvent, useState, useMemo } from "react"
 import ErrorImage from "../assets/DinoGame/Error.svg"
 import TaxiImage from "../assets/DinoGame/Taxi.svg"
 import StandImage from "../assets/DinoGame/Stand.svg"
 import WalkImage1 from "../assets/DinoGame/Walk1.svg"
 import WalkImage2 from "../assets/DinoGame/Walk2.svg"
 import RestartImage from "../assets/DinoGame/Restart.svg"
+
+type LoadedImages = {
+  stand: HTMLImageElement
+  walk1: HTMLImageElement
+  walk2: HTMLImageElement
+  error: HTMLImageElement
+  taxi: HTMLImageElement
+  restart: HTMLImageElement
+}
 
 type Obstacle = {
   x: number
@@ -58,11 +69,29 @@ class HitBox {
 }
 
 const DinoGame = () => {
-  const canvasRef = useRef(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
   const jumpRef = useRef(false)
   const [isEnd, setIsEnd] = useState(false)
   const [isStarted, setIsStarted] = useState(false)
   const [restart, setRestart] = useState(0)
+  const [images, setImages] = useState<LoadedImages>()
+
+  const loadImage = (src: string) => {
+    const img = document.createElement("img")
+    img.src = src
+    return img
+  }
+
+  useEffect(() => {
+    setImages({
+      stand: loadImage(StandImage),
+      walk1: loadImage(WalkImage1),
+      walk2: loadImage(WalkImage2),
+      error: loadImage(ErrorImage),
+      taxi: loadImage(TaxiImage),
+      restart: loadImage(RestartImage),
+    })
+  }, [])
 
   const jump = () => {
     jumpRef.current = true
@@ -97,11 +126,14 @@ const DinoGame = () => {
   }
 
   useEffect(() => {
-    const canvas = canvasRef.current as unknown as HTMLCanvasElement // ඞ
-    const context: CanvasRenderingContext2D | null = canvas.getContext("2d")
+    if (!images) return undefined
+    const canvas = canvasRef.current
+    if (!canvas) return undefined
+    const context = canvas.getContext("2d")
+    if (!context) return undefined
     const obstacleTypes = [
-      { targetHeight: 130, image: ErrorImage },
-      { targetHeight: 75, image: TaxiImage },
+      { targetHeight: 130, image: images.error },
+      { targetHeight: 75, image: images.taxi },
     ]
     let animationFrameId: number
     let frameCount = 0
@@ -114,7 +146,7 @@ const DinoGame = () => {
     let obstacleMoveSpeed = startObstacleMoveSpeed
     let currentRunTickCount = 0
     let gameHasEnded = false
-    let amountVisibleFromLeft = restart > 0 ? context?.canvas.width || 750 : 160
+    let amountVisibleFromLeft = restart > 0 ? context.canvas.width || 750 : 160
     let currentObstacles: Obstacle[] = []
     let groundSpecs: Point[] = []
     const createSpec = (x?: number): Point => {
@@ -152,31 +184,35 @@ const DinoGame = () => {
       const distanceFromBottom = 10
       const playerDrawY =
         ctx.canvas.height - playerHeight - playerY - distanceFromBottom
-      const image = new Image()
       const animationSlowMult = 3 * (2.5 / obstacleMoveSpeed)
       const picIndex = Math.floor(
         (currentRunTickCount % (40 * animationSlowMult)) /
           (10 * animationSlowMult)
       )
       const pictureIfOnGround = [
-        StandImage,
-        WalkImage1,
-        StandImage,
-        WalkImage2,
+        images.stand,
+        images.walk1,
+        images.stand,
+        images.walk2,
       ][picIndex]
-      const pictureIfInAir = StandImage
+      const pictureIfInAir = images.stand
       const playerPicture = playerY === 0 ? pictureIfOnGround : pictureIfInAir
-      image.src = playerPicture
       const { scaledWidth, scaledHeight } = getScaledImageDimensions(
-        image,
+        playerPicture,
         playerHeight
       )
       let playerX = 50
-      const isStandPicture = playerPicture === StandImage
+      const isStandPicture = playerPicture === images.stand
       if (isStandPicture) {
         playerX += scaledWidth / 4 // Animation looks better with offset
       }
-      ctx.drawImage(image, playerX, playerDrawY, scaledWidth, scaledHeight)
+      ctx.drawImage(
+        playerPicture,
+        playerX,
+        playerDrawY,
+        scaledWidth,
+        scaledHeight
+      )
       const playerHitBox = new HitBox(scaledWidth, scaledHeight, {
         x: 50,
         y: playerDrawY,
@@ -266,10 +302,8 @@ const DinoGame = () => {
     const createObstacle = (): Obstacle => {
       const obstacleType =
         obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)]
-      const image = new Image()
-      image.src = obstacleType.image
       const { scaledWidth, scaledHeight } = getScaledImageDimensions(
-        image,
+        obstacleType.image,
         obstacleType.targetHeight
       )
       const minDistanceFromScreenEdge = 250
@@ -285,7 +319,7 @@ const DinoGame = () => {
           Math.random() * (groundHeight - minDistanceFromGroundLine),
         width: scaledWidth,
         height: scaledHeight,
-        image,
+        image: obstacleType.image,
       }
     }
 
@@ -355,9 +389,7 @@ const DinoGame = () => {
     }
 
     const render = () => {
-      if (context) {
-        draw(context)
-      }
+      draw(context)
       const gameIsRunning = !gameHasEnded && isStarted
       if (gameIsRunning) {
         currentRunTickCount += 1
@@ -381,7 +413,7 @@ const DinoGame = () => {
     return () => {
       window.cancelAnimationFrame(animationFrameId)
     }
-  }, [restart, isStarted])
+  }, [restart, isStarted, images])
 
   return (
     <div className="w-full flex justify-center py-10 px-2">
