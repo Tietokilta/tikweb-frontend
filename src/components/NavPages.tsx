@@ -39,9 +39,10 @@ type Props = {
 }
 
 const NavPages: React.FC<Props> = ({ rootItem }) => {
+  if (!rootItem?.items?.length) return null
   return (
     <nav className="flex flex-col items-start min-h-full bg-gray-darkest text-white pl-10 pr-5">
-      {rootItem?.items?.map((item) => (
+      {rootItem.items.map((item) => (
         <Item key={item.path} item={item} />
       ))}
     </nav>
