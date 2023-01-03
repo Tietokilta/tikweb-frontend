@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import '~react-toastify/dist/ReactToastify.min.css';
+
 @layer base {
   h1 {
     @apply text-4xl;
@@ -34,10 +36,6 @@
 
   a {
     @apply no-underline cursor-pointer font-normal font-bold text-orange;
-  }
-
-  article p {
-    @apply my-2 leading-7;
   }
 }
 

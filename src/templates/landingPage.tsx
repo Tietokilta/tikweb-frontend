@@ -4,7 +4,7 @@ import { FullWidthContainer } from "../components/Containers"
 import EventCard from "../components/EventCard"
 import Hero from "../components/Hero"
 import ContentRenderer from "../components/ContentRenderer"
-import Title from "../components/Title"
+import { H2 } from "../components/typography"
 import { PageContext, PageInfo } from "../contexts/PageContext"
 import Layout from "../components/Layout"
 import { Locale, StrapiLandingPage } from "../types/strapi"
@@ -69,10 +69,10 @@ const LandingPage: React.FC<Props> = ({
           buttonColor={buttonColor}
           buttonLink="/"
         />
-        <div className="justify-center flex flex-col md:flex-row">
+        <main className="flex-grow justify-center flex flex-col md:flex-row">
           <ContentRenderer contentBlocks={content} />
           <FullWidthContainer className="p-3">
-            <Title>Juuri Nyt</Title>
+            <H2>Juuri Nyt</H2>
             <EventCard
               title="Wappusitsit"
               location="Smökki"
@@ -82,7 +82,7 @@ const LandingPage: React.FC<Props> = ({
               description="Teekkareiden vuoden tärkein tapahtuma lähenee ja mikä olisi parempi tapa juhlistaa sitä jo ennakkoon kuin Wappusitsit! Tänäkin vuonna paikan päällä raikaa"
               signUpLink="https://tietokilta.fi"
             />
-            <Title className="pt-3">Tulevat tapahtumat</Title>
+            <H2 className="pt-3">Tulevat tapahtumat</H2>
             {testEvents.map((x) => (
               <EventCard
                 key={x.title} // todo replace
@@ -94,7 +94,7 @@ const LandingPage: React.FC<Props> = ({
               />
             ))}
           </FullWidthContainer>
-        </div>
+        </main>
       </Layout>
     </PageContext.Provider>
   )

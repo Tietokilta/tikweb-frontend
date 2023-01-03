@@ -42,7 +42,7 @@ const EventCard: React.FC<Props> = (props: Props) => {
         "font-mono text-xl rounded-xl shadow-md bg-gray-darkest text-white p-4"
       )}
     >
-      <div className="flex flex-row justify-between">
+      <div className="flex justify-between">
         <div className="flex-column">
           <p className="font-mono">
             {title} @ {location}
@@ -62,7 +62,7 @@ const EventCard: React.FC<Props> = (props: Props) => {
       </div>
       {description && (
         <>
-          <div className="relative flex-row mt-3 text-sm font-sans">
+          <div className="relative mt-3 text-sm font-sans">
             {description}
             <div
               className="absolute top-0 left-[-5px] h-[calc(100%+10px)] w-[calc(100%+10px)]"
@@ -72,7 +72,7 @@ const EventCard: React.FC<Props> = (props: Props) => {
               }}
             />
           </div>
-          <div className="relative flex-row mt-3 font-mono text text-sm">
+          <div className="relative mt-3 font-mono text text-sm">
             <a href={signUpLink}>Ilmoittaudu</a>
           </div>
         </>

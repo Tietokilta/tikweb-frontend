@@ -56,12 +56,12 @@ const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
   )
 
   return (
-    <div className="flex flex-row min-h-full">
+    <main className="flex-grow flex min-h-full">
       <div className="hidden md:block">
         <NavPages rootItem={rootItem} />
       </div>
       <div className="px-5 py-4 w-full">{children}</div>
-    </div>
+    </main>
   )
 }
 
