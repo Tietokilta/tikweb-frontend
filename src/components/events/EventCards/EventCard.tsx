@@ -35,7 +35,7 @@ const EventCard: React.FC<Props> = (props: Props) => {
     maxCapacity,
   } = props
   const date = new Date(dateString)
-  return (
+  return description ? (
     <div
       className={classNames(
         className,
@@ -49,14 +49,14 @@ const EventCard: React.FC<Props> = (props: Props) => {
           </p>
           <p className="font-mono text-sm">{formatDateString(date)}</p>
         </div>
-        {description && (
-          <div className="flex-column justify-end py-1 px-3 rounded-2xl my-auto h-fit flex-shrink bg-white text-black font-mono text-sm font-bold">
-            {numberOfAttendees}/{maxCapacity}
-          </div>
-        )}
         {!description && (
           <div className="flex-column justify-end my-auto font-mono text-sm font-bold">
             <a href={signUpLink}>Lue lisää</a>
+          </div>
+        )}
+        {description && (
+          <div className="flex-column justify-end py-1 px-3 rounded-2xl my-auto h-fit flex-shrink bg-white text-black font-mono text-sm font-bold">
+            {numberOfAttendees}/{maxCapacity}
           </div>
         )}
       </div>
@@ -78,6 +78,27 @@ const EventCard: React.FC<Props> = (props: Props) => {
         </>
       )}
     </div>
+  ) : (
+    <a href={signUpLink} className="font-normal">
+      <div
+        className={classNames(
+          className,
+          "font-mono text-xl rounded-xl shadow-md bg-gray-darkest text-white p-4"
+        )}
+      >
+        <div className="flex justify-between">
+          <div className="flex-column">
+            <p className="font-mono">
+              {title} @ {location}
+            </p>
+            <p className="font-mono text-sm">{formatDateString(date)}</p>
+          </div>
+          <div className="flex-column justify-end my-auto font-mono text-sm font-bold text-orange">
+            Lue lisää
+          </div>
+        </div>
+      </div>
+    </a>
   )
 }
 
