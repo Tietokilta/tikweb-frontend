@@ -8,7 +8,7 @@ import { H2 } from "../components/typography"
 import { PageContext, PageInfo } from "../contexts/PageContext"
 import Layout from "../components/Layout"
 import { Locale, StrapiLandingPage } from "../types/strapi"
-import { pathWithOtherLocale } from "../paths"
+import { otherLocale, pathWithOtherLocale } from "../paths"
 import Meta from "../components/Meta"
 
 const testEvents = [
@@ -120,8 +120,12 @@ export const pageQuery = graphql`
   }
 `
 
-export const Head: React.FC<Props> = () => {
-  return <Meta title="Tietokilta" titleSuffix={false} />
+export const Head: React.FC<Props> = ({ pageContext: { locale } }) => {
+  const localeLink = {
+    locale: otherLocale(locale),
+    href: pathWithOtherLocale("", locale),
+  }
+  return <Meta title="Tietokilta" titleSuffix={false} localeLink={localeLink} />
 }
 
 export default LandingPage

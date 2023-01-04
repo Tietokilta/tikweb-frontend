@@ -6,7 +6,7 @@ import Layout from "../components/Layout"
 import Meta from "../components/Meta"
 import SideBar from "../components/SideBar"
 import { PageContext, PageInfo } from "../contexts/PageContext"
-import { pathWithOtherLocale } from "../paths"
+import { otherLocale, pathWithOtherLocale } from "../paths"
 import { StrapiPage } from "../types/strapi"
 
 type Props = {
@@ -54,12 +54,14 @@ export const pageQuery = graphql`
   }
 `
 
-export const Head: React.FC<Props> = ({
-  data: {
-    strapiPage: { title },
-  },
-}) => {
-  return <Meta title={title} />
+export const Head: React.FC<Props> = ({ data: { strapiPage } }) => {
+  const localeLink = strapiPage.fields.localeLink
+    ? {
+        locale: otherLocale(strapiPage.locale),
+        href: strapiPage.fields.localeLink,
+      }
+    : undefined
+  return <Meta title={strapiPage.title} localeLink={localeLink} />
 }
 
 export default Page

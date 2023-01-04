@@ -35,7 +35,7 @@ export type StrapiPage = {
   fields: {
     // Path is always present if a page ends up rendered
     path: string
-    localeLink?: string
+    localeLink: string | null
   }
 }
 
