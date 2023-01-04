@@ -8,7 +8,6 @@ import SideBar from "../components/SideBar"
 import { PageContext, PageInfo } from "../contexts/PageContext"
 import { pathWithOtherLocale } from "../paths"
 import { StrapiPage } from "../types/strapi"
-import firstSentenceFromContent from "../utils/firstSentenceFromContent"
 
 type Props = {
   data: {
@@ -57,11 +56,10 @@ export const pageQuery = graphql`
 
 export const Head: React.FC<Props> = ({
   data: {
-    strapiPage: { content, title },
+    strapiPage: { title },
   },
 }) => {
-  const description = firstSentenceFromContent(content)
-  return <Meta title={title} description={description} />
+  return <Meta title={title} />
 }
 
 export default Page

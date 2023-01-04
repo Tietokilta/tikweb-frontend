@@ -10,7 +10,6 @@ import Layout from "../components/Layout"
 import { Locale, StrapiLandingPage } from "../types/strapi"
 import { pathWithOtherLocale } from "../paths"
 import Meta from "../components/Meta"
-import firstSentenceFromContent from "../utils/firstSentenceFromContent"
 
 const testEvents = [
   {
