@@ -3,6 +3,16 @@ require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 })
 
+const commonContentPopulate = {
+  // TextBlock only has text
+  // For Committee:
+  members: {
+    populate: {
+      picture: true,
+    },
+  },
+}
+
 module.exports = {
   siteMetadata: {
     title: "Tietokilta",
@@ -31,7 +41,12 @@ module.exports = {
               },
             },
             queryParams: {
-              populate: "deep",
+              populate: {
+                content: {
+                  populate: commonContentPopulate,
+                },
+                localizations: true,
+              },
               publicationState:
                 process.env.GATSBY_IS_PREVIEW === "true" ? "preview" : "live",
             },
@@ -46,7 +61,16 @@ module.exports = {
               },
             },
             queryParams: {
-              populate: "deep",
+              populate: {
+                headerPhoto: true,
+                content: {
+                  populate: commonContentPopulate,
+                },
+                buttonLink: {
+                  // Ensure we don't overwrite Page node contents
+                  fields: ["id"],
+                },
+              },
             },
           },
           {
