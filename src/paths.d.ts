@@ -13,3 +13,6 @@ export declare const pathWithOtherLocale: (
   path: string,
   locale: Locale
 ) => string
+
+/** Extracts the locale from a path with locale */
+export declare const localeFromPath: (path: string) => Locale

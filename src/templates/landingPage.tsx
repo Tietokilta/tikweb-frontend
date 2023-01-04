@@ -8,7 +8,8 @@ import { H2 } from "../components/typography"
 import { PageContext, PageInfo } from "../contexts/PageContext"
 import Layout from "../components/Layout"
 import { Locale, StrapiLandingPage } from "../types/strapi"
-import { pathWithOtherLocale } from "../paths"
+import { otherLocale, pathWithOtherLocale } from "../paths"
+import Meta from "../components/Meta"
 
 const testEvents = [
   {
@@ -69,9 +70,9 @@ const LandingPage: React.FC<Props> = ({
           buttonColor={buttonColor}
           buttonLink="/"
         />
-        <main className="flex-grow justify-center flex flex-col md:flex-row">
+        <main className="flex-grow justify-center flex flex-col md:flex-row gap-3 p-3">
           <ContentRenderer contentBlocks={content} />
-          <FullWidthContainer className="p-3">
+          <FullWidthContainer>
             <H2>Juuri Nyt</H2>
             <EventCard
               title="Wappusitsit"
@@ -118,5 +119,13 @@ export const pageQuery = graphql`
     }
   }
 `
+
+export const Head: React.FC<Props> = ({ pageContext: { locale } }) => {
+  const localeLink = {
+    locale: otherLocale(locale),
+    href: pathWithOtherLocale("", locale),
+  }
+  return <Meta title="Tietokilta" titleSuffix={false} localeLink={localeLink} />
+}
 
 export default LandingPage

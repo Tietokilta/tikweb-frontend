@@ -1,4 +1,4 @@
-type TextBlock = {
+export type TextBlock = {
   strapi_component: "common-content.text-block"
   id: number
   text: {
@@ -8,7 +8,7 @@ type TextBlock = {
   }
 }
 
-type CommitteeBlock = {
+export type CommitteeBlock = {
   strapi_component: "common-content.committee"
   id: number
   name: string
@@ -35,7 +35,7 @@ export type StrapiPage = {
   fields: {
     // Path is always present if a page ends up rendered
     path: string
-    localeLink?: string
+    localeLink: string | null
   }
 }
 

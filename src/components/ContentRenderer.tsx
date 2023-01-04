@@ -6,11 +6,12 @@ import Markdown from "./Markdown"
 
 type Props = {
   contentBlocks: StrapiPageContentBlock[]
+  className?: string
 }
 
-const ContentRenderer: React.FC<Props> = ({ contentBlocks }) => {
+const ContentRenderer: React.FC<Props> = ({ contentBlocks, className }) => {
   return (
-    <FullWidthContainer>
+    <FullWidthContainer className={className}>
       {(contentBlocks ?? []).map((block) => {
         if (
           block.strapi_component === "common-content.text-block" &&
