@@ -72,7 +72,7 @@ const EventCardList: FC<{
 })
 const EventCards: FC = () => {
   const { locale } = useContext(PageContext)
-  const { events, pending, error } = useEventListState({})
+  const { events, pending, error } = useEventListState()
   const paths = useEventsPaths()
 
   if (pending) {
