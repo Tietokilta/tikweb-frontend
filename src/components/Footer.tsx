@@ -1,9 +1,9 @@
+import { graphql, useStaticQuery } from "gatsby"
 import * as React from "react"
-import { useStaticQuery, graphql, Link } from "gatsby"
-import { FullWidthContainer } from "./Containers"
-
 import { StrapiPartners } from "../types/strapi"
 import parseImageUrl from "../utils/parseImageUrl"
+import { FullWidthContainer } from "./Containers"
+import Link from "./Link"
 
 const Footer: React.FC = () => {
   const data = useStaticQuery(graphql`
@@ -29,19 +29,28 @@ const Footer: React.FC = () => {
       <FullWidthContainer className="max-w-[90rem] flex flex-col items-center">
         <p className="text-3xl pt-4 pb-16 font-mono">{partners.title}</p>
         <div className="flex flex-wrap justify-center pb-40 items-center">
-          {partners.partner.map(({ logo, name, url }) => {
-            return (
+          {partners.partner.map(({ logo, name, url }, index) => {
+            const img = (
+              <img
+                // This is more correct than using any of the potentially duplicate fields...
+                // eslint-disable-next-line react/no-array-index-key
+                key={index}
+                src={parseImageUrl(logo.url)}
+                alt={name}
+                className="max-h-[10vw] mx-auto"
+              />
+            )
+            return url ? (
               <Link
+                // eslint-disable-next-line react/no-array-index-key
+                key={index}
                 to={url}
-                key={name}
                 className="grow-1 shrink-0 basis-full md:basis-1/2 lg:basis-1/3 p-3 justify-center"
               >
-                <img
-                  src={parseImageUrl(logo.url)}
-                  alt={name}
-                  className="max-h-[10vw] mx-auto"
-                />
+                {img}
               </Link>
+            ) : (
+              img
             )
           })}
         </div>

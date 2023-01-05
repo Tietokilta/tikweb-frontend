@@ -62,7 +62,7 @@ type Picture = {
 type Partner = {
   logo: Picture
   name: string
-  url: string
+  url: string | null
 }
 
 export type StrapiPartners = {

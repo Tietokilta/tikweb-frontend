@@ -1,6 +1,6 @@
-import { Link } from "gatsby"
-import { FullWidthContainer } from "./Containers"
 import parseImageUrl from "../utils/parseImageUrl"
+import { FullWidthContainer } from "./Containers"
+import Link from "./Link"
 
 type Props = {
   image: string

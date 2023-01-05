@@ -1,6 +1,6 @@
 import classNames from "classnames"
-import { Link } from "gatsby"
 import { AnchorHTMLAttributes, HTMLAttributes } from "react"
+import Link from "./Link"
 
 // Not helpful here...
 /* eslint-disable react/jsx-props-no-spreading */

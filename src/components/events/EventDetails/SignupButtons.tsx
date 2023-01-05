@@ -1,4 +1,3 @@
-import { useNavigate } from "@gatsbyjs/reach-router"
 import {
   beginSignup,
   useSingleEventContext,
@@ -8,6 +7,7 @@ import {
   signupStateText,
 } from "@tietokilta/ilmomasiina-components/dist/utils/signupStateText"
 import { Quota } from "@tietokilta/ilmomasiina-models"
+import { navigate } from "gatsby"
 import moment from "moment-timezone"
 import { useCallback, useState } from "react"
 import Countdown from "react-countdown"
@@ -33,7 +33,6 @@ const SignupButton = ({
   seconds,
   total,
 }: SignupButtonProps) => {
-  const navigate = useNavigate()
   const paths = useEventsPaths()
   const { event } = useSingleEventContext()
   const [submitting, setSubmitting] = useState<string>()
@@ -52,7 +51,7 @@ const SignupButton = ({
         })
       }
     },
-    [navigate, paths, isOpen]
+    [paths, isOpen]
   )
 
   if (!event) return null

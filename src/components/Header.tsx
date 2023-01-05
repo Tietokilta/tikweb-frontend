@@ -1,7 +1,6 @@
-import { Link } from "gatsby"
-
 import logo from "../assets/logo.svg"
 import { FullWidthContainer } from "./Containers"
+import Link from "./Link"
 import NavBar from "./NavBar"
 
 const Header: React.FC = () => (

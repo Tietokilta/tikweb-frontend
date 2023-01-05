@@ -1,10 +1,11 @@
 import { useLocation } from "@gatsbyjs/reach-router"
 import classNames from "classnames"
-import { graphql, Link, useStaticQuery } from "gatsby"
+import { graphql, useStaticQuery } from "gatsby"
 import { Fragment, useContext, useState } from "react"
 import { PageContext } from "../contexts/PageContext"
 import { StrapiNavigation } from "../types/strapi"
 import BurgerButton from "./BurgerButton"
+import Link from "./Link"
 import NavPages from "./NavPages"
 
 type NavQuery = {
