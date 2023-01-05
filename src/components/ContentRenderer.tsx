@@ -18,7 +18,7 @@ const ContentRenderer: React.FC<Props> = ({ contentBlocks, className }) => {
           block?.text?.data?.text
         ) {
           return (
-            <div className="font-sans pb-3 text-sm" key={block.id}>
+            <div className="font-sans pb-3" key={block.id}>
               <Markdown>{block.text.data.text}</Markdown>
             </div>
           )
