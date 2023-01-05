@@ -5,10 +5,9 @@ import {
 } from "@tietokilta/ilmomasiina-components"
 import { Signup } from "@tietokilta/ilmomasiina-models"
 import { Field, Formik, FormikHelpers } from "formik"
-import { Link } from "gatsby"
 import { useCallback, useState } from "react"
 import { toast } from "react-toastify"
-import { H1, P } from "../../typography"
+import { A, H1, P } from "../../typography"
 import DeleteSignup from "./DeleteSignup"
 import FieldRow from "./FieldRow"
 import { Button, CheckBox, TextInput } from "../inputs"
@@ -154,9 +153,7 @@ const EditForm: React.FC = () => {
 
             {!registrationClosed && (
               <nav className="flex justify-end items-baseline gap-3">
-                {!isNew && (
-                  <Link to={paths.eventDetails(event.slug)}>Peruuta</Link>
-                )}
+                {!isNew && <A href={paths.eventDetails(event.slug)}>Peruuta</A>}
                 <Button
                   type="submit"
                   formNoValidate

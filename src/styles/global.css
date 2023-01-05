@@ -5,26 +5,6 @@
 @import '~react-toastify/dist/ReactToastify.min.css';
 
 @layer base {
-  h1 {
-    @apply text-4xl;
-  }
-  h2 {
-    @apply text-3xl;
-  }
-  h3 {
-    @apply text-2xl;
-  }
-  h4 {
-    @apply text-base;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4 {
-    @apply font-bold mb-2;
-  }
-
   html,
   body {
     @apply h-full;
@@ -32,10 +12,6 @@
 
   body {
     @apply bg-black;
-  }
-
-  a {
-    @apply no-underline cursor-pointer font-normal font-bold text-orange;
   }
 }
 

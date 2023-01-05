@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useStaticQuery, graphql } from "gatsby"
+import { useStaticQuery, graphql, Link } from "gatsby"
 import { FullWidthContainer } from "./Containers"
 
 import { StrapiPartners } from "../types/strapi"
@@ -31,8 +31,8 @@ const Footer: React.FC = () => {
         <div className="flex flex-wrap justify-center pb-40 items-center">
           {partners.partner.map(({ logo, name, url }) => {
             return (
-              <a
-                href={url}
+              <Link
+                to={url}
                 key={name}
                 className="grow-1 shrink-0 basis-full md:basis-1/2 lg:basis-1/3 p-3 justify-center"
               >
@@ -41,7 +41,7 @@ const Footer: React.FC = () => {
                   alt={name}
                   className="max-h-[10vw] mx-auto"
                 />
-              </a>
+              </Link>
             )
           })}
         </div>

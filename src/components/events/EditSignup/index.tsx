@@ -3,8 +3,7 @@ import {
   EditSignupProvider,
   useEditSignupContext,
 } from "@tietokilta/ilmomasiina-components"
-import { Link } from "gatsby"
-import { H1, P } from "../../typography"
+import { A, H1, P } from "../../typography"
 import EditForm from "./EditForm"
 import Spinner from "../Spinner"
 import {
@@ -32,7 +31,7 @@ const EditSignupView = () => {
         <H1>Ilmoittautumista ei löytynyt</H1>
         <P>Ilmoittautumisesi saattaa olla jo poistettu.</P>
         <P>
-          <Link to={paths.eventsList}>Palaa tapahtumalistaukseen</Link>
+          <A href={paths.eventsList}>Palaa tapahtumalistaukseen</A>
         </P>
       </>
     )

@@ -49,14 +49,17 @@ const NavBar: React.FC = () => {
           <Link
             key={item.path}
             to={item.path}
-            className="font-mono ml-6 lg:ml-12 text-white"
+            className="font-mono font-bold ml-6 lg:ml-12 text-white"
             activeClassName="underline"
             partiallyActive
           >
             {item.title}
           </Link>
         ))}
-        <Link to={localeLink} className="font-mono ml-6 lg:ml-12 text-white">
+        <Link
+          to={localeLink}
+          className="font-mono font-bold ml-6 lg:ml-12 text-white"
+        >
           {locale === "fi" ? "In English" : "Suomeksi"}
         </Link>
       </nav>
@@ -79,7 +82,7 @@ const NavBar: React.FC = () => {
               <Fragment key={item.path}>
                 <Link
                   to={item.path}
-                  className="block font-mono text-2xl p-4 text-white"
+                  className="block font-mono font-bold text-2xl p-4 text-white"
                   activeClassName="underline"
                   partiallyActive
                 >
@@ -90,7 +93,7 @@ const NavBar: React.FC = () => {
             ))}
             <Link
               to={localeLink}
-              className="block font-mono text-2xl p-4 text-white"
+              className="block font-mono font-bold text-2xl p-4 text-white"
             >
               {locale === "fi" ? "In English" : "Suomeksi"}
             </Link>

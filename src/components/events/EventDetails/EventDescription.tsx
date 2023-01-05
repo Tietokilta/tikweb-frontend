@@ -1,6 +1,6 @@
 import moment from "moment-timezone"
 import { useSingleEventContext } from "@tietokilta/ilmomasiina-components"
-import { H1 } from "../../typography"
+import { A, H1 } from "../../typography"
 import { timezone } from "../config"
 import Markdown from "../../Markdown"
 
@@ -43,27 +43,27 @@ const EventDescription = () => {
         {event.webpageUrl && (
           <p className="my-1">
             <strong>Kotisivut:</strong>{" "}
-            <a
+            <A
               href={event.webpageUrl}
               title="Kotisivut"
               target="_blank"
               rel="noreferrer noopener"
             >
               {event.webpageUrl}
-            </a>
+            </A>
           </p>
         )}
         {event.facebookUrl && (
           <p className="my-1">
             <strong>Facebook-tapahtuma:</strong>{" "}
-            <a
+            <A
               href={event.facebookUrl}
               title="Facebook-tapahtuma"
               target="_blank"
               rel="noreferrer noopener"
             >
               {event.facebookUrl}
-            </a>
+            </A>
           </p>
         )}
       </div>
