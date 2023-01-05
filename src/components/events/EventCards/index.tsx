@@ -1,19 +1,14 @@
-import {
-  IlmoPaths,
-  useEventListState,
-} from "@tietokilta/ilmomasiina-components"
-import { EventListItem } from "@tietokilta/ilmomasiina-models/dist/services/events/list"
-import { StringifyApi } from "@tietokilta/ilmomasiina-models/dist/utils"
+import { useEventListState } from "@tietokilta/ilmomasiina-components"
+import { Event } from "@tietokilta/ilmomasiina-models"
 import { FC, memo, useContext } from "react"
 import { ErrorBoundary } from "react-error-boundary"
 import { PageContext } from "../../../contexts/PageContext"
-import { H2 } from "../../typography"
+import { H2, P } from "../../typography"
 import "../config"
 import { Loading } from "../Spinner"
-import { useEventsPaths } from "../utils"
 import EventCard from "./EventCard"
 
-const MAX_EVENTS = 3
+const MAX_UPCOMING_EVENTS = 3
 
 const FallbackComponent: FC = () => {
   const { locale } = useContext(PageContext)
@@ -30,60 +25,66 @@ const FallbackComponent: FC = () => {
   )
 }
 const EventCardList: FC<{
-  events: StringifyApi<EventListItem>[]
-  paths: IlmoPaths
-}> = memo(({ events, paths }) => {
+  events: Event.List
+}> = memo(({ events }) => {
   const { locale } = useContext(PageContext)
+
+  const currentDayStart = new Date()
+  currentDayStart.setHours(0, 0, 0, 0)
   const currentDayEnd = new Date()
   currentDayEnd.setHours(23, 59, 59, 999)
-  const currentEvents = events.filter(
-    (event) => event.date && new Date(event.date) < currentDayEnd
-  )
-  const restofEvents = events
-    .filter((event) => event.date && !currentEvents.includes(event))
-    .slice(0, MAX_EVENTS)
 
-  const renderEvent = (event: StringifyApi<EventListItem>) =>
-    event.date && (
-      <EventCard
-        key={event.title} // todo replace
-        className="mb-3"
-        title={event.title}
-        location="lorem ipsum"
-        date={event.date}
-        signUpLink={paths.eventDetails(event.slug)}
-      />
-    )
-  return locale === "fi" ? (
+  const currentEvents = events.filter((event) => {
+    // An event is not current if it has no date...
+    if (!event.date) return false
+    // ...if it starts after today...
+    if (new Date(event.date) > currentDayEnd) return false
+    // ...if it has ended already...
+    if (event.endDate && new Date(event.endDate) < new Date()) return false
+    // ...or if it has no end date but started earlier than today
+    if (!event.endDate && new Date(event.date) < currentDayStart) return false
+    return true
+  })
+  // An event is upcoming if it starts after today
+  const upcomingEvents = events
+    .filter((event) => event.date && new Date(event.date) > currentDayEnd)
+    .slice(0, MAX_UPCOMING_EVENTS)
+
+  return (
     <>
-      <H2>Juuri nyt</H2>
-      {currentEvents.map(renderEvent)}
-      <H2>Tulevat tapahtumat</H2>
-      {restofEvents.map(renderEvent)}
-    </>
-  ) : (
-    <>
-      <H2>Right now</H2>
-      {currentEvents.map(renderEvent)}
-      <H2>Upcoming events</H2>
-      {restofEvents.map(renderEvent)}
+      {currentEvents.length > 0 && (
+        <>
+          <H2>{locale === "fi" ? "Juuri nyt!" : "Right now!"}</H2>
+          {currentEvents.map((event) => (
+            <EventCard
+              key={event.slug}
+              event={event}
+              className="mb-3"
+              expanded
+            />
+          ))}
+        </>
+      )}
+      <H2>{locale === "fi" ? "Tulevat tapahtumat" : "Upcoming events"}</H2>
+      {upcomingEvents.map((event) => (
+        <EventCard key={event.slug} event={event} className="mb-3" />
+      ))}
+      {!upcomingEvents.length && (
+        <P>
+          {locale === "fi" ? "Ei tulevia tapahtumia." : "No upcoming events."}
+        </P>
+      )}
     </>
   )
 })
 const EventCards: FC = () => {
   const { locale } = useContext(PageContext)
   const { events, pending, error } = useEventListState()
-  const paths = useEventsPaths()
 
   if (pending) {
-    return locale === "fi" ? (
+    return (
       <>
-        <H2>Tulevat tapahtumat</H2>
-        <Loading />
-      </>
-    ) : (
-      <>
-        <H2>Upcoming events</H2>
+        <H2>{locale === "fi" ? "Tulevat tapahtumat" : "Upcoming events"}</H2>
         <Loading />
       </>
     )
@@ -94,7 +95,7 @@ const EventCards: FC = () => {
 
   return (
     <ErrorBoundary FallbackComponent={FallbackComponent}>
-      <EventCardList events={events} paths={paths} />
+      <EventCardList events={events} />
     </ErrorBoundary>
   )
 }

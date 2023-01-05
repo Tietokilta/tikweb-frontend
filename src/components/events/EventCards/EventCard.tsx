@@ -1,104 +1,87 @@
+import { Event } from "@tietokilta/ilmomasiina-models"
 import classNames from "classnames"
+import { Link } from "gatsby"
+import sumBy from "lodash/sumBy"
+import { useContext } from "react"
+import { PageContext } from "../../../contexts/PageContext"
+import Markdown from "../../Markdown"
+import { dateTimeFormat } from "../dateFormat"
+import { useEventsPaths } from "../utils"
 
 type Props = {
-  title: string
-  description?: string
-  date: string
-  location: string
-  numberOfAttendees?: number
-  maxCapacity?: number
-  signUpLink: string
+  event: Event.List.Event
+  expanded?: boolean
   className?: string
 }
 
-const days = ["su", "ma", "ti", "ke", "to", "pe", "la"]
+const EventCard: React.FC<Props> = ({ event, expanded, className }: Props) => {
+  const { locale } = useContext(PageContext)
+  const paths = useEventsPaths()
 
-const formatDateString = (t: Date): string => {
-  const date = `0${t.getDate()}`.slice(-2)
-  const month = `0${t.getMonth() + 1}`.slice(-2)
-  const year = t.getFullYear()
-  const hours = `0${t.getHours()}`.slice(-2)
-  const minutes = `0${t.getMinutes()}`.slice(-2)
-  const day = days[t.getDay()] // I guess the best way would to format date in strapi?
-  return `${day} ${date}-${month}-${year}, klo ${hours}:${minutes}`
-}
+  const { slug, title, date: dateString, location, description } = event
+  if (!dateString) return null
 
-const EventCard: React.FC<Props> = (props: Props) => {
-  const {
-    className,
-    title,
-    numberOfAttendees,
-    date: dateString,
-    location,
-    signUpLink,
-    description,
-    maxCapacity,
-  } = props
   const date = new Date(dateString)
-  return description ? (
+  const hasSignup = Boolean(event.registrationStartDate)
+  const signupCount = sumBy(event.quotas, "signupCount")
+  const maxCapacity =
+    sumBy(event.quotas, (quota) => quota.size ?? Infinity) + event.openQuotaSize
+
+  return (
     <div
       className={classNames(
         className,
-        "font-mono text-xl rounded-xl shadow-md bg-gray-darkest text-white p-4"
+        "text-xl rounded-xl shadow-md bg-gray-darkest text-white p-4"
       )}
     >
       <div className="flex justify-between">
-        <div className="flex-column">
-          <p className="font-mono">
-            {title} @ {location}
+        <div>
+          <h3 className="font-mono text-base font-bold mt-0 mb-1">
+            <Link to={paths.eventDetails(slug)}>
+              {title}
+              {location && ` @ ${location}`}
+            </Link>
+          </h3>
+          <p className="font-mono text-sm font-bold">
+            {dateTimeFormat(locale).format(new Date(date))}
           </p>
-          <p className="font-mono text-sm">{formatDateString(date)}</p>
         </div>
-        {!description && (
-          <div className="flex-column justify-end my-auto font-mono text-sm font-bold">
-            <a href={signUpLink}>Lue lisää</a>
+        {expanded && hasSignup && (
+          // Signup count pill
+          <div className="py-1 px-3 rounded-2xl my-auto bg-white text-black font-mono text-sm font-bold">
+            {signupCount}/{maxCapacity !== Infinity ? maxCapacity : "\u221E"}
           </div>
         )}
-        {description && (
-          <div className="flex-column justify-end py-1 px-3 rounded-2xl my-auto h-fit flex-shrink bg-white text-black font-mono text-sm font-bold">
-            {numberOfAttendees}/{maxCapacity}
-          </div>
+        {!expanded && (
+          // Non-expanded signup/learn more link
+          <Link
+            to={paths.eventDetails(slug)}
+            className="my-auto font-mono text-sm font-bold text-orange"
+          >
+            {hasSignup ? "Ilmoittaudu" : "Lue lisää"}
+          </Link>
         )}
       </div>
-      {description && (
+      {expanded && (
+        // Description and bottom signup/learn more link
         <>
-          <div className="relative mt-3 text-sm font-sans">
-            {description}
-            <div
-              className="absolute top-0 left-[-5px] h-[calc(100%+10px)] w-[calc(100%+10px)]"
-              style={{
-                background:
-                  "linear-gradient(180deg, rgba(2,0,36,0) 20%, rgba(33,39,48,1) 79%)",
-              }}
-            />
-          </div>
-          <div className="relative mt-3 font-mono text text-sm">
-            <a href={signUpLink}>Ilmoittaudu</a>
-          </div>
+          {description && (
+            <div className="relative text-sm font-sans max-h-20 overflow-hidden">
+              <Markdown plainText>{description}</Markdown>
+              {/* Cancel margin of last paragraph to get consistent space at end */}
+              <div className="-mt-2" />
+              <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent to-gray-darkest" />
+            </div>
+          )}
+          <Link
+            to={paths.eventDetails(slug)}
+            className="block mt-3 font-mono text-sm font-bold text-orange"
+          >
+            {hasSignup ? "Ilmoittaudu" : "Lue lisää"}
+          </Link>
         </>
       )}
     </div>
-  ) : (
-    <a href={signUpLink} className="font-normal">
-      <div
-        className={classNames(
-          className,
-          "font-mono text-xl rounded-xl shadow-md bg-gray-darkest text-white p-4"
-        )}
-      >
-        <div className="flex justify-between">
-          <div className="flex-column">
-            <p className="font-mono">
-              {title} @ {location}
-            </p>
-            <p className="font-mono text-sm">{formatDateString(date)}</p>
-          </div>
-          <div className="flex-column justify-end my-auto font-mono text-sm font-bold text-orange">
-            Lue lisää
-          </div>
-        </div>
-      </div>
-    </a>
   )
 }
 
