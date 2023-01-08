@@ -1,25 +1,23 @@
-import { useNavigate } from "@gatsbyjs/reach-router"
 import {
   useEditSignupContext,
   useUpdateSignup,
 } from "@tietokilta/ilmomasiina-components"
 import { Signup } from "@tietokilta/ilmomasiina-models"
 import { Field, Formik, FormikHelpers } from "formik"
-import { Link } from "gatsby"
+import { navigate } from "gatsby"
 import { useCallback, useState } from "react"
 import { toast } from "react-toastify"
-import { H1, P } from "../../typography"
+import { A, H1, P } from "../../typography"
+import { Button, CheckBox, TextInput } from "../inputs"
+import { useEventsPaths } from "../utils"
 import DeleteSignup from "./DeleteSignup"
 import FieldRow from "./FieldRow"
-import { Button, CheckBox, TextInput } from "../inputs"
 import QuestionFields from "./QuestionFields"
 import SignupStatus from "./SignupStatus"
-import { useEventsPaths } from "../utils"
 
 const EditForm: React.FC = () => {
   const { event, signup, registrationClosed } = useEditSignupContext()
   const updateSignup = useUpdateSignup()
-  const navigate = useNavigate()
   const paths = useEventsPaths()
   const isNew = !signup?.confirmedAt
 
@@ -61,7 +59,7 @@ const EditForm: React.FC = () => {
         setSubmitting(false)
       }
     },
-    [event, isNew, updateSignup, navigate, paths]
+    [event, isNew, updateSignup, paths]
   )
 
   if (!event || !signup) return null
@@ -154,9 +152,7 @@ const EditForm: React.FC = () => {
 
             {!registrationClosed && (
               <nav className="flex justify-end items-baseline gap-3">
-                {!isNew && (
-                  <Link to={paths.eventDetails(event.slug)}>Peruuta</Link>
-                )}
+                {!isNew && <A href={paths.eventDetails(event.slug)}>Peruuta</A>}
                 <Button
                   type="submit"
                   formNoValidate

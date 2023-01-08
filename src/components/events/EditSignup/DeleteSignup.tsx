@@ -1,9 +1,9 @@
-import { useNavigate } from "@gatsbyjs/reach-router"
 import {
   useDeleteSignup,
   useEditSignupContext,
 } from "@tietokilta/ilmomasiina-components"
 import { useFormikContext } from "formik"
+import { navigate } from "gatsby"
 import { FC, useCallback, useState } from "react"
 import { toast } from "react-toastify"
 import { H2, P } from "../../typography"
@@ -15,7 +15,6 @@ const DELETE_CONFIRM_MS = 4000
 const DeleteSignup: FC = () => {
   const { event } = useEditSignupContext()
   const deleteSignup = useDeleteSignup()
-  const navigate = useNavigate()
   const paths = useEventsPaths()
 
   const { isSubmitting, setSubmitting } = useFormikContext()
@@ -37,7 +36,7 @@ const DeleteSignup: FC = () => {
         autoClose: 5000,
       })
     }
-  }, [deleteSignup, event, navigate, paths, setSubmitting])
+  }, [deleteSignup, event, paths, setSubmitting])
 
   if (!event) return null
 

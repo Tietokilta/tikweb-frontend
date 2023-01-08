@@ -3,8 +3,7 @@ import {
   SingleEventProvider,
   useSingleEventContext,
 } from "@tietokilta/ilmomasiina-components"
-import { Link } from "gatsby"
-import { H1, H2, P } from "../../typography"
+import { A, H1, H2, P } from "../../typography"
 import EventDescription from "./EventDescription"
 import QuotaBars from "./QuotaBars"
 import SignupButtons from "./SignupButtons"
@@ -24,7 +23,7 @@ const SingleEventView: React.FC = () => {
   if (pending) {
     return (
       <>
-        <Link to={paths.eventsList}>&#8592; Takaisin</Link>
+        <A href={paths.eventsList}>&#8592; Takaisin</A>
         <div className="mt-3" />
         <Spinner />
       </>
@@ -36,7 +35,7 @@ const SingleEventView: React.FC = () => {
         <H1>Tapahtumaa ei löytynyt</H1>
         <P>Tapahtuma saattaa olla menneisyydessä tai poistettu.</P>
         <P>
-          <Link to={paths.eventsList}>Palaa tapahtumalistaukseen</Link>
+          <A href={paths.eventsList}>Palaa tapahtumalistaukseen</A>
         </P>
       </>
     )
@@ -44,7 +43,7 @@ const SingleEventView: React.FC = () => {
 
   return (
     <>
-      <Link to={paths.eventsList}>&#8592; Takaisin</Link>
+      <A href={paths.eventsList}>&#8592; Takaisin</A>
       <div className="md:flex gap-4">
         <EventDescription />
         <div className="md:w-1/3 flex flex-col gap-3 mb-6">

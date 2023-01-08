@@ -5,7 +5,7 @@ import DinoGame from "../components/DinoGame"
 import Layout from "../components/Layout"
 import Meta from "../components/Meta"
 import SideBar from "../components/SideBar"
-import { H1 } from "../components/typography"
+import { A, H1 } from "../components/typography"
 import { PageContext, PageInfo } from "../contexts/PageContext"
 import { localeFromPath, pathWithOtherLocale } from "../paths"
 
@@ -23,12 +23,12 @@ const NotFoundPage: React.FC<PageProps> = () => {
           {locale === "fi" ? (
             <>
               <H1>Sivua {pathname} ei löytynyt</H1>
-              <a href="/">Takaisin kotisivulle</a>
+              <A href="/">Takaisin kotisivulle</A>
             </>
           ) : (
             <>
               <H1>Page {pathname} Not Found</H1>
-              <a href="/en">Back to homepage</a>
+              <A href="/en">Back to homepage</A>
             </>
           )}
           <DinoGame />

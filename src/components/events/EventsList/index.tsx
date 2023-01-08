@@ -8,7 +8,6 @@ import {
   eventsToRows,
 } from "@tietokilta/ilmomasiina-components/dist/utils/eventListUtils"
 import { signupStateText } from "@tietokilta/ilmomasiina-components/dist/utils/signupStateText"
-import { Link } from "gatsby"
 import { timezone } from "../config"
 import {
   EventsRouteProps,
@@ -16,9 +15,9 @@ import {
   RouteWrapper,
   useEventsPaths,
 } from "../utils"
-import Spinner from "../Spinner"
+import { Loading } from "../Spinner"
 import EventsListRow from "./EventsListRow"
-import { H1, P } from "../../typography"
+import { A, H1, P } from "../../typography"
 
 const EventsListView: React.FC = () => {
   const { events, error, pending } = useEventListContext()
@@ -28,7 +27,7 @@ const EventsListView: React.FC = () => {
     return (
       <>
         <H1>Tapahtumat</H1>
-        <Spinner />
+        <Loading />
       </>
     )
   }
@@ -48,7 +47,7 @@ const EventsListView: React.FC = () => {
       return (
         <EventsListRow
           stateClass={stateText.class}
-          title={<Link to={paths.eventDetails(slug)}>{title}</Link>}
+          title={<A href={paths.eventDetails(slug)}>{title}</A>}
           date={date ? date.tz(timezone).format("DD.MM.YYYY") : ""}
           signupStatus={stateText}
           signupCount={signupCount}

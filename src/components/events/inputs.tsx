@@ -42,7 +42,7 @@ export const Button: FC<ButtonProps> = ({
     type={type}
     disabled={disabled || loading}
     className={classNames(
-      "text-white p-2 font-sans relative",
+      "text-white p-2 font-sans relative rounded",
       (loading || disabled) && "bg-gray-light text-white",
       !(loading || disabled) && intentColors[intent ?? "primary"],
       className

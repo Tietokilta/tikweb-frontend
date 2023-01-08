@@ -18,7 +18,7 @@ const QuotaBar: FC<QuotaBarProps> = ({ title, value, max }) => (
     {title}
     <div
       role="progressbar"
-      className="bg-gray-light"
+      className="bg-gray-light rounded overflow-hidden"
       aria-valuemax={max}
       aria-valuenow={value}
     >

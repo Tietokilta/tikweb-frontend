@@ -1,5 +1,5 @@
-import { Link } from "gatsby"
 import { NavigationItem } from "../types/strapi"
+import Link from "./Link"
 
 type ItemProps = {
   item: NavigationItem
