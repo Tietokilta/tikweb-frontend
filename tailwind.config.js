@@ -12,6 +12,7 @@ module.exports = {
         orange: "#F77F1C",
         red: "#A31F0D",
         yellow: "#F4D227",
+        green: "green", // TODO: design
         gray: {
           darkest: "#212730",
           dark: "#3F4B59",

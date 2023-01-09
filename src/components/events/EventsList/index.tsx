@@ -7,7 +7,10 @@ import {
   WAITLIST,
   eventsToRows,
 } from "@tietokilta/ilmomasiina-components/dist/utils/eventListUtils"
-import { signupStateText } from "@tietokilta/ilmomasiina-components/dist/utils/signupStateText"
+import {
+  SignupState,
+  signupStateText,
+} from "@tietokilta/ilmomasiina-components/dist/utils/signupStateText"
 import { timezone } from "../config"
 import {
   EventsRouteProps,
@@ -18,6 +21,13 @@ import {
 import { Loading } from "../Spinner"
 import EventsListRow from "./EventsListRow"
 import { A, H1, P } from "../../typography"
+
+const stateClasses: Record<SignupState, string> = {
+  [SignupState.disabled]: "text-gray-light",
+  [SignupState.not_opened]: "",
+  [SignupState.open]: "text-green",
+  [SignupState.closed]: "text-red",
+}
 
 const EventsListView: React.FC = () => {
   const { events, error, pending } = useEventListContext()
@@ -46,8 +56,8 @@ const EventsListView: React.FC = () => {
       const stateText = signupStateText(signupState)
       return (
         <EventsListRow
-          stateClass={stateText.class}
           title={<A href={paths.eventDetails(slug)}>{title}</A>}
+          stateClass={stateClasses[signupState.state]}
           date={date ? date.tz(timezone).format("DD.MM.YYYY") : ""}
           signupStatus={stateText}
           signupCount={signupCount}
