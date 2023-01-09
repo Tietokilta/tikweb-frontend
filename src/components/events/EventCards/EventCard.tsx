@@ -48,7 +48,7 @@ const EventCard: React.FC<Props> = ({ event, expanded, className }: Props) => {
         </div>
         {expanded && hasSignup && (
           // Signup count pill
-          <div className="py-1 px-3 rounded-2xl my-auto bg-white text-black font-mono text-sm font-bold">
+          <div className="py-1 px-3 rounded-2xl my-auto bg-white text-black font-mono text-sm font-bold whitespace-nowrap">
             {signupCount}/{maxCapacity !== Infinity ? maxCapacity : "\u221E"}
           </div>
         )}
@@ -56,7 +56,7 @@ const EventCard: React.FC<Props> = ({ event, expanded, className }: Props) => {
           // Non-expanded signup/learn more link
           <Link
             to={paths.eventDetails(slug)}
-            className="my-auto font-mono text-sm font-bold text-orange"
+            className="my-auto font-mono text-sm font-bold text-orange whitespace-nowrap"
           >
             {hasSignup ? "Ilmoittaudu" : "Lue lisää"}
           </Link>
