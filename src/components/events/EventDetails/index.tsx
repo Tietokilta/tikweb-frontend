@@ -3,6 +3,10 @@ import {
   SingleEventProvider,
   useSingleEventContext,
 } from "@tietokilta/ilmomasiina-components"
+import {
+  SignupState,
+  signupState,
+} from "@tietokilta/ilmomasiina-components/dist/utils/signupStateText"
 import { A, H1, H2, P } from "../../typography"
 import EventDescription from "./EventDescription"
 import QuotaBars from "./QuotaBars"
@@ -41,17 +45,22 @@ const SingleEventView: React.FC = () => {
     )
   }
 
+  const { registrationStartDate, registrationEndDate, signupsPublic } = event
+  const eventState = signupState(registrationStartDate, registrationEndDate)
+
   return (
     <>
       <A href={paths.eventsList}>&#8592; Takaisin</A>
       <div className="md:flex gap-4">
         <EventDescription />
-        <div className="md:w-1/3 flex flex-col gap-3 mb-6">
-          <SignupButtons />
-          <QuotaBars />
-        </div>
+        {eventState.state !== SignupState.disabled && (
+          <div className="basis-1/3 flex flex-col gap-3 mb-6">
+            <SignupButtons />
+            <QuotaBars />
+          </div>
+        )}
       </div>
-      {event.signupsPublic && (
+      {signupsPublic && (
         <>
           <H2>Ilmoittautuneet</H2>
           {signupsByQuota?.map((quota) => (

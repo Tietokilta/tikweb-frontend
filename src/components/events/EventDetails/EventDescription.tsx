@@ -10,7 +10,7 @@ const EventDescription = () => {
     return null
   }
   return (
-    <div className="md:w-2/3 mb-6">
+    <div className="basis-2/3 grow mb-6">
       <H1 className="my-3">{event.title}</H1>
       <div className="border-y-2 border-solid border-gray-lightest py-1">
         {event.category && (
