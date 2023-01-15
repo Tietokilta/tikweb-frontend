@@ -62,8 +62,8 @@ exports.sourceNodes = async ({
 
   // Add paths to Strapi page nodes based on the nav structure.
   const addPagePaths = (nav, locale) => {
-    if (nav.path && nav.related) {
-      const page = pagesById.get(nav.related.id)
+    const page = pagesById.get(nav.related?.id)
+    if (nav.path && page) {
       const path = pathWithLocale(nav.path, locale)
       createNodeField({ node: page, name: "path", value: path })
     }
@@ -73,9 +73,9 @@ exports.sourceNodes = async ({
 
   // Add localized paths to pages as well.
   for (const page of pages) {
-    const localization = page.localizations.data[0]
-    if (localization) {
-      const otherPage = pagesById.get(localization.id)
+    const otherLocale = page.localizations.data[0]
+    const otherPage = pagesById.get(otherLocale?.id)
+    if (otherPage) {
       // Ideally this would use @link, but there's not really a good way of doing
       // that without recreating the node
       createNodeField({
