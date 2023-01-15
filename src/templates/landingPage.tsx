@@ -1,6 +1,5 @@
 import { graphql } from "gatsby"
 import { useMemo } from "react"
-import { FullWidthContainer } from "../components/Containers"
 import ContentRenderer from "../components/ContentRenderer"
 import EventCards from "../components/events/EventCards"
 import Hero from "../components/Hero"
@@ -47,11 +46,13 @@ const LandingPage: React.FC<Props> = ({
           buttonColor={buttonColor}
           buttonLink="/"
         />
-        <main className="flex-grow justify-center flex flex-col md:flex-row gap-3 p-3">
-          <ContentRenderer contentBlocks={content} />
-          <FullWidthContainer className="p-3">
+        <main className="flex-grow justify-center flex flex-col md:flex-row p-3">
+          <div className="w-full p-3 flex-1 overflow-hidden">
+            <ContentRenderer contentBlocks={content} />
+          </div>
+          <div className="w-full p-3 flex-1">
             <EventCards />
-          </FullWidthContainer>
+          </div>
         </main>
       </Layout>
     </PageContext.Provider>

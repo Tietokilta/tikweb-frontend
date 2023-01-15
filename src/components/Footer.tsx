@@ -2,7 +2,6 @@ import { graphql, useStaticQuery } from "gatsby"
 import * as React from "react"
 import { StrapiPartners } from "../types/strapi"
 import parseImageUrl from "../utils/parseImageUrl"
-import { FullWidthContainer } from "./Containers"
 import Link from "./Link"
 
 const Footer: React.FC = () => {
@@ -26,7 +25,7 @@ const Footer: React.FC = () => {
 
   return (
     <div className="flex w-full text-white justify-center bg-black px-4 md:px-8 lg:px-16 py-6">
-      <FullWidthContainer className="max-w-[90rem] flex flex-col items-center">
+      <div className="w-full max-w-[90rem] flex flex-col items-center">
         <p className="text-3xl pt-4 pb-16 font-mono">{partners.title}</p>
         <div className="flex flex-wrap justify-center pb-40 items-center">
           {partners.partner.map(({ logo, name, url }, index) => {
@@ -54,7 +53,7 @@ const Footer: React.FC = () => {
             )
           })}
         </div>
-      </FullWidthContainer>
+      </div>
     </div>
   )
 }

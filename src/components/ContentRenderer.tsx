@@ -1,17 +1,16 @@
 import { graphql } from "gatsby"
 import { StrapiPageContentBlock } from "../types/strapi"
 import CommitteeCard from "./CommitteeCard"
-import { FullWidthContainer } from "./Containers"
 import Markdown from "./Markdown"
+import { H2 } from "./typography"
 
 type Props = {
   contentBlocks: StrapiPageContentBlock[]
-  className?: string
 }
 
-const ContentRenderer: React.FC<Props> = ({ contentBlocks, className }) => {
+const ContentRenderer: React.FC<Props> = ({ contentBlocks }) => {
   return (
-    <FullWidthContainer className={className}>
+    <>
       {(contentBlocks ?? []).map((block) => {
         if (
           block.strapi_component === "common-content.text-block" &&
@@ -37,7 +36,7 @@ const ContentRenderer: React.FC<Props> = ({ contentBlocks, className }) => {
         }
         return null
       })}
-    </FullWidthContainer>
+    </>
   )
 }
 

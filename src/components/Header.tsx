@@ -1,11 +1,10 @@
 import logo from "../assets/logo.svg"
-import { FullWidthContainer } from "./Containers"
 import Link from "./Link"
 import NavBar from "./NavBar"
 
 const Header: React.FC = () => (
-  <div className="z-50 sticky top-0 left-0 flex justify-center w-full h-12 px-4 md:px-8 lg:px-16 bg-black text-white">
-    <FullWidthContainer className="flex justify-between max-w-[90rem]">
+  <div className="w-full z-50 sticky top-0 left-0 flex justify-center h-12 px-4 md:px-8 lg:px-16 bg-black text-white">
+    <div className="w-full max-w-[90rem] flex justify-between">
       <Link
         to="/"
         className="sticky flex items-center font-bold text-2xl text-white"
@@ -14,7 +13,7 @@ const Header: React.FC = () => (
         Tietokilta Ry
       </Link>
       <NavBar />
-    </FullWidthContainer>
+    </div>
   </div>
 )
 
