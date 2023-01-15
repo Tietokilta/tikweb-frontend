@@ -6,8 +6,9 @@ type Props = {
 
 const TextWithIcon: React.FC<Props> = ({ icon, text, alt }) => {
   return text ? (
-    <div className="flex items-end mb-4 h-4 text-sm">
-      <img className="h-full mr-2" src={icon} alt={alt} /> {text}
+    <div className="flex items-end mb-1 mt-2 h-4 text-sm">
+      <img className="h-full mr-2" src={icon} alt={alt} />
+      {text}
     </div>
   ) : null
 }

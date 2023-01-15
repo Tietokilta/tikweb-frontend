@@ -26,8 +26,8 @@ const ContentRenderer: React.FC<Props> = ({ contentBlocks, className }) => {
         if (block.strapi_component === "common-content.committee") {
           return (
             <div key={block.id}>
-              <h2 className="font-mono">{block.name}</h2>
-              <div className="grid gap-4 grid-cols-1 md:grid-cols-2 auto-rows-fr max-w-4xl">
+              <H2 className="font-mono">{block.name}</H2>
+              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 auto-rows-fr max-w-[96rem]">
                 {block?.members?.map((member) => {
                   return <CommitteeCard member={member} key={member.id} />
                 })}
