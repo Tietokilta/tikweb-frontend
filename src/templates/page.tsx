@@ -4,7 +4,7 @@ import ContentRenderer from "../components/ContentRenderer"
 import { H1 } from "../components/typography"
 import Layout from "../components/Layout"
 import Meta from "../components/Meta"
-import SideBar from "../components/SideBar"
+import ContentPageLayout from "../components/ContentPageLayout"
 import { PageContext, PageInfo } from "../contexts/PageContext"
 import { otherLocale, pathWithOtherLocale } from "../paths"
 import { StrapiPage } from "../types/strapi"
@@ -29,10 +29,10 @@ const Page: React.FC<Props> = ({ data: { strapiPage } }) => {
   return (
     <PageContext.Provider value={context}>
       <Layout>
-        <SideBar>
+        <ContentPageLayout>
           <H1>{strapiPage.title}</H1>
           <ContentRenderer contentBlocks={strapiPage.content} />
-        </SideBar>
+        </ContentPageLayout>
       </Layout>
     </PageContext.Provider>
   )

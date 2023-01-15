@@ -4,7 +4,7 @@ import { useMemo } from "react"
 import DinoGame from "../components/DinoGame"
 import Layout from "../components/Layout"
 import Meta from "../components/Meta"
-import SideBar from "../components/SideBar"
+import ContentPageLayout from "../components/ContentPageLayout"
 import { A, H1 } from "../components/typography"
 import { PageContext, PageInfo } from "../contexts/PageContext"
 import { localeFromPath, pathWithOtherLocale } from "../paths"
@@ -19,7 +19,7 @@ const NotFoundPage: React.FC<PageProps> = () => {
   return (
     <PageContext.Provider value={context}>
       <Layout>
-        <SideBar>
+        <ContentPageLayout>
           {locale === "fi" ? (
             <>
               <H1>Sivua {pathname} ei löytynyt</H1>
@@ -32,7 +32,7 @@ const NotFoundPage: React.FC<PageProps> = () => {
             </>
           )}
           <DinoGame />
-        </SideBar>
+        </ContentPageLayout>
       </Layout>
     </PageContext.Provider>
   )

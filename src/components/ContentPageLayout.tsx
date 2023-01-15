@@ -15,7 +15,7 @@ type NavQuery = {
   }
 }
 
-const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
+const ContentPageLayout: React.FC<SideBarProps> = (props: SideBarProps) => {
   const { children } = props
   const { locale } = useContext(PageContext)
 
@@ -60,9 +60,9 @@ const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
       <div className="hidden md:block">
         <NavPages rootItem={rootItem} />
       </div>
-      <div className="px-5 py-4 w-full">{children}</div>
+      <div className="px-5 py-4 grow overflow-hidden">{children}</div>
     </main>
   )
 }
 
-export default SideBar
+export default ContentPageLayout

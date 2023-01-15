@@ -56,6 +56,14 @@ export const P = ({ children, className, ...props }: ParaProps) => (
   </p>
 )
 
+type PreProps = HTMLAttributes<HTMLPreElement>
+
+export const Pre = ({ children, className, ...props }: PreProps) => (
+  <pre className={classNames("my-2 overflow-auto", className)} {...props}>
+    {children}
+  </pre>
+)
+
 type AnchorProps = AnchorHTMLAttributes<HTMLAnchorElement>
 
 export const A = ({ children, className, href, ...props }: AnchorProps) =>
