@@ -1,5 +1,6 @@
 import classNames from "classnames"
-import { AnchorHTMLAttributes, HTMLAttributes } from "react"
+import { AnchorHTMLAttributes, HTMLAttributes, ImgHTMLAttributes } from "react"
+import parseImageUrl from "../utils/parseImageUrl"
 import Link from "./Link"
 
 // Not helpful here...
@@ -85,3 +86,14 @@ export const A = ({ children, className, href, ...props }: AnchorProps) =>
       {children}
     </Link>
   )
+
+type ImgProps = ImgHTMLAttributes<HTMLImageElement>
+
+export const Img = ({ className, alt, src, ...props }: ImgProps) => (
+  <img
+    alt={alt}
+    src={src && parseImageUrl(src)}
+    className={classNames("", className)}
+    {...props}
+  />
+)

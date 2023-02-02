@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react"
 import ReactMarkdown, { Components } from "react-markdown"
 import remarkGfm from "remark-gfm"
-import { A, H1, H2, H3, H4, P, Pre } from "./typography"
+import { A, H1, H2, H3, H4, P, Pre, Img } from "./typography"
 
 const markdownComponents: Components = {
   h1: H1,
@@ -11,6 +11,7 @@ const markdownComponents: Components = {
   p: P,
   pre: Pre,
   a: A,
+  img: Img,
 }
 
 // Fragment is necessary for react-markdown typings
